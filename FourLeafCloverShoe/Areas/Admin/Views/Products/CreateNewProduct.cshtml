@@ -1,0 +1,91 @@
+﻿@model FourLeafCloverShoe.Share.Models.Product
+@{
+    ViewBag.Title = "Add New Product";
+    ViewBag.pTitle = "E-commerce";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Thông tin sản phẩm</h5>
+            </div>
+            <form asp-action="CreateNewProduct">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input asp-for="ProductName" type="text" class="form-control" placeholder="Nhập tên sản phẩm">
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Loại sản phẩm</label>
+                        <select asp-for="CategoryId" id="choices-category" class="form-select" asp-items="@(new SelectList(ViewBag.ListCategoryitems, "Value", "Text"))">
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hãng sản xuất</label>
+                        <select asp-for="BrandId" id="choices-sizes" class="form-select" asp-items="@(new SelectList(ViewBag.ListBranditems, "Value", "Text"))">
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label">Status</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="True" checked>
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">Bán ngay</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="False">
+                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không bán</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ảnh sản phẩm</label>
+                        <div class="multisteps-form__content">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div action="/Admin/Products/UploadImage" class="dropzone" id="productImg"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Mô tả</label>
+                        <div class="card-body">
+                            <textarea asp-for="Description" name="Description" class="form-control" id="classic-editor" style="height:100px">
+                            <p>
+                                Demo
+                                </p>
+                        </textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="card-body text-end btn-page">
+                        <button type="submit" class="btn btn-primary mb-0">Save product</button>
+                        <button class="btn btn-outline-secondary mb-0">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+

@@ -1,0 +1,290 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.AddressAddModel
+@using FourLeafCloverShoe.Share.Models
+
+<div class="profile-main__account-inner">
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div class="profile-main__account-header">
+            <h1 class="profile-main__account-header__title">Thêm địa chỉ mới</h1>
+            <div class="profile-main__account-header__des">
+                Quản lý thông tin hồ sơ để bảo mật tài khoản
+            </div>
+        </div>
+        <div class="profile-main__account-body">
+            <div class="profile-main__account-body__info">
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="RecipientName">Tên người nhận</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <input id="RecipientName" class="form-control valid" name="RecipientName">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="RecipientPhone">Số điện thoại</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <input id="RecipientPhone" class="form-control valid" type="text" name="RecipientPhone">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input id="ProvinceName" name="ProvinceName" hidden />
+                <input id="DistrictName" name="DistrictName" hidden />
+                <input id="WardName" name="WardName" hidden />
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="province">Tỉnh/Thành phố</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="profile-account__custom-form__form-select-flex">
+                                <div class="input-outer" style="width:100% !important;">
+                                    <select id="province" class="form-control valid" name="ProvinceID" required>
+                                    </select>
+                                    <i class="mwc-icon-angle-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="district">Quận/Huyện</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="profile-account__custom-form__form-select-flex">
+                                <div class="input-outer" style="width:100% !important;">
+                                    <select id="district" class="form-control valid" name="DistrictID" required>
+                                    </select>
+                                    <i class="mwc-icon-angle-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="ward">Chọn xã/phường</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="profile-account__custom-form__form-select-flex">
+                                <div class="input-outer" style="width:100% !important;">
+                                    <select id="ward" class="form-control valid" name="WardCode" required>
+                                    </select>
+                                    <i class="mwc-icon-angle-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label for="Description">Địa chỉ</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <input id="Description" class="form-control valid" name="Description" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label></label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="IsDefault" type="checkbox" id="flexSwitchCheckDefault">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Đặt làm địa chỉ mặc định</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-account__custom-form__footer">
+            <button type="submit" class="btn btn-solid-primary btn--m btn--inline">
+                Lưu
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Kiểm tra form trước khi submit
+        $('#profile-form').on('submit', function (e) {
+            var isValid = true;
+            var errorMessage = '';
+            var isValid1 = true;
+            var errorMessage1 = '';
+            var isValid2 = true;
+            var errorMessage2 = '';
+            // Kiểm tra tên người nhận
+            var recipientName = $('#RecipientName').val().trim();
+            if (recipientName === '') {
+                isValid = false;
+                errorMessage += 'Tên người nhận không được để trống.';
+            }
+
+            // Kiểm tra số điện thoại
+            var recipientPhone = $('#RecipientPhone').val().trim();
+            var phonePattern = /^0\d{9}$/; // Số điện thoại bắt đầu bằng 0 và có 10 chữ số
+            if(recipientPhone === ''){
+                 isValid1 = false;
+                errorMessage1 += 'Số điện thoại không được để trống.';
+            }
+            else if (!phonePattern.test(recipientPhone)) {
+                isValid1 = false;
+                errorMessage1 += 'Số điện thoại phải là số. Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.';
+            }
+            var Description = $('#Description').val().trim();
+            if (Description === '') {
+                isValid2 = false;
+                errorMessage2 += 'Nhập địa chỉ chi tiết.';
+            }
+            // Nếu không hợp lệ, ngăn chặn việc submit form và hiển thị thông báo lỗi
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }else if(!isValid1){
+                 e.preventDefault();
+                alert(errorMessage1);
+            } else if (!isValid2) {
+                e.preventDefault();
+                alert(errorMessage2);
+            }
+        });
+
+        // Cập nhật tên tỉnh/thành phố, quận/huyện, xã/phường khi chọn
+        $("#province").change(function () {
+            var selectedProvince = $(this).val();
+            var selectedProvinceName = $(this).find("option:selected").text();
+            $('#ProvinceName').val(selectedProvinceName);
+            console.log(selectedProvince, selectedProvinceName);
+        });
+
+        $("#district").change(function () {
+            var selectedDistrict = $(this).val();
+            var selectedDistrictName = $(this).find("option:selected").text();
+            $('#DistrictName').val(selectedDistrictName);
+            console.log(selectedDistrict, selectedDistrictName);
+        });
+
+        $("#ward").change(function () {
+            var selectedWard = $(this).val();
+            var selectedWardName = $(this).find("option:selected").text();
+            $('#WardName').val(selectedWardName);
+            console.log(selectedWard, selectedWardName);
+        });
+
+        // Gọi AJAX để lấy danh sách tỉnh/thành phố
+        $.ajax({
+            type: "GET",
+            url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/province",
+            headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#province").append('<option disabled selected hidden>Vui lòng chọn tỉnh</option>');
+                for (var i = 0; i < data.data.length; i++) {
+                    var option = $("<option>").val(data.data[i].ProvinceID).text(data.data[i].ProvinceName);
+                    $("#province").append(option);
+                }
+            },
+            error: function (response) {
+                console.error(response);
+                toastr.error('Không thể tải danh sách tỉnh/thành phố', 'Lỗi');
+            }
+        });
+
+        // Gọi AJAX để lấy danh sách quận/huyện khi chọn tỉnh/thành phố
+        $("#province").change(function () {
+            var provinceId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/district?province_id=" + provinceId,
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#district").empty();
+                    $("#ward").empty();
+                    $('#DistrictName').val("");
+                    $('#WardName').val("");
+
+                    // Thêm option mặc định
+                    $("#district").append('<option disabled selected hidden>Vui lòng chọn huyện</option>');
+                    for (var i = 0; i < data.data.length; i++) {
+                        var option = $("<option>").val(data.data[i].DistrictID).text(data.data[i].DistrictName);
+                        $("#district").append(option);
+                    }
+                },
+                error: function (response) {
+                    console.error(response);
+                    toastr.error('Không thể tải danh sách quận/huyện', 'Lỗi');
+                }
+            });
+        });
+
+        // Gọi AJAX để lấy danh sách xã/phường khi chọn quận/huyện
+        $("#district").change(function () {
+            var districtId = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id=" + districtId,
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#ward").empty();
+                    // Thêm option mặc định
+                    $("#ward").append('<option disabled selected hidden>Vui lòng chọn Xã</option>');
+                    for (var i = 0; i < data.data.length; i++) {
+                        var option = $("<option>").val(data.data[i].WardCode).text(data.data[i].WardName);
+                        $("#ward").append(option);
+                    }
+                },
+                error: function (response) {
+                    console.error(response);
+                    toastr.error('Không thể tải danh sách xã/phường', 'Lỗi');
+                }
+            });
+        });
+
+        // Gọi AJAX để tính phí vận chuyển khi chọn xã/phường
+        $("#ward").change(function () {
+            var value1 = document.getElementById("ward").value;
+            var value2 = document.getElementById("district").value;
+            $.ajax({
+                type: "GET",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378?to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500 + "&service_type_id=2",
+                headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log("API Response:", data);
+                    toastr.success('Tính phí vận chuyển thành công', 'Thành công');
+                },
+                error: function (response) {
+                    console.error(response);
+                    toastr.error('Không thể tính phí vận chuyển', 'Lỗi');
+                }
+            });
+        });
+    });
+</script>

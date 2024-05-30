@@ -1,0 +1,187 @@
+﻿@model X.PagedList.IPagedList<FourLeafCloverShoe.Share.Models.Order>
+
+@{
+    ViewData["Title"] = "Manganer order";
+    int?[] selectStatus = ViewBag.SelectedStatuses;
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+@* section css {
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    @* <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/flatpickr.min.css">
+    <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/datepicker-bs5.min.css"> 
+} *@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .sidebar {
+        background-color: #ffffff;
+        padding: 20px;
+        border-right: 1px solid #dee2e6;
+        min-height: 100vh;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .invoice-status {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .invoice-status li {
+            margin-bottom: 10px;
+        }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar">
+            <form asp-action="Index" asp-controller="ManagerOrder" method="get">
+                <h4>Hóa đơn</h4>
+                <div class="form-group">
+                    <label for="start-time">Bắt đầu</label>
+                    <input type="text" class="form-control" id="start" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="end-time">Kết thúc</label>
+                    <input type="text" id="end" name="endDate" class="form-control">
+                </div>
+                <h5>Trạng thái</h5>
+            
+                <ul class="invoice-status">
+                    <li><input name="status" value="-1" type="checkbox" @(selectStatus != null && (selectStatus).Contains(-1) ? "checked" : "")> Đơn chờ</li>
+                    <li><input name="status" value="0" type="checkbox" @(selectStatus != null && (selectStatus).Contains(0) ? "checked" : "")> Chờ thanh toán</li>
+                    <li><input name="status" value="1" type="checkbox" @(selectStatus != null && (selectStatus).Contains(1) ? "checked" : "")> Đã thanh toán</li>
+                    <li><input name="status" value="2" type="checkbox" @(selectStatus != null && (selectStatus).Contains(2) ? "checked" : "")> Chờ xác nhận</li>
+                    <li><input name="status" value="3" type="checkbox" @(selectStatus != null && (selectStatus).Contains(3) ? "checked" : "")> Chờ lấy hàng</li>
+                    <li><input name="status" value="4" type="checkbox" @(selectStatus != null && (selectStatus).Contains(4) ? "checked" : "")> Đang giao hàng</li>
+                    <li><input name="status" value="6" type="checkbox" @(selectStatus != null && (selectStatus).Contains(6) ? "checked" : "")> Giao hàng thất bại</li>
+                    <li><input name="status" value="8" type="checkbox" @(selectStatus != null && (selectStatus).Contains(8) ? "checked" : "")> Giao hàng thành công</li>
+                    <li><input name="status" value="9" type="checkbox" @(selectStatus != null && (selectStatus).Contains(9) ? "checked" : "")> Thanh toán tại quầy</li>
+                    <li><input name="status" value="10" type="checkbox" @(selectStatus != null && (selectStatus).Contains(10) ? "checked" : "")> Yêu cầu đổi trả</li>
+                </ul>
+                <button style="width:249px" type="submit" class="btn btn-dark">Lọc</button>
+            </form>
+        </div>
+
+        <!-- Content -->
+        <div class="col-md-9 content" id="orderList">
+            <form asp-action="Index" asp-controller="ManagerOrder" method="get">
+                <div class="d-flex justify-content-between mb-3">
+                    <h4>Hóa đơn</h4>
+                    <input type="text" name="searchText" class="form-control w-50" placeholder="Nhập mã hóa đơn">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </form>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Hóa đơn</th>
+                        <th>Thời gian</th>
+                        <th>Khách hàng</th>
+                        <th>Nhân viên xác nhận</th>
+                        <th>Trạng thái</th>
+                        <th>Tổng tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><a href="@Url.Action("OrderDetail", "ManagerOrder", new { orderId = item.Id })">@item.OrderCode</a></td>
+                            <td>@item.CreateDate</td>
+                            <td>@item.Users.FullName</td>
+                            <td>@item.Users.FullName</td>
+                            @if (item.OrderStatus == -1)
+                            {
+                                <td><span class="badge badge-info">Đơn chờ</span></td>
+                            }
+                            else if(item.OrderStatus == 0)
+                            {
+                                <td><span class="badge badge-info">Chờ thanh toán</span></td>
+                            }
+                            else if (item.OrderStatus == 1)
+                            {
+                                <td><span class="badge badge-success">Đã thanh toán</span></td>
+                            }
+                            else if (item.OrderStatus == 2)
+                            {
+                                <td><span class="badge badge-warning">Chờ xác nhận</span></td>
+                            }
+                            else if (item.OrderStatus == 3)
+                            {
+                                <td><span class="badge badge-warning">Chờ lấy hàng</span></td>
+                            }
+                            else if (item.OrderStatus == 4)
+                            {
+                                <td><span class="badge badge-primary">Đang giao hàng</span></td>
+                            }
+                            else if (item.OrderStatus == 5)
+                            {
+                                <td><span class="badge badge-primary">Chờ lấy hàng</span></td>
+                            }
+                            else if (item.OrderStatus == 6)
+                            {
+                                <td><span class="badge badge-danger">Giao hàng thất bại</span></td>
+                            }
+                            else if (item.OrderStatus == 8)
+                            {
+                                <td><span class="badge badge-success">Giao hàng thành công</span></td>
+                            }
+                            else if (item.OrderStatus == 9)
+                            {
+                                <td><span class="badge badge-success">Thanh toán tại quầy</span></td>
+                            }
+                            else if (item.OrderStatus == 10)
+                            {
+                                <td><span class="badge badge-danger">Yêu cầu đổi trả</span></td>
+                            }
+                            <td>@item.TotalAmout.Value.ToString("N0")</td>
+                            @* <td></td> *@
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <nav>
+                    <!-- Phân trang -->
+                    <ul class="pagination">
+                        <li class="page-item @(Model.IsFirstPage ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = 1,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Đầu</a>
+                        </li>
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Trước</a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.PageCount; i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Tiếp</a>
+                        </li>
+                        <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script type="text/javascript">
+   
+</script>

@@ -1,0 +1,44 @@
+﻿@model FourLeafCloverShoe.Share.Models.Order
+@{
+    Layout = null;
+}
+<style>
+
+
+    .gif {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3rem; /* Add some spacing below the GIF */
+    }
+
+    .content {
+        margin: 0; /* Remove top margin for better layout */
+        text-align: center;
+    }
+
+        .content .main-heading {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+    p {
+        font-size: 1.3rem;
+        padding: 0.7rem 0;
+    }
+
+</style>
+
+<div class="container">
+    <div class="gif">
+        <img src="https://i.gifer.com/7efs.gif" alt="gif_ing" />
+    </div>
+    <div class="content">
+        <h1 class="main-heading">Đặt hàng thành công.</h1>
+        <p>
+            Mã đơn hàng của bạn là: @Model.OrderCode <br />
+            <span class="rightinput"><a style="color:red" href="/order/ExportPDF?orderId=@Model.Id" title="Xuất hoá đơn">Xuất hoá đơn</a></span>
+        </p>
+    </div>
+</div>
+<br />
+

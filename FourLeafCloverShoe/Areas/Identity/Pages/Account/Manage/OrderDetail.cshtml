@@ -1,0 +1,454 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.OrderDetailModel
+@{
+}
+<div class="account-forgot-password-form">
+    <div class="account-forgot-password-header">
+        <h1 class="account-forgot-password-header-title">Thông tin chi tiết đơn hàng </h1>
+        <div class="account-forgot-password-header-des">
+            <span>Thời gian cập nhật: @Model.Order.UpdateDate?.ToString("HH:mm dd-MM-yyyy")</span>
+        </div>
+    </div>
+</div>
+<div class="order-item">
+    <div>
+        <div class="order-item-inner">
+            <div class="order-item-header">
+                <div class="order-item-header-left">
+                    <a class="order-item-status-link" href="">
+
+                        <span>Mã đơn hàng: <span style="color:red">@Model.Order.OrderCode</span></span>
+                    </a>
+                </div>
+                <div class="order-item-header-right">
+                    <!--ko if:Status != 6-->
+                    <div class="order-item-status">
+                        <a class="order-item-status-link" href="">
+                            <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon icon-free-shipping-line">
+                                <g>
+                                    <line fill="none" stroke-linejoin="round" stroke-miterlimit="10" x1="8.6" x2="4.2" y1="9.8" y2="9.8">
+                                    </line>
+                                    <circle cx="3" cy="11.2" fill="none" r="2" stroke-miterlimit="10">
+                                    </circle>
+                                    <circle cx="10" cy="11.2" fill="none" r="2" stroke-miterlimit="10"></circle>
+                                    <line fill="none" stroke-miterlimit="10" x1="10.5" x2="14.4" y1="7.3" y2="7.3">
+                                    </line>
+                                    <polyline fill="none" points="1.5 9.8 .5 9.8 .5 1.8 10 1.8 10 9.1" stroke-linejoin="round" stroke-miterlimit="10">
+                                    </polyline>
+                                    <polyline fill="none" points="9.9 3.8 14 3.8 14.5 10.2 11.9 10.2" stroke-linejoin="round" stroke-miterlimit="10">
+                                    </polyline>
+                                </g>
+                            </svg>
+                            @if (Model.Order.OrderStatus == 0)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Chờ thanh toán
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 1)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Chờ xác nhận (Đã thanh toán)
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 2)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Chờ xác nhận
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 3)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Chờ lấy hàng
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 4)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Đang giao hàng
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 5)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu huỷ đơn
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 6)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Giao hàng thất bại
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 7)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu huỷ đơn không được chấp nhận
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 8)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Giao hàng thành công
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 9)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Mua hàng thành công (Tại quầy)
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 10)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu đổi/trả
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 11)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu đổi trả được chấp nhận
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 12)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu đổi trả bị từ chối
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 13)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Đã huỷ đơn
+                                </span>
+                            }
+                            else if (Model.Order.OrderStatus == 14)
+                            {
+                                <span class="order-item-status-text" data-bind="text:StatusName">
+                                    Yêu cầu huỷ đơn được chấp nhận
+                                </span>
+                            }
+
+                        </a>
+                    </div>
+                    <!--/ko-->
+                    <!--ko if:Status == 6--><!--/ko-->
+                </div>
+            </div>
+            <div class="order-item-body">
+                <div class="order-item-product">
+                    <div data-bind="foreach:DetailItems">
+                        @foreach (var product in Model.Order.OrderItems)
+                        {
+                            <span class="order-item-product-grid">
+
+                                <div class="order-item-product-info-grid">
+                                    <div class="order-item-product-thumb">
+                                        <div class="shopee-image__wrapper">
+                                            <div class="shopee-image__content">
+                                                <a href="/Products/ProductDetail?productId=@product.ProductDetails.ProductId">
+                                                    <img src="@product.ProductDetails.Products.ProductImages.First().ImageUrl">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order-item-product-info">
+                                        <div>
+                                            <div class="order-item-product-title">
+                                                <a href="/Products/ProductDetail?productId=@product.ProductDetails.ProductId">
+                                                    <span class="order-item-product-title-inner" data-bind="text:ProductName">
+                                                        @product.ProductDetails.Products.ProductName
+                                                    </span>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="order-item-product-variants">
+                                                Kích cỡ: <span>
+                                                    @product.ProductDetails.Size.Name
+                                                </span>
+                                            </div>
+                                            <div class="order-item-product-quantity" data-bind="text:'x'+TotalQty">
+                                                x @product.Quantity
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-item-product-amount">
+                                    <div>
+                                        <!--ko if: IsBonus--><!--/ko-->
+                                        <!--ko if:Price > 0 && !IsBonus-->
+                                        <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)">đ270,000</span>
+                                        <span class="order-item-product-amount-content order-item-product-new-price">@product.Price?.ToString("N0") đ</span>
+                                        <!--/ko-->
+                                        <!--ko if:Price == 0 && !IsBonus--><!--/ko-->
+                                    </div>
+                                </div>
+                               
+                                    @if (product.Orders.OrderStatus == 8 && product.Rate.Status == 0)
+                                    {
+                                        <div>
+                                            <div class="order-item-calc-inner">
+                                            <a href="/Products/ReviewProducts?idCTHD=@product.Rate.OrderItemId" class="btn btn-solid-primary btn--m btn--inline">Đánh giá sản phẩm</a>
+                                            </div>
+                                        </div>
+                                    }
+                                    
+                                
+                            </span>
+                            <div class="order-item-line"></div>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-item-space"></div>
+        </div>
+    </div>
+    <div class="order-item-full-line">
+        <div class="order-item-full-line-left"></div>
+        <div class="order-item-full-line-right"></div>
+    </div>
+    <div class="order-item-calc">
+        <div class="order-item-calc-inner">
+            @{
+                var tienhang = Model.Order.TotalAmout + Model.Order.VoucherValue + Model.Order.CoinsUsed - Model.Order.ShippingFee;
+            }
+            <div class="order-item-calc-lable">Tổng tiền hàng:</div>
+            <div class="" data-bind="text:'đ'+SubTotal.format(0,3)">@tienhang?.ToString("N0") đ</div>
+        </div>
+    </div>
+    <div class="order-item-calc">
+        <div class="order-item-calc-inner">
+            <div class="order-item-calc-lable">Giảm tiền mã giảm giá:</div>
+            <div class="" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.VoucherValue?.ToString("N0") đ</div>
+        </div>
+    </div>
+
+    <div class="order-item-calc">
+        <div class="order-item-calc-inner">
+            <div class="order-item-calc-lable">Giảm tiền dùng xu:</div>
+            <div class="" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.CoinsUsed?.ToString("N0") đ</div>
+        </div>
+    </div>
+    <div class="order-item-calc">
+        <div class="order-item-calc-inner">
+            <div class="order-item-calc-lable">Phí vận chuyển:</div>
+            <div class="" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.ShippingFee?.ToString("N0") đ</div>
+        </div>
+    </div>
+
+    <div class="order-item-calc">
+        <div class="order-item-calc-inner">
+            <div class="order-item-calc-lable">Tổng tiền đơn hàng:</div>
+            <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.TotalAmout?.ToString("N0") đ</div>
+        </div>
+    </div>
+    @if (Model.Order.OrderStatus == 0 || Model.Order.OrderStatus == 1 ||Model.Order.OrderStatus==2)
+    {
+        if (Model.Order.OrderStatus == 0)
+        {
+            <div>
+                <div class="order-item-calc-inner">
+                    <button class="btn btn-solid-primary btn--m btn--inline" id="btnContinuePayment" aria-disabled="true">Tiếp tục thanh toán</button>
+                </div>
+            </div>
+        }
+        <div>
+            <div class="order-item-calc-inner">
+                <button class="btn btn-solid-primary btn--m btn--inline" id="btnHuyDon" aria-disabled="true">Huỷ đơn</button>
+            </div>
+        </div>
+    }
+    else if (Model.Order.OrderStatus == 3 || Model.Order.OrderStatus == 4)
+    {
+        <div>
+            <div class="order-item-calc-inner">
+                <button class="btn btn-solid-primary btn--m btn--inline" id="btnYeuCauHuyDon" aria-disabled="true">Yêu cầu Huỷ đơn</button>
+            </div>
+        </div>
+    }
+    else if (Model.Order.OrderStatus == 8 || Model.Order.OrderStatus == 9)
+    {
+        <div>
+            <div class="order-item-calc-inner">
+                <button class="btn btn-solid-primary btn--m btn--inline" id="btnYeuCauHoanDon" aria-disabled="true">Yêu cầu trả hàng/hoàn tiền</button>
+            </div>
+        </div>
+    }
+</div>
+<div class="modal fade" id="modalHuyDon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chọn lí do bạn muốn huỷ đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" id="exampleModalLabel">Lý do bạn muốn huỷ đơn hàng là :</h5>
+                <form method="post" asp-page-handler="HuyDon">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name1" value="Tôi muốn cập nhật địa chỉ/sdt nhận hàng.">
+                    <label class="form-check-label" for="name1">
+                        Tôi muốn cập nhật địa chỉ/sdt nhận hàng.
+
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name2" value=" Tôi muốn thêm/ thay mã giảm giá.">
+                    <label class="form-check-label" for="name2">
+                        Tôi muốn thêm/ thay mã giảm giá.
+
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name3" value="Tôi muốn thay đổi sản phẩm (kích thước, số lượng...)">
+                    <label class="form-check-label" for="name3">
+                        Tôi muốn thay đổi sản phẩm (kích thước, số lượng...)
+
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name4" value="Thủ tục thanh toán rắc rối">
+                    <label class="form-check-label" for="name4">
+                        Thủ tục thanh toán rắc rối
+
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name5" value=" Tôi tìm thấy chỗ mua khác tốt hơn (Rẻ hơn, uy tín hơn, giao nhanh hơn...)">
+                    <label class="form-check-label" for="name5">
+                        Tôi tìm thấy chỗ mua khác tốt hơn (Rẻ hơn, uy tín hơn, giao nhanh hơn...)
+
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radiohuydon" id="name6" value="Tôi không có nhu cầu mua nữa.">
+                    <label class="form-check-label" for="name6">
+                        Tôi không có nhu cầu mua nữa.
+
+                    </label>
+                </div>
+                    <input type="hidden" id="selectedReason" name="selectedReason" value="">
+                    <input type="hidden"  name="orderId" value="@Model.Order.Id">
+                <div class="modal-footer">
+                    <button type="submit" id="submitform" class="btn btn-solid-primary btn--m btn--inline" disabled aria-disabled="true">Xác nhận</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalYeuCauHuyDon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chọn lí do bạn muốn huỷ đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" id="exampleModalLabel">Lý do bạn muốn huỷ đơn hàng là :</h5>
+                <form method="post" asp-page-handler="YeuCauHuyDon">
+                    
+                    <textarea placeholder="Vui lòng nhập nội dung lớn hơn 50 kí tự" id="selectedReason1" name="selectedReason" style="width: 100%; height: 100px;"></textarea>
+
+                    <input type="hidden" name="orderId" value="@Model.Order.Id">
+                    <div class="modal-footer">
+                        <button type="submit" id="submitformYeuCauHuyDon" class="btn btn-solid-primary btn--m btn--inline" disabled aria-disabled="true">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalYeuCauHoanDon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chọn lí do bạn muốn huỷ đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" id="exampleModalLabel">Lý do bạn muốn hoàn  đơn hàng là :</h5>
+                <form method="post" asp-page-handler="YeuCauHoanDon">
+                    
+                    <textarea placeholder="Vui lòng nhập nội dung lớn hơn 50 kí tự" id="selectedReason2" name="selectedReason" style="width: 100%; height: 100px;"></textarea>
+
+                    <input type="hidden" name="orderId" value="@Model.Order.Id">
+                    <div class="modal-footer">
+                        <button type="submit" id="submitformYeuCauHoanDon" class="btn btn-solid-primary btn--m btn--inline" disabled aria-disabled="true">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        $(document).ready(function () {
+            $("#btnHuyDon").click(function () {
+                $('#modalHuyDon').modal('show');
+            });
+        $("#btnYeuCauHuyDon").click(function () {
+            $('#modalYeuCauHuyDon').modal('show');
+            });
+        $("#btnYeuCauHoanDon").click(function () {
+            $('#modalYeuCauHoanDon').modal('show');
+            });
+        $("#btnContinuePayment").click(function () {
+            var orderId = '@Model.Order.Id';
+            $.ajax({
+                url: '/order/ContinuePayment',
+                type: 'POST',
+                data: {
+                    orderId: orderId,
+                },
+                success: function (result) {
+                    window.location.href = result;
+                }
+            });
+            });
+        
+        });
+
+
+</script>
+<script>
+    const radioButtons = document.querySelectorAll('input[name="radiohuydon"]');
+
+    radioButtons.forEach((radioButton) => {
+        radioButton.addEventListener('change', () => {
+            const selectedValue = document.querySelector('input[name="radiohuydon"]:checked').value;
+            document.getElementById('selectedReason').value = selectedValue;
+            document.getElementById('submitform').disabled = false;
+        });
+    });
+    var selectedReasonInput = document.getElementById('selectedReason1');
+
+    selectedReasonInput.addEventListener('change', function () {
+        var inputValue = selectedReasonInput.value.trim();
+
+        if (inputValue.length >= 50) {
+            document.getElementById('submitformYeuCauHuyDon').disabled = false;
+        }else{
+            document.getElementById('submitformYeuCauHuyDon').disabled = true;
+        }
+    });
+    var selectedReasonInput = document.getElementById('selectedReason2');
+
+    selectedReasonInput.addEventListener('change', function () {
+        var inputValue = selectedReasonInput.value.trim();
+
+        if (inputValue.length >= 50) {
+            document.getElementById('submitformYeuCauHoanDon').disabled = false;
+        }else{
+            document.getElementById('submitformYeuCauHoanDon').disabled = true;
+        }
+    });
+
+</script>
+

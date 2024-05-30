@@ -1,0 +1,341 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using FourLeafCloverShoe.Share.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<div class="no-padding col-xs-12 hidden-sm hidden-xs col-md-1 right-cus d-none d-lg-block">
+    <span  title="Tìm kiếm bằng QR Code" style="float:left">
+        <a href="javascript:;" id="start" class="count-holder">
+            <img src="~/fileuser/Assets/App/images/searchqr.png" width="25" />
+        </a>
+    </span>
+    @if (User.Identity.IsAuthenticated)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        <span id="account-handle" class="icon-cart">
+            <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                @if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+                {
+                    <img src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))" class="avatar rounded-circle" width="30">
+
+                }
+                else
+                {
+                    <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
+
+                }
+            </a>
+        </span>
+        <span id="site-cart-handle" onclick="opencart()" class="icon-cart" title="Giỏ hàng">
+            <a href="javascript:;" class="count-holder">
+                <img src="~/fileuser/Assets/App/images/cart.svg" width="25">
+                <span class="count-holder"><span class="count">0</span></span>
+            </a>
+        </span>
+    }
+    else
+    {
+        <span id="account-handle" class="icon-cart">
+            <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Login">
+                <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.99952 8C4.79727 8 2.98828 6.19608 2.98828 4C2.98828 1.80392 4.79727 0 6.99952 0C9.20176 0 11.0108 1.80392 11.0108 4C11.0108 6.19608 9.20176 8 6.99952 8ZM6.99952 1.01961C5.34783 1.01961 4.01075 2.35294 4.01075 4C4.01075 5.64706 5.34783 6.98039 6.99952 6.98039C8.6512 6.98039 9.98828 5.64706 9.98828 4C9.98828 2.35294 8.6512 1.01961 6.99952 1.01961Z"
+                          fill="#2D2D2D"></path>
+                    <path d="M13.5281 15.9998H0.47191C0.157303 15.9998 0 15.7645 0 15.5292V12.0782C0 11.5292 0.235955 11.0586 0.707865 10.8233C4.48315 8.47036 9.59551 8.47036 13.3708 10.8233C13.764 11.0586 14.0787 11.6076 14.0787 12.0782V15.5292C14 15.7645 13.764 15.9998 13.5281 15.9998ZM1.02247 14.9802H13.0562V12.0782C13.0562 11.9213 12.9775 11.7645 12.8202 11.686C9.35955 9.5684 4.7191 9.5684 1.25843 11.686C1.10112 11.7645 1.02247 11.9213 1.02247 12.0782V14.9802Z"
+                          fill="#2D2D2D"></path>
+                </svg>
+            </a>
+        </span>
+        <span id="site-cart-handle" onclick="opencart()" class="icon-cart" title="Giỏ hàng">
+            <a href="javascript:;" class="count-holder">
+                <img src="~/fileuser/Assets/App/images/cart.svg" width="25" />
+                <span class="count-holder"><span class="count">0</span></span>
+            </a>
+        </span>
+    }
+
+</div>
+
+<div data-pc-direction="ltr">
+    <div class="toast-container position-fixed top-0 end-0 p-3 " style="z-index: 99999"></div>
+</div>
+
+<div class="modal fade" id="cameraModal" tabindex="-1" aria-labelledby="cameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cameraModalLabel">Chọn camera</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select id="cameraSelect" class="form-select"></select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="applyCamera">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<video id="video" width="300" height="200" hidden></video>
+<canvas id="canvas" width="300" height="200" hidden></canvas>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var scanning = false;
+    var intervalId; // Biến để lưu ID của hàm setInterval
+
+
+$(document).ready(function() {
+        $('#start').click(function () {
+            if (!scanning) {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.enumerateDevices().then(function (devices) {
+                        var videoDevices = devices.filter(function (device) {
+                            return device.kind === 'videoinput';
+                        });
+                        if (videoDevices.length > 0) {
+                            // Fill the select with the list of cameras
+                            var select = $('#cameraSelect');
+                            select.empty();
+                            videoDevices.forEach(function (device) {
+                                select.append($('<option/>', { value: device.deviceId, text: device.label }));
+                            });
+                            // Show the modal
+                            $('#cameraModal').modal('show');
+                            $('.modal-backdrop').remove();
+                            $('body').removeClass('modal-open');
+
+                        } else {
+                            alert("Không tìm thấy camera!");
+                        }
+                    });
+                }
+                intervalId = setInterval(scanAndSend, 500);
+            } else {
+                stopScanning();
+                video.hidden = true;
+            }
+        });
+
+        $('#applyCamera').click(function () {
+            var selectedDeviceId = $('#cameraSelect').val();
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: selectedDeviceId } }).then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+                video.hidden = false;
+                scanning = true;
+                var modal = bootstrap.Modal.getInstance($('#cameraModal')[0]);
+                modal.hide();
+            });
+        });
+        function scanAndSend() {
+            if (!scanning) {
+                return;
+            }
+
+            context.drawImage(video, 0, 0, 300, 200);
+            var imageData = canvas.toDataURL('image/png');
+            $.post('/Home/DecodeQRCode', { imageData: imageData }, function (data) {
+                if (data) {
+                    stopScanning();
+                    video.hidden = true;
+                    console.log('QR Code found: ' + data);
+                }
+            });
+        }
+
+        function stopScanning() {
+            scanning = false;
+            clearInterval(intervalId); // Dừng hàm setInterval
+            video.pause();
+            if (video.srcObject) {
+                let tracks = video.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+
+            }
+        }
+});
+
+
+
+</script>
+
+<script>
+    function showToast(message, status) {
+        var statusmessage = "";
+        if (status == true) {
+            statusmessage = "bg-success";
+        } else {
+            statusmessage = "bg-danger"
+        }
+
+        var toastContainer = document.querySelector('.toast-container');
+
+        // Check the number of current toasts
+        var currentToasts = toastContainer.getElementsByClassName('toast');
+        if (currentToasts.length >= 2) {
+            // If there are already 3 toasts, remove the oldest one
+            currentToasts[0].remove();
+        }
+
+        var toastEl = document.createElement('div');
+        toastEl.classList.add('toast');
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+
+        var toastHeader = document.createElement('div');
+        toastHeader.classList.add('toast-header');
+        toastHeader.classList.add('text-white');
+        toastHeader.classList.add(statusmessage);
+        toastHeader.innerHTML = `<strong class="me-auto"> <i class="mwc-icon-bell-o " style="width: 20px"></i> Thông báo</strong>
+                                <small>0 phút trước</small>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`;
+        var toastBody = document.createElement('div');
+
+        toastBody.classList.add('toast-body');
+        toastBody.style.display = 'flex';
+        toastBody.style.flexDirection = 'row';
+        toastBody.style.alignItems = 'center';
+        toastBody.style.textAlign = 'left';
+        if (status == true) {
+            toastBody.innerHTML = `<img class="img" src="/fileadmin/assets/images/notification/ok-48.png"> ${message}`;
+        } else {
+            toastBody.innerHTML = `<img class="img" src="/fileadmin/assets/images/notification/high_priority-48.png"> ${message}`;
+        }
+        toastEl.appendChild(toastHeader);
+        toastEl.appendChild(toastBody);
+        toastContainer.appendChild(toastEl);
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+    function addToCart() {
+        var quantity = $('#quantity-input').val();
+        $.ajax({
+            url: '/cart/addToCart',
+            type: 'POST',
+            data: { quantity: quantity, productDetailId: productDetailId },
+            success: function (response) {
+                showToast(response.message, response.isSuccess);
+                getCartCount();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function removeMiniCartItem(productDetailId) {
+        $.ajax({
+            url: "/cart/removeMiniCartItem",
+            type: "POST",
+            data: { productDetailId: productDetailId },
+            success: function (response) {
+                // Cập nhật lại mini-cart sau khi xóa sản phẩm
+                showToast(response.message, response.isSuccess);
+                $("#site-cart-handle").click();
+                getCartCount();
+
+                console.log(response);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function removeCartItem(productDetailId) {
+        $.ajax({
+            url: "/cart/removeCartItem",
+            type: "POST",
+            data: { productDetailId: productDetailId },
+            success: function (response) {
+                // Cập nhật lại mini-cart sau khi xóa sản phẩm
+                showToast(response.message, response.isSuccess);
+                location.reload();
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+    // Hàm để lấy số lượng sản phẩm trong giỏ hàng
+    function getCartCount() {
+        // Gửi yêu cầu AJAX để lấy số lượng sản phẩm trong giỏ hàng
+        $.ajax({
+            url: '/cart/getCountCart',
+            type: 'GET',
+            success: function (data) {
+                // Cập nhật số lượng sản phẩm trong giỏ hàng trong layout
+                $('.count').text(data.count);
+            },
+            error: function () {
+                console.log('Lỗi khi lấy số lượng sản phẩm trong giỏ hàng');
+            }
+        });
+    }
+
+    // Gọi hàm getCartCount mỗi khi trang được tải lại
+    $(document).ready(function () {
+        getCartCount();
+    });
+    $("#site-cart-handle").click(function () {
+        $.ajax({
+            url: "/cart/getMiniCart",
+            type: "GET",
+            success: function (response) {
+                var html = "";
+                html += '<div id="sidebar-cart" class="cart-widget-side wd-side-hidden wd-right wd-opened">';
+                html += '<div class="wd-heading widget-heading"><span class="title widget-title">Giỏ hàng</span>';
+                html += '<div class="close-side-widget wd-action-btn wd-style-text wd-cross-icon">';
+                html += '<a href="javascript:;" onclick="closecart()"><img src="/fileuser/Assets/App/images/iconclose.png"style="width:17px;padding-right:5px;">Đóng</a>';
+                html += '</div></div><div class="widget woocommerce widget_shopping_cart"><div id="cart-list-item" class="widget_shopping_cart_content" style="opacity: 1;">';
+                if (response.tongtien == 0) {
+                    html += '<span class="cart-item-name">Giỏ hàng trống</span>';
+                }
+                else {
+                    var lstproductsss = JSON.parse(response.lstproducts);
+                    var so = 0;
+                    $.each(lstproductsss, function (k, item) {
+
+                        item.CartItems.forEach(function (items) {
+                            if (items.ProductDetailId == item.Id) {
+                                so = items.Quantity;
+                            }
+                        });
+                        html += '<div class="elementor-menu-cart__products woocommerce-mini-cart cart woocommerce-cart-form__contents">';
+                        html += '<div class="elementor-menu-cart__product woocommerce-cart-form__cart-item cart_item">';
+                        html += '<div class="elementor-menu-cart__product-image product-thumbnail">';
+                        html += '<img width="800" height="800" src="' + item.Products.ProductImages[0].ImageUrl + '"class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wd-lazy-fade wd-loaded" alt="" loading="lazy"></div>';
+                        html += '<div class="elementor-menu-cart__product-name product-name" data-title="Product">';
+                        html += '<span class="cart-item-name">' + item.Products.ProductName + '</span>';
+                        html += '<ul class="variation">';
+                        html += '<li class="variation-Kchc"><span class="item-variation-name">SKU:</span><span class="item-variation-value">' + item.SKU + '</span></li>';
+                        html += '<li class="variation-Kchc"><span class="item-variation-name">Kích cỡ:</span><span class="item-variation-value">' + item.Size.Name + '</span></li>';
+                        html += ' </ul></div>';
+                        html += '<div class="elementor-menu-cart__product-price product-price" data-title="Price">';
+                        html += ' <span class="quantity">' + so + ' × <span class="woocommerce-Price-amount amount"><bdi>' + item.PriceSale.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ" + '<span class="woocommerce-Price-currencySymbol"></span></bdi></span></span></div>';
+                        html += '<div class="elementor-menu-cart__product-remove product-remove">';
+                        html += '<a href="javascript:;" onclick="removeMiniCartItem(\'' + item.Id + '\')" aria-label="Xóa sản phẩm"></a></div></div></div>';
+                    });
+                    html += '<div class="elementor-menu-cart__subtotal">';
+                    html += '<strong>Tạm tính:</strong> <span class="woocommerce-Price-amount amount"><bdi>' + response.tongtien.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ" + '<span class="woocommerce-Price-currencySymbol"></span></bdi></span></div>';
+                    html += '<div class="elementor-menu-cart__footer-buttons">';
+                    html += '<a href="/cart" class="elementor-button elementor-button--view-cart elementor-size-md"><span class="elementor-button-text">Xem giỏ hàng</span> </a></div></div></div></div>';
+                }
+                // Thêm mã HTML vào container';
+                document.getElementById("sidebar-cart").innerHTML = html;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+
+</script>

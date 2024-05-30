@@ -1,0 +1,30 @@
+﻿@model FourLeafCloverShoe.Share.Models.Brand
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form method="post" asp-action="Create">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Tên hãng</label>
+                        <input asp-for="Name" type="text" class="form-control" placeholder="Nhập tên hãng">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Thêm mới</button>
+                        </div>
+                    </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")

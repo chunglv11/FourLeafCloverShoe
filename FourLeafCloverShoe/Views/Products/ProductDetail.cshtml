@@ -1,0 +1,1215 @@
+﻿@using FourLeafCloverShoe.Share.Models;
+@using FourLeafCloverShoe.Share.ViewModels
+@model FourLeafCloverShoe.Share.Models.Product
+@{
+    var lstRate = ViewBag.lstRate as List<RateViewModel>;
+}
+<link href="~/fileuser/lib/jquery-pagination/simplePagination.css" rel="stylesheet">
+
+<style>
+    .input-group.input-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .input-group.input-spinner .form-control {
+            flex-grow: 1;
+            height: 30px;
+            border-radius: 2px;
+        }
+
+        .input-group.input-spinner .btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 2px;
+            border:medium,solid;
+            background-color: white;
+            color: black;
+            font-size: 12px;
+            cursor: pointer;
+        }
+</style>
+<style>
+    .simple-pagination ul {
+        margin: 0 0 20px;
+        padding: 0;
+        list-style: none;
+        text-align: center;
+    }
+
+    .simple-pagination li {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+        .simple-pagination li a,
+        .simple-pagination li span {
+            color: #666;
+            text-decoration: none;
+            border: 1px solid #EEE;
+            background-color: #FFF;
+            box-shadow: 0px 0px 10px 0px #EEE;
+        }
+
+    .simple-pagination .current {
+        color: #FFF;
+        background-color: #000;
+        border-color: #000;
+    }
+
+    /*.simple-pagination .prev.current,
+            .simple-pagination .next.current {
+                background: #ccc;
+            }*/
+    .status-product {
+        background-color: #898989;
+        color: #fff;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        min-width: 100px;
+        width: 40%;
+        height: 30px;
+        padding-top: 6px
+    }
+
+    .buy-now-link {
+        cursor: pointer;
+    }
+
+    .product-option-item {
+        cursor: pointer;
+    }
+
+    .image-product-modal {
+        max-width: 140px;
+        max-height: 140px;
+    }
+
+    @@media(min-width: 992px) {
+        .image-product-modal {
+            max-width: 140px;
+            max-height: 140px;
+        }
+    }
+
+    @@media(max-width: 786px) {
+
+        .product-option-item {
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .image-product-modal {
+            max-width: 120px;
+            max-height: 120px;
+        }
+    }
+
+    @@media(max-width: 1024px) {
+        /*.slick-dotted.slick-slider {
+                    display: none;
+                }*/
+    }
+
+    /*fix tràn attribute*/
+    .product-detail-main .product-detail-main-bottom .product-detail-main-bottom-left .product-option .product-option-items {
+        flex-wrap: inherit;
+    }
+
+    .modal-store .product-option-item.active {
+        /*border: 1px solid #ccc;*/
+    }
+
+    .modal-store .product-option-item {
+        text-align: center;
+        padding: 7px 9px;
+        background-color: #fff;
+        color: #000000;
+        -webkit-transition: all 0.25s;
+        -o-transition: all 0.25s;
+        transition: all 0.25s;
+        border: 1px solid transparent;
+    }
+
+    .be-comment-block {
+        margin-bottom: 50px !important;
+        border: 1px solid #edeff2;
+        border-radius: 2px;
+        padding: 10px;
+        border: 1px solid #ffffff;
+    }
+
+    .comments-title {
+        font-size: 16px;
+        color: #262626;
+        margin-bottom: 15px;
+    }
+
+    .be-img-comment {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin-bottom: 15px;
+    }
+
+    .be-ava-comment {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .be-comment-content {
+        margin-left: 80px;
+    }
+
+        .be-comment-content span {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+    .be-comment-name {
+        font-size: 13px;
+    }
+
+    .be-comment-content a {
+        color: #383b43;
+    }
+
+    .be-comment-time {
+        text-align: right;
+    }
+
+    .be-comment-time {
+        font-size: 11px;
+        color: #b4b7c1;
+    }
+
+    .be-comment-text {
+        font-size: 13px;
+        line-height: 18px;
+        color: #7a8192;
+        display: block;
+        background: #f6f6f7;
+        border: 1px solid #edeff2;
+        padding: 10px;
+    }
+
+    .rating {
+        --dir: right;
+        --fill: gold;
+        --fillbg: rgba(100, 100, 100, 0.15);
+        --heart: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.328l-1.453-1.313q-2.484-2.25-3.609-3.328t-2.508-2.672-1.898-2.883-0.516-2.648q0-2.297 1.57-3.891t3.914-1.594q2.719 0 4.5 2.109 1.781-2.109 4.5-2.109 2.344 0 3.914 1.594t1.57 3.891q0 1.828-1.219 3.797t-2.648 3.422-4.664 4.359z"/></svg>');
+        --star: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17.25l-6.188 3.75 1.641-7.031-5.438-4.734 7.172-0.609 2.813-6.609 2.813 6.609 7.172 0.609-5.438 4.734 1.641 7.031z"/></svg>');
+        --stars: 5;
+        --starsize: 3rem;
+        --symbol: var(--star);
+        --value: 1;
+        --w: calc(var(--stars) * var(--starsize));
+        --x: calc(100% * (var(--value) / var(--stars)));
+        block-size: var(--starsize);
+        inline-size: var(--w);
+        position: relative;
+        touch-action: manipulation;
+        -webkit-appearance: none;
+    }
+
+    [dir="rtl"] .rating {
+        --dir: left;
+    }
+
+    .rating::-moz-range-track {
+        background: linear-gradient(to var(--dir), var(--fill) 0 var(--x), var(--fillbg) 0 var(--x));
+        block-size: 100%;
+        mask: repeat left center/var(--starsize) var(--symbol);
+    }
+
+    .rating::-webkit-slider-runnable-track {
+        background: linear-gradient(to var(--dir), var(--fill) 0 var(--x), var(--fillbg) 0 var(--x));
+        block-size: 100%;
+        mask: repeat left center/var(--starsize) var(--symbol);
+        -webkit-mask: repeat left center/var(--starsize) var(--symbol);
+    }
+
+    .rating::-moz-range-thumb {
+        height: var(--starsize);
+        opacity: 0;
+        width: var(--starsize);
+    }
+
+    .rating::-webkit-slider-thumb {
+        height: var(--starsize);
+        opacity: 0;
+        width: var(--starsize);
+        -webkit-appearance: none;
+    }
+
+    .rating,
+    .rating-label {
+        display: block;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .rating-label {
+        margin-block-end: 1rem;
+    }
+
+    /* NO JS */
+    .rating--nojs::-moz-range-track {
+        background: var(--fillbg);
+    }
+
+    .rating--nojs::-moz-range-progress {
+        background: var(--fill);
+        block-size: 100%;
+        mask: repeat left center/var(--starsize) var(--star);
+    }
+
+    .rating--nojs::-webkit-slider-runnable-track {
+        background: var(--fillbg);
+    }
+
+    .rating--nojs::-webkit-slider-thumb {
+        background-color: var(--fill);
+        box-shadow: calc(0rem - var(--w)) 0 0 var(--w) var(--fill);
+        opacity: 1;
+        width: 1px;
+    }
+
+    [dir="rtl"] .rating--nojs::-webkit-slider-thumb {
+        box-shadow: var(--w) 0 0 var(--w) var(--fill);
+    }
+
+    #formComment .error {
+        margin-top: 0.25rem;
+        font-size: .875em;
+        color: #dc3545;
+    }
+
+    .product-option-item img {
+        border-radius: 100%;
+        padding: 1px;
+    }
+
+    .product-option-item.active img {
+        border: 2px solid red;
+    }
+
+
+    #colorOptions .product-option-item {
+        padding: 1px !important;
+    }
+
+    #sizeOptions .product-option-item.active {
+        border: 2px solid red;
+    }
+
+    #colorOptions .product-option-item.active {
+        border: 2px solid red;
+    }
+
+    .product-option-item.disabled-link {
+        pointer-events: none; /* Ngăn chặn mọi tương tác chuột */
+        opacity: 0.5; /* Làm mờ để hiển thị trạng thái vô hiệu hóa */
+    }
+
+</style>
+
+<section class="product-detail-layout">
+    <div class="container-fluid">
+        <div class="section-padding">
+            <div class="product-detail-top mb-32px">
+                <div id="product-detail-thumb" class="product-detail-thumb">
+                    <style>
+                        .slick-slider {
+                            display: table;
+                            table-layout: fixed;
+                            width: 100%;
+                        }
+
+                        @@media (max-width: 768px) {
+                            .product-detail-thumb-outer {
+                                max-width: 760px !important;
+                            }
+                        }
+                    </style>
+                    <div id="product-detail-thumb" class="product-detail-thumb">
+
+                        <div class="product-detail-thumb-outer">
+                            <div class="product-grid-thumb product-grid-thumb-tag">
+                                <div class="product-grid-sale-tag">
+                                </div>
+                            </div>
+                            <div class="product-detail-thumb-main slick-initialized slick-slider">
+                                <button class="slick-prev slick-arrow" aria-label="Previous" type="button" style="display: block;">
+                                    Previous
+                                </button>
+                                <style>
+                                    .product-detail-thumb-main-item.slick-slide.slick-cloned {
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                    }
+
+                                        .product-detail-thumb-main-item.slick-slide.slick-cloned .product-grid-thumb {
+                                            width: 100%;
+                                            height: 100%;
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+                                        }
+
+                                            .product-detail-thumb-main-item.slick-slide.slick-cloned .product-grid-thumb img.product-detail-slider {
+                                                object-fit: cover;
+                                                width: 100%;
+                                                height: 100%;
+                                            }
+                                </style>
+                                <div class="slick-list draggable">
+                                    <div class="slick-track" style="opacity: 1; width: 100%;">
+                                        <div class="product-detail-thumb-main-item slick-slide slick-cloned"
+                                             data-slick-index="-1" aria-hidden="true" tabindex="-1"
+                                             style="width: 744px;">
+                                            <div class="product-grid-thumb">
+                                                <a href="#" class="product-grid-image"
+                                                   data-src="#"
+                                                   tabindex="-1">
+                                                    <img class="product-detail-slider"
+                                                         src="@Model.ProductImages.First().ImageUrl"
+                                                         alt="">
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="slick-next slick-arrow" aria-label="Next" type="button" style="display: block;">
+                                    Next
+                                </button>
+                            </div>
+
+                            <div class="slick-list draggable">
+                                <div class="slick-track" style="opacity: 1; width: 100%;">
+                                    @foreach (var item in Model.ProductImages)
+                                    {
+                                        <div class="product-detail-thumb-nav-item slick-slide slick-current slick-active"
+                                             data-slick-index="0" aria-hidden="false" tabindex="0"
+                                             style="width: 141px;">
+                                            <div class="product-grid-thumb">
+                                                <a href="#" class="product-grid-image" tabindex="0">
+                                                    <img class="product-detail-slider"
+                                                         src="@item.ImageUrl"
+                                                         alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                           
+                        </div>
+
+                    </div>
+                    <script src="~/fileuser/Assets/App/js/slick-product-detail.js"
+                            type="text/javascript"></script>
+                </div>
+
+                <div class="product-detail-main">
+                    <h1 style="font-size: x-large;">@Model.ProductName</h1>
+                    <p class="product-code">@Model.ProductCode</p>
+                    <div class="product-top-info">
+                        @if (lstRate != null)
+                        {
+                            
+                            <div class="product-grid-rating">
+                                @{
+                                    // Tính trung bình và làm tròn đến 1 chữ số thập phân
+                                    var averageRating = Math.Round(Convert.ToDecimal(lstRate.Average(rate => rate.Rating)), 1);
+                                    // Hiển thị số sao theo số điểm trung bình
+                                    for (var i = 1; i <= 5; i++)
+                                    {
+                                        <div class="product-grid-star @(i <= averageRating ? "product-grid-star-active" : "")">
+                                            <i class="mwc-icon-mwc-star"></i>
+                                        </div>
+                                       
+                                    }
+                                    <span class="product-top-review-count">@averageRating/5</span>
+                                }
+                            </div>
+                            <div class="product-top-review">
+                                @{
+                                    var count = lstRate.Count(c => c.IDPro == Model.Id);
+                                }
+                                <span class="product-top-review-count">@count</span> Đánh giá
+                            </div>
+                       }
+                        <div class="product-availibleQuantity">
+                            @{
+                                decimal priceMax = ViewBag.priceMax??0;
+                                decimal priceMin = ViewBag.priceMin??0;
+                                int availibleQuantity = ViewBag.availibleQuantity;
+                            }
+                            Còn lại <span id="availibleQuantity">@availibleQuantity </span> sản phẩm
+                        </div>
+                    </div>
+                    <p class="product-grid-price">
+                        <span class="product-grid-price-new">
+                            <span class="product-grid-price-new-text is-flash-sale">
+                                @if (priceMin == priceMax)
+                                {
+                                    <span>@priceMin.ToString("N0") đ</span>
+                                 }else
+                                {
+                                    <span>@priceMin.ToString("N0") đ -  @priceMax.ToString("N0") đ</span>
+                                }
+                            </span>
+                        </span>
+                    </p>
+                    <p class="sale-des"></p>
+                    <div class="product-detail-main-bottom">
+                        <div class="product-detail-main-bottom-left">
+                            <div class="product-option hiden-xs">
+                                <div class="product-option-lable">Kích thước</div>
+                                <div id="sizeOptions" class="product-option-items">
+                                    @foreach (var item in ViewBag.lstsize as List<Size>)
+                                    {
+                                        <a id="@item.Id" class="product-option-item ">@item.Name</a>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="product-option hiden-xs">
+                                <div class="product-option-lable">Màu</div>
+                                <div id="colorOptions" class="product-option-items">
+                                    @foreach (var item in ViewBag.lstColors as List<Colors>)
+                                    {
+                                        <a id="@item.Id" class="product-option-item ">@item.ColorName</a>
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-4 flex-grow-0">
+                                <div class="input-group mb-3 input-spinner">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-light" type="button" id="button-minus">-</button>
+                                    </div>
+                                    <input name="quantity" type="number" style="text-align: center; background-color: white;" class="form-control" min="1" value="1" id="quantity-input">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light" type="button" id="button-plus">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="#" class="size-guide-link" data-bs-toggle="modal"
+                               data-bs-target="#modalHDSIZE"> Hướng Dẫn Tính Size </a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalHDSIZE" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                HƯỚNG DẪN
+                                                TÍNH SIZE
+                                            </h5>
+                                            <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                <img src="https://img.mwc.com.vn/files/images/hd-size/step1-huong-dan-chon-size-giay-vascara_grande.jpg">
+                                            </p>
+                                            <p>
+                                                <span class="lead">01. Vẽ khung bàn chân</span>
+                                                <span>&nbsp;</span>
+                                                <br>
+                                                <span>
+                                                    Đặt bàn chân lên tờ giấy trắng, dùng bút đánh
+                                                    dấu theo khung bàn chân trên giấy
+                                                </span>
+                                            </p>
+                                            <p>
+                                                <img src="https://img.mwc.com.vn/files/images/hd-size/step2-huong-dan-chon-size-giay-vascara_grande.jpg">
+                                            </p>
+                                            <p>
+                                                <span class="lead">02. Đo chiều dài bàn chân</span>
+                                                <span>&nbsp;</span>
+                                                <br>
+                                                <span>
+                                                    Dùng thước đo chiều dài lớn nhất từ mũi chân
+                                                    đến gót chân trên khung bàn chân đã đánh
+                                                    dấu
+                                                </span>
+                                            </p>
+                                            <p>
+                                                <img src="https://img.mwc.com.vn/files/images/hd-size/step3-huong-dan-chon-size-giay-vascara_grande.jpg">
+                                            </p>
+                                            <p>
+                                                <span class="lead">03. Đo độ rộng vòng chân</span>
+                                                <span>&nbsp;</span>
+                                                <br>
+                                                <span>
+                                                    Lấy thước dây quấn quanh 1 vòng bàn chân từ
+                                                    khớp ngón chân cái đến khớp ngón chân út
+                                                </span>
+                                            </p>
+                                            <table class="mce-item-table" width="570" height="138">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            size
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            độ rộng
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            độ dài
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            35
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            20.7
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            23.1
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            36
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            21.1
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            23.8
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            37
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            21.6
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            24.5
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            38
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            22.1
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            25.2
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="width: 182px; text-align: center;"
+                                                            data-mce-style="width: 182px; text-align: center;">
+                                                            39
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            22.6
+                                                        </td>
+                                                        <td style="width: 183px; text-align: center;"
+                                                            data-mce-style="width: 183px; text-align: center;">
+                                                            25.8
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Đóng
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalProductInStore" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            </div>
+                            <div class="product-cart-actions hiden-xs">
+                                <a style="display: inherit;" id="btnBuyNow"
+                                   class="buy-now-link"> Mua ngay </a>
+
+                                <button onclick="addToCart();" style="cursor: pointer; display: inherit;" id="btnAddToCart"
+                                   class="add-to-cart-link">
+                                    <i class="mwc-icon-mwc-cart"></i> Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                        <img src="#" id="imgQrCode" hidden/>
+                    <div class="product-single__policy">
+                        <div class="product-policy">
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon3.jpg"
+                                         alt="Đổi trả với số điện thoại">
+                                </div> <span class="product-policy__title">
+                                    Bảo hành keo vĩnh viễn
+                                </span>
+                            </div>
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon4.jpg"
+                                         alt="Miễn phí vận chuyển">
+                                </div> <span class="product-policy__title">
+                                    Miễn phí vận chuyển toàn quốc<br> cho đơn hàng từ 150k
+                                </span>
+                            </div>
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon5.jpg"
+                                         alt="Đổi hàng trong 60 ngày">
+                                </div> <span class="product-policy__title">
+                                    Đổi trả dễ dàng <br> (trong vòng 7 ngày nếu lỗi nhà sản xuất)
+                                </span>
+                            </div>
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon2.jpg" alt=""
+                                         style="width: 25px;">
+                                </div> <span class="product-policy__title">
+                                    Hotline 1900.633.349<br>
+                                    hỗ trợ từ 8h30-21h30
+                                </span>
+                            </div>
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon1.jpg"
+                                         alt="Trả hàng tận nơi">
+                                </div> <span class="product-policy__title">
+                                    Giao hàng tận nơi,<br> nhận hàng xong thanh toán
+                                </span>
+                            </div>
+                            <div class="product-policy__item">
+                                <div class="product-policy__icon">
+                                    <img src="https://img.mwc.com.vn/files/Icon/icon3.jpg"
+                                         alt="Giao hàng">
+                                </div> <span class="product-policy__title">
+                                    Ưu đãi tích điểm và <br>hưởng quyền lợi thành viên từ "Cỏ bốn lá"
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-12 mb-32px dt-pro">
+
+
+                    <ul class="nav nav-tabs" id="ProductTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="product-detail-des-tab" data-bs-toggle="tab" data-bs-target="#product-detail-des" type="button" role="tab" aria-controls="product-detail-des" aria-selected="false"> Chi tiết sản phẩm</button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="product-detail-review-tab" data-bs-toggle="tab" data-bs-target="#product-detail-review" type="button" role="tab" aria-controls="product-detail-review" aria-selected="false" onclick="loadComments()"> Bình luận </button>
+                        </li>
+
+                    </ul>
+                    <div class="tab-content" id="ProductTabContent">
+                        <div class="tab-pane fade show active" id="product-detail-des" role="tabpanel" aria-labelledby="product-detail-des-tab">
+                        @Html.Raw(Model.Description)    
+                        </div>
+
+                        <div class="tab-pane fade" id="product-detail-review" role="tabpanel" aria-labelledby="product-detail-review-tab">
+                            <br>
+                            <div class="be-comment-block" id="product-detail-comments">
+                                <input type="hidden" id="TotalRow" name="TotalRow" value="0">
+                                <h1 class="comments-title">Không có bình luận</h1>
+                                
+                                    <div class="be-comment mb-2">
+                                       
+                                    </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-12 mb-32px">
+                    <div class="filter-sidebar-body">
+                        <div class="combo-products">
+                            <div class="combo-products-title">Có thể bạn cũng thích</div>
+                            <div class="combo-products-content">
+                                <div class="combo-products-grid">
+                                    <div class="product-grid-item">
+                                        <div class="product-grid-thumb">
+
+                                            <a href="#"
+                                               class="product-grid-image">
+                                                <img class="product-detail-slider"
+                                                     src="~/fileuser/img/sanpham.jpg"
+                                                     alt="">
+                                            </a>
+                                        </div>
+                                        <a class="product-grid-info"
+                                           href="#"
+                                           title="Vớ nam nữ MWC - AT16">
+                                            <div  class="product-grid-info-top">
+                                                <p class="product-grid-title">
+                                                    Vớ nam nữ MWC - AT16
+                                                </p>
+                                                <p class="product-grid-price">
+                                                    <span class="product-grid-price-new">
+                                                        <span class="product-grid-price-new-text is-flash-sale">
+                                                            35.000 đ
+                                                        </span>
+
+
+                                                    </span>
+                                                </p>
+                                            </div>
+
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<style>
+    .image-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+    }
+
+        .image-slider img {
+            scroll-snap-align: center;
+            flex: 0 0 auto;
+            margin-right: 10px; /* Khoảng cách giữa các ảnh */
+        }
+
+</style>
+@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+<script type="text/javascript">
+    function loadComments() {
+        var productId = '@(Model.Id)';
+        $.ajax({
+            url: '/Products/ShowRateByIdProduct', 
+            type: 'GET',
+            data: { IdPro: productId },
+            success: function (data) {
+                updateComments(data);
+                console.log(data);
+            },
+            error: function () {
+                alert('Lỗi');
+            }
+        });
+    }
+
+    function updateComments(comments) {
+        var commentsContainer = $('#product-detail-comments');
+
+        if (comments && comments.length > 0) {
+            var commentHtml = '';
+
+            comments.forEach(function (comment) {
+
+                // Tạo biến để lưu các biểu tượng sao
+                var starIcons = '';
+                for (var i = 0; i < comment.rating; i++) {
+                    starIcons += '<div class="product-grid-star product-grid-star-active"><i class="mwc-icon-mwc-star"></i></div>';
+                }
+
+
+                //ánh đánh gia
+                // Tách chuỗi URL ảnh thành mảng
+                var imageUrls = comment.imageUrl ? comment.imageUrl.split(';') : [];
+                // Tạo các slide ảnh
+                var imageSlides = '';
+                imageUrls.forEach(function (url) {
+                    imageSlides += `<img style="width:150px;height:100px;" src="${url}" alt="">`;
+                });
+                var imageSliderHtml = `
+                    <div class="image-slider">
+                        ${imageSlides}
+                    </div>
+                `;
+                commentHtml += `
+                    <div class="be-comment mb-2">
+                        <div class="be-img-comment">
+                            <a href="#">
+                               <img src="data:image/jpeg;base64,${comment.anhKh}" alt="" class="be-ava-comment">
+                            </a>
+                        </div>
+                        <div class="be-comment-content">
+                            <span class="be-comment-name">
+                                <a href="#">${comment.tenKH}</a>
+                            </span>
+                            <div class="be-comment-text d-flex flex-column">
+                                <div class="product-grid-rating">
+                                    ${starIcons} <!-- Hiển thị các biểu tượng sao -->
+                                </div>
+                                    <span>${comment.createDate}</span>
+                                <span>${comment.contents || "Người này không để lại lời nhắn gì"}</span>
+                                <span>Size: ${comment.size}</span>
+                                <span>Color: ${comment.color}</span>
+                                ${imageSliderHtml} <!-- Ảnh đánh giá -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            commentsContainer.html(commentHtml);
+        } else {
+            commentsContainer.html('<h1 class="comments-title">Không có bình luận</h1>');
+        }
+    }
+
+</script>
+
+
+
+
+<script type="text/javascript">
+
+
+    var availableQuantity = document.getElementById('availibleQuantity');    // Lấy phần tử nút + và - bằng id
+    var buttonPlus = document.getElementById('button-plus');
+    var buttonMinus = document.getElementById('button-minus');
+    var quantityInput = document.getElementById('quantity-input');
+    quantityInput.max = parseInt(availableQuantity.textContent);
+    quantityInput.onchange = function () { // nếu <=1 gán =1
+        if (this.value <= 0) {
+            this.value = 1;
+        }
+    };
+
+    // Thiết lập sự kiện click cho nút +
+    buttonPlus.addEventListener('click', function () {
+        // Tăng giá trị của input số lượng khi nút + được click
+        if (parseInt(quantityInput.value) < parseInt(availableQuantity.textContent)) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+    });
+    // Thiết lập sự kiện click cho nút -
+    buttonMinus.addEventListener('click', function () {
+        // Giảm giá trị của input số lượng khi nút - được click, nhưng không được nhỏ hơn 1
+        if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    });
+    // Thiết lập sự kiện input cho input số lượng để kiểm tra giá trị nhập vào
+    quantityInput.addEventListener('input', function () {
+        // Nếu giá trị nhập vào lớn hơn giá trị max, cập nhật lại giá trị của input
+        if (parseInt(quantityInput.value) > parseInt(availableQuantity.textContent)) {
+            quantityInput.value = parseInt(availableQuantity.textContent);
+        }
+    });
+
+
+    var productDetailId = "";
+
+    let selectedSize = null;
+    let selectedColor = null;
+    const productId = "@Model.Id";
+    $("#sizeOptions > .product-option-item").on("click", function () {
+        const newSizeId = $(this).attr('id');
+
+        if (selectedSize !== newSizeId) {
+            selectedSize = newSizeId;
+            updateActiveOption('size', selectedSize);
+            fetchAvailableColors(selectedSize);
+            if (selectedColor && selectedSize) {
+                fetchProductDetails(selectedSize, selectedColor);
+            }
+        }
+    });
+
+    $("#colorOptions > .product-option-item").on("click", function () {
+        const newColorId = $(this).attr('id');
+
+        if (selectedColor !== newColorId) {
+            selectedColor = newColorId;
+            updateActiveOption('color', selectedColor);
+            fetchAvailableSizes(selectedColor);
+            if (selectedColor && selectedSize) {
+                fetchProductDetails(selectedSize, selectedColor);
+            }
+        }
+    });
+
+    function fetchAvailableSizes(colorId) {
+        $.ajax({
+            url: '/products/getavailableoptions',
+            type: 'POST',
+            data: { productId: productId, colorId: colorId },
+            success: function (response) {
+                updateAvailableOptions(response.sizes, null);
+                if (selectedSize && !response.sizes.includes(selectedSize)) {
+                    updateActiveOption('size', null); // Deselect size
+                    selectedSize = null;
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function fetchAvailableColors(sizeId) {
+        $.ajax({
+            url: '/products/getavailableoptions',
+            type: 'POST',
+            data: { productId: productId, sizeId: sizeId },
+            success: function (response) {
+                updateAvailableOptions(null, response.colors); // Update only colors
+                if (selectedColor && !response.colors.includes(selectedColor)) {
+                    updateActiveOption('color', null); // Deselect color
+                    selectedColor = null;
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function fetchProductDetails(sizeId, colorId) {
+        $.ajax({
+            url: '/products/getdatabysizeid',
+            type: 'POST',
+            data: { sizeId: sizeId, productId: productId, colorId: colorId },
+            success: function (response) {
+                console.log(response);
+                productDetailId = response.productDetailId;
+                $('.product-grid-price-new-text').text(response.priceSale.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+                if (response.status == 1) {
+                    var availibleQuantity = '@ViewBag.availibleQuantity';
+                    var content = 'Còn lại <span id="availibleQuantity">' + availibleQuantity + '</span> sản phẩm';
+                    $('.product-availibleQuantity').html(content);
+                    $('#availibleQuantity').text(response.quantity);
+                    $('#quantity-input').attr('max', response.quantity);
+
+                }
+                if (response.status == 0) {
+                    $('.product-availibleQuantity').text("Sản phẩm ngừng kinh doanh");
+                }
+                $('#imgQrCode').attr('src', response.imgQrCode);
+                $('#imgQrCode').removeAttr('hidden');
+            },
+            error: function (error) {
+                console.log(error);
+                // Handle error gracefully
+            }
+        });
+    }
+
+
+    function updateAvailableOptions(availableSizes, availableColors) {
+        $("#sizeOptions > .product-option-item").each(function () {
+            const sizeId = $(this).attr('id');
+            $(this).attr('data-disabled', availableSizes && !availableSizes.includes(sizeId));
+            $(this).toggleClass('disabled-link', $(this).attr('data-disabled') === "true");
+        });
+
+        $("#colorOptions > .product-option-item").each(function () {
+            const colorId = $(this).attr('id');
+            $(this).attr('data-disabled', availableColors && !availableColors.includes(colorId));
+            $(this).toggleClass('disabled-link', $(this).attr('data-disabled') === "true");
+        });
+    }
+    $("#sizeOptions > .product-option-item, #colorOptions > .product-option-item").on("click", function (event) {
+        if ($(this).attr('data-disabled') === 'true') {
+            event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+            return;
+        }
+
+        // ... (rest of your click event handler) ...
+    });
+
+    function updateActiveOption(optionType, selectedId) {
+        $(`#${optionType}Options > .product-option-item`).each(function () {
+            const itemId = $(this).attr('id');
+            if (itemId === selectedId) {
+                $(this).addClass('active').attr('aria-checked', 'true');
+            } else {
+                $(this).removeClass('active').attr('aria-checked', 'false');
+            }
+        });
+    }
+
+    // $("#sizeOptions > .product-option-item").on("click", function () {
+    //     quantityInput.value = 1;
+    //     clearActiveSize();
+    //     $(this).addClass('active').attr('aria-checked', 'true');
+    //     var sizeId = $(this).attr('id'); // Lấy ID của kích thước được chọn
+    //     var productId = "@Model.Id";
+    //     $("#sizeOptions > .product-option-item").not(this).removeClass('active').attr('aria-checked', 'false');
+
+    //     // Gửi AJAX request để truyền ID kích thước về action trong controller
+    //     $.ajax({
+    //         url: '/products/getdatabysizeid',
+    //         type: 'POST',
+    //         data: { sizeId: sizeId, productId: productId },
+    //         success: function (response) {
+    //             // Lấy giá trị quantity từ kết quả Ajax
+    //             var priceValue = response.priceSale;
+    //             var quantityValue = response.quantity;
+    //             productDetailId = response.productDetailId;
+    //             // Sử dụng jQuery để tìm phần tử có class "product-grid-price-new-text" và gán giá trị quantity vào nội dung của nó
+    //             $('.product-grid-price-new-text').text(priceValue.toLocaleString('en-US', { minimumFractionDigits: 0 }) + " đ");
+    //             if(response.status==1){
+    //                 var availibleQuantity = '@ViewBag.availibleQuantity';
+    //                 var content = 'Còn lại <span id="availibleQuantity">' + availibleQuantity + '</span> sản phẩm';
+    //                 $('.product-availibleQuantity').html(content);
+    //                 $('#availibleQuantity').text(quantityValue);
+
+    //             }
+    //             if (response.status == 0) {
+    //                 $('.product-availibleQuantity').text("Sản phẩm ngừng kinh doanh");
+    //             }
+    //             $('#imgQrCode').attr('src', response.imgQrCode);
+    //             $('#imgQrCode').removeAttr('hidden');
+    //         },
+    //         error: function (error) {
+    //             console.log(error);
+    //         }
+    //     });
+    // });
+
+
+    function clearActiveSize() {
+        let sizeOptions = $("#sizeOptions > .product-option-item");
+        sizeOptions.removeClass('active').attr('aria-checked', 'false');
+    }
+
+
+</script>
+<script>
+
+    // Khi trang web tải xong
+    document.addEventListener("DOMContentLoaded", function () {
+        var slideItemsContainer = document.querySelector(".product-detail-thumb-main .slick-track");
+        var navItemsContainer = document.querySelector(".slick-list.draggable .slick-track");
+
+        var navItems = document.querySelectorAll(".product-detail-thumb-nav-item");
+        var slideItems = [];
+
+        // Tạo phần tử slide ảnh trong slide và phần dưới từ dữ liệu có sẵn
+        for (var i = 0; i < navItems.length; i++) {
+            var navItem = navItems[i];
+
+            // Clone phần tử slide ảnh phần dưới
+            var slideItemClone = navItem.cloneNode(true);
+
+            // Thêm phần tử slide ảnh vào slide
+            slideItemsContainer.appendChild(slideItemClone);
+
+            // Lưu trữ phần tử slide ảnh trong slide
+            slideItems.push(slideItemClone);
+
+            // Thiết lập sự kiện cho phần tử slide ảnh phần dưới
+            navItem.addEventListener("click", function () {
+                var currentIndex = Array.from(navItems).findIndex(function (item) {
+                    return item.classList.contains("slick-current");
+                });
+                var nextIndex = Array.from(navItems).indexOf(this);
+
+                switchSlide(currentIndex, nextIndex);
+                switchActiveNav(currentIndex, nextIndex);
+            });
+        }
+        // Thiết lập sự kiện cho nút "Next"
+        var nextButton = document.querySelector(".slick-next");
+        nextButton.addEventListener("click", function () {
+            var currentIndex = Array.from(navItems).findIndex(function (item) {
+                return item.classList.contains("slick-current");
+            });
+            var nextIndex = (currentIndex + 1) % navItems.length;
+
+            switchSlide(currentIndex, nextIndex);
+            switchActiveNav(currentIndex, nextIndex);
+
+            // Lấy đường dẫn ảnh từ phần dưới và hiển thị lên phần trượt (slide)
+            var nextImageSrc = navItems[nextIndex].querySelector(".product-detail-slider").getAttribute("src");
+            var slideItem = document.querySelector(".product-detail-thumb-main-item.slick-slide.slick-cloned .product-detail-slider");
+            slideItem.setAttribute("src", nextImageSrc);
+        });
+
+        // Thiết lập sự kiện cho nút "Previous"
+        var prevButton = document.querySelector(".slick-prev");
+        prevButton.addEventListener("click", function () {
+            var currentIndex = Array.from(navItems).findIndex(function (item) {
+                return item.classList.contains("slick-current");
+            });
+            var prevIndex = (currentIndex - 1 + navItems.length) % navItems.length;
+
+            switchSlide(currentIndex, prevIndex);
+            switchActiveNav(currentIndex, prevIndex);
+
+            // Lấy đường dẫn ảnh từ phần dưới và hiển thị lên phần trượt (slide)
+            var prevImageSrc = navItems[prevIndex].querySelector(".product-detail-slider").getAttribute("src");
+            var slideItems = document.querySelector(".product-detail-thumb-main-item.slick-slide.slick-cloned .product-detail-slider");
+            slideItems.setAttribute("src", prevImageSrc);
+        });
+
+        // Hàm chuyển đổi slide
+        function switchSlide(currentIndex, nextIndex) {
+            slideItems[currentIndex].classList.remove("slick-current");
+            slideItems[nextIndex].classList.add("slick-current");
+
+            // Lấy đường dẫn ảnh từ phần dưới và hiển thị lên trên
+            var nextImageSrc = navItems[nextIndex].querySelector(".product-detail-slider").getAttribute("src");
+            var mainImage = slideItems[nextIndex].querySelector(".product-detail-slider");
+            mainImage.setAttribute("src", nextImageSrc);
+        }
+
+        // Hàm chuyển đổi đánh dấu active của phần dưới
+        function switchActiveNav(currentIndex, nextIndex) {
+            navItems[currentIndex].classList.remove("slick-current");
+            navItems[nextIndex].classList.add("slick-current");
+        }
+    });
+
+</script>

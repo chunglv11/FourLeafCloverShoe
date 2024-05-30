@@ -1,0 +1,70 @@
+﻿@model FourLeafCloverShoe.Share.Models.Post
+
+
+@{
+    ViewBag.Title = "Thêm mới";
+    ViewBag.pTitle = "Bài đăng";
+}
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form method="post" asp-action="Create">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Tiêu đề bài viết</label>
+                        <input asp-for="Tittle" type="text" class="form-control" placeholder="Nhập tiêu đề bài viết">
+                        <span asp-validation-for="Tittle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Trạng thái</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="True">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">Xuất bản</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="False" >
+                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không xuất bản</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ảnh Tiêu đế</label>
+                        <div class="multisteps-form__content">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div action="/Admin/Post/UploadImage" class="dropzone" id="productImg"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Nội dung bài viết</label>
+                        <div class="card-body">
+                            <textarea asp-for="Contents" name="Contents" class="form-control" id="classic-editor" style="height:100px">
+                                
+
+                        </textarea>
+                            <span asp-validation-for="Contents" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                            <div class="card-body text-end btn-page">
+                                <button type="submit" class="btn btn-primary mb-0">Thêm mới</button>
+                            </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+

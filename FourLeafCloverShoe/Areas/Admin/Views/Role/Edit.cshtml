@@ -1,0 +1,40 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+@{
+    ViewBag.Title = "Cập nhật";
+    ViewBag.pTitle = "Chức vụ";
+}
+
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Chỉnh sửa chức vụ</h5>
+            </div>
+            <form method="post">
+                @if (Model != null && !String.IsNullOrEmpty(Model.Id))
+                {
+                    <input asp-for="@Model.Id" hidden />
+                }
+
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Tên Chức vụ</label>
+                        <input asp-for="Name" type="text" class="form-control" placeholder="Nhập tên Chức vụ">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Lưu thay đổi</button>
+                        </div>
+                </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+

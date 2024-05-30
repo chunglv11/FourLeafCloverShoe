@@ -1,0 +1,106 @@
+﻿<!-- Required Js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/popper.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/simplebar.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/bootstrap.min.js"></script>
+<script src="~/fileadmin/assets/js/fonts/custom-font.js"></script>
+<script src="~/fileadmin/assets/js/pcoded.js"></script>
+<script src="~/fileadmin/assets/js/plugins/feather.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/dropzone-amd-module.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/ckeditor/classic/ckeditor.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/simple-datatables.js"></script>
+<script src="~/fileadmin/assets/js/plugins/flatpickr.min.js"></script>
+<script src="~/fileadmin/assets/js/plugins/choices.min.js"></script>
+<script>
+    var datatable = new simpleDatatables.DataTable('#tb-sorting');
+    var dataTable1 = new simpleDatatables.DataTable('#pc-dt-simple');
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var resetMultiple = new Choices('#reset-multiple', {
+            removeItemButton: true
+
+        });
+
+       
+    });
+  
+    (function () {
+        ClassicEditor.create(document.querySelector('#classic-editor')).catch((error) => {
+            console.log(error);
+        });
+    })();
+</script>
+
+<script>
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        dark_layout = 'true';
+    } else {
+        dark_layout = 'false';
+    }
+    layout_change_default();
+    if (dark_layout == 'true') {
+        layout_change('dark');
+    } else {
+        layout_change('light');
+    }
+</script>
+<script>
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/Hubs").build(); //
+    connection.on("alertToAdmin", (message, status) => {
+        showToast(message, status);
+    });
+
+    connection.start().catch(err => console.error(err));
+    function showToast(message, status) {
+        var statusmessage = "";
+        if (status == true) {
+            statusmessage = "bg-success";
+        } else {
+            statusmessage = "bg-danger"
+        }
+
+        var toastContainer = document.querySelector('.toast-container');
+
+        // Check the number of current toasts
+        var currentToasts = toastContainer.getElementsByClassName('toast');
+        if (currentToasts.length >= 2) {
+            // If there are already 3 toasts, remove the oldest one
+            currentToasts[0].remove();
+        }
+
+        var toastEl = document.createElement('div');
+        toastEl.classList.add('toast');
+        toastEl.setAttribute('role', 'alert');
+        toastEl.setAttribute('aria-live', 'assertive');
+        toastEl.setAttribute('aria-atomic', 'true');
+
+        var toastHeader = document.createElement('div');
+        toastHeader.classList.add('toast-header');
+        toastHeader.classList.add('text-white');
+        toastHeader.classList.add(statusmessage);
+        toastHeader.innerHTML = `<strong class="me-auto"> <i class="mwc-icon-bell-o " style="width: 20px"></i> Thông báo</strong>
+                            <small>0 phút trước</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`;
+        var toastBody = document.createElement('div');
+
+        toastBody.classList.add('toast-body');
+        toastBody.style.display = 'flex';
+        toastBody.style.flexDirection = 'row';
+        toastBody.style.alignItems = 'center';
+        toastBody.style.textAlign = 'left';
+        if (status == true) {
+            toastBody.innerHTML = `<img class="img" src="/fileadmin/assets/images/notification/ok-48.png"> ${message}`;
+        } else {
+            toastBody.innerHTML = `<img class="img" src="/fileadmin/assets/images/notification/high_priority-48.png"> ${message}`;
+        }
+        toastEl.appendChild(toastHeader);
+        toastEl.appendChild(toastBody);
+        toastContainer.appendChild(toastEl);
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+
+</script>

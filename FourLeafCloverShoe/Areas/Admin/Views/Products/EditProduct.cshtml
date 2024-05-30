@@ -1,0 +1,135 @@
+﻿@model FourLeafCloverShoe.Share.Models.Product
+@{
+    ViewBag.Title = "Cập nhật";
+    ViewBag.pTitle = "Sản phẩm";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form asp-action="EditProduct">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Mã sản phẩm</label>
+                        <input asp-for="ProductCode" type="text" value="@Model.ProductCode" disabled class="form-control">
+                        <input asp-for="Id" type="text" value="@Model.Id" hidden class="form-control">
+                        <span asp-validation-for="ProductCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input asp-for="ProductName" type="text" value="@Model.ProductName" class="form-control" placeholder="Nhập tên sản phẩm">
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Loại sản phẩm</label>
+                        <select asp-for="CategoryId" id="choices-category" class="form-select" asp-items="@(new SelectList(ViewBag.ListCategoryitems, "Value", "Text"))">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hãng sản xuất</label>
+                        <select asp-for="BrandId" id="choices-sizes" class="form-select" asp-items="@(new SelectList(ViewBag.ListBranditems, "Value", "Text"))">
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label">Status</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="True">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">Bán ngay</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="False">
+                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không bán</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    @if (Model.ProductImages != null)
+                    {
+                        <div class="form-group">
+                            <div class="row mt-4">
+                                <label>Ảnh sản phẩm</label>
+
+                                @foreach (var item in Model.ProductImages)
+                                {
+                                    <div class="col-lg-3">
+                                        <div class="card h-70">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="d-flex">
+                                                            <a @*asp-action="RemoveImage" asp-route-productImageId="@item.Id"*@ onclick="RemoveImage('@item.Id')" class="btn btn-outline-dark btn-sm mb-0" name="button">Remove</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <img class="w-100 border-radius-lg shadow-lg mt-3"
+                                                             src="@item.ImageUrl"
+                                                             alt="product_image">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group">
+                        <div class="multisteps-form__content">
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div action="/Admin/Products/UploadImage" class="dropzone" id="productImg"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Mô tả</label>
+                        <div class="card-body">
+                            <textarea asp-for="Description" name="Description" class="form-control" id="classic-editor" style="height:100px">
+                            @Model.Description
+                        </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Lưu thay đổi</button>
+                            <button class="btn btn-outline-secondary mb-0">Reset</button>
+                        </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+<script>
+    function RemoveImage(productImageId) {
+        // Gửi request Ajax
+        $.ajax({
+            url: "/Admin/Products/RemoveImage", // Thay bằng URL của action
+            type: "POST", // Hoặc "GET" tùy theo action của bạn
+            data: { productImageId: productImageId }, // Truyền item.id vào action
+            success: function (response) {
+                // Nếu action trả về true, reload lại trang
+                if (response === true) {
+                    location.reload();
+                }
+            },
+            error: function () {
+                // Xử lý khi có lỗi xảy ra (nếu cần)
+                alert(response);
+            }
+        });
+    }
+</script>

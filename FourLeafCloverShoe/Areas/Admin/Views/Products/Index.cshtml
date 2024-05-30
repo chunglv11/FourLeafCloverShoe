@@ -1,0 +1,129 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.Product>
+
+@{
+    ViewBag.Title = "Danh sách";
+    ViewBag.pTitle = "Sản phẩm";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-sm-12">
+        <div class="card table-card">
+            <div class="card-body">
+                <div class="text-end p-sm-4 pb-sm-2">
+                    <a asp-action="CreateNewProduct" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover tbl-product" id="tb-sorting">
+                        <thead>
+                            <tr>
+                                <th >STT</th>
+                                <th >Sản phẩm</th>
+                                <th >Loại</th>
+                                <th >Hãng sản xuất</th>
+                                <th >Giá bán (VNĐ)</th>
+                                <th >Số lượng tồn</th>
+                                <th >Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @{
+                                            stt++;
+                                            <span>@stt</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-auto pe-0">
+                                                @if (item.ProductImages.Count() == 0)
+                                                {
+                                                    <img src="~/fileadmin/assets/images/application/img-prod-1.jpg" alt="user-image" class="wid-40 rounded">
+                                                }
+                                                else
+                                                {
+                                                    <img src="@item.ProductImages.First().ImageUrl" alt="user-image" class="wid-40 rounded">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                <h6 class="mb-1">@item.ProductName</h6>
+                                                <p class="text-muted f-12 mb-0">@item.ProductCode (@item.Categories.Name - @item.Brands.Name)</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@item.Categories.Name</td>
+                                    <td>@item.Brands.Name</td>
+                                    @{
+                                        int count = item.ProductDetails.Count();
+                                        decimal? minprice = 0;
+                                        decimal? maxprice = 0;
+                                        if (count != 0)
+                                        {
+                                            minprice = item.ProductDetails.Min(c => c.PriceSale);
+                                            maxprice = item.ProductDetails.Max(c => c.PriceSale);
+
+                                        }
+                                    }
+                                    <td>
+                                        @if (minprice == 0 && maxprice == 0)
+                                        {
+                                            <span>-- VNĐ</span>
+                                        }
+                                        else if (minprice == maxprice)
+                                        {
+                                            <span>@minprice?.ToString("N0") VNĐ</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@minprice?.ToString("N0") VNĐ -> @maxprice?.ToString("N0") VNĐ</span>
+                                        }
+                                    </td>
+
+                                    <td>@item.AvailableQuantity</td>
+                                    <td class="text-center">
+                                        @if (item.Status == true)
+                                        {
+                                            <span class="badge text-bg-primary">Đang bán</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-danger">Ngừng bán</span>
+                                        }
+                                        <div class="prod-action-links">
+                                            <ul class="list-inline me-auto mb-0">
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xem sản phẩm chi tiết">
+                                                    <a asp-action="ProductDetail" asp-route-productId="@item.Id"
+                                                       class="avtar avtar-xs btn-link-secondary btn-pc-default">
+                                                        <i class="ti ti-eye f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                                    <a asp-action="EditProduct" asp-route-productId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                        <i class="ti ti-edit-circle f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
+                                                    <a asp-action="DeleteProduct" asp-route-productId="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                        <i class="ti ti-trash f-18"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ sample-page ] end -->
+</div>

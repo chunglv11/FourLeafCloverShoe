@@ -1,0 +1,339 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="orders-page">
+    <div class="custom-tab-nav">
+        <a class="custom-tab-nav-item custom-tab-nav-item--active" href="#" onclick="allPurchase()" data-target="#order-tab-all">
+            <span class="_0rjE9m">Tất cả</span>
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-pending-confirm" onclick="confirmPurchase()">
+            <span class="_0rjE9m">Chờ xác nhận</span>
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-pending-pick" onclick="pickPurchase()">
+            <span class="_0rjE9m">Chờ lấy hàng</span>
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-process" onclick="processPurchase()">
+            <span class="_0rjE9m">Đang giao</span>
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-done" onclick="donePurchase()">
+            <span class="_0rjE9m">Đã giao</span>
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-cancel" onclick="cancelPurchase()">
+            <span class="_0rjE9m">Đã Hủy</span>
+        </a>
+    </div>
+    <div class="custom-tab-contents">
+        <div class="custom-tab-content-item custom-tab-content-item--active" id="order-tab-all">
+            <!--ko if:PurchaseItems().length > 0-->
+            <div data-bind="foreach:PurchaseItems">
+                <div class="order-item">
+                    <div>
+                        <div class="order-item-inner">
+                            <div class="order-item-header">
+                                <div class="order-item-header-left">
+                                </div>
+                                <div class="order-item-header-right">
+                                    <!--ko if:Status != 6-->
+                                    <div class="order-item-status">
+                                        <a class="order-item-status-link" href="#">
+                                            <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon icon-free-shipping-line">
+                                                <g>
+                                                    <line fill="none" stroke-linejoin="round" stroke-miterlimit="10" x1="8.6" x2="4.2" y1="9.8" y2="9.8">
+                                                    </line>
+                                                    <circle cx="3" cy="11.2" fill="none" r="2" stroke-miterlimit="10">
+                                                    </circle>
+                                                    <circle cx="10" cy="11.2" fill="none" r="2" stroke-miterlimit="10"></circle>
+                                                    <line fill="none" stroke-miterlimit="10" x1="10.5" x2="14.4" y1="7.3" y2="7.3">
+                                                    </line>
+                                                    <polyline fill="none" points="1.5 9.8 .5 9.8 .5 1.8 10 1.8 10 9.1" stroke-linejoin="round" stroke-miterlimit="10">
+                                                    </polyline>
+                                                    <polyline fill="none" points="9.9 3.8 14 3.8 14.5 10.2 11.9 10.2" stroke-linejoin="round" stroke-miterlimit="10">
+                                                    </polyline>
+                                                </g>
+                                            </svg>
+                                            <span class="order-item-status-text" data-bind="text:StatusName">
+                                                Chờ xác
+                                                nhận
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <!--/ko-->
+                                    <!--ko if:Status == 6--><!--/ko-->
+                                </div>
+                            </div>
+                            <div class="order-item-line"></div>
+                            <div class="order-item-body">
+                                <div class="order-item-product">
+                                    <div data-bind="foreach:DetailItems">
+                                        <span class="order-item-product-grid">
+                                            <div class="order-item-product-info-grid">
+                                                <div class="order-item-product-thumb">
+                                                    <div class="shopee-image__wrapper">
+                                                        <div class="shopee-image__content">
+                                                            <a href="/products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh" data-bind="attr:{href:&quot;/products/&quot;+ KeySlug}">
+                                                                <img src="https://img.mwc.com.vn/giay-thoi-trang?w=78&amp;h=78&amp;FileInput=/Resources/Product/2023/04/11/z4254834402341_084ef787c70d56019a8a4aae2ba6a4ba.jpg" data-bind="attr:{src:ImageUrl}">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-item-product-info">
+                                                    <div>
+                                                        <div class="order-item-product-title">
+                                                            <a href="/products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh" data-bind="attr:{href:&quot;/products/&quot;+ KeySlug}">
+                                                                <span class="order-item-product-title-inner" data-bind="text:ProductName">
+                                                                    Giày
+                                                                    Sandal Nữ MWC - 2934
+                                                                    Sandal Đế Bánh Mì
+                                                                    Cao 5cm Siêu Hack
+                                                                    Dáng Phối Khóa Với 2
+                                                                    Quai Ngang Nhún Tiểu
+                                                                    Thư Sang
+                                                                    Chảnh
+                                                                </span>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="order-item-product-variants">
+                                                            Phân loại hàng: <span data-bind="text:Color +' - ' + Size">
+                                                                kem
+                                                                - 35
+                                                            </span>
+                                                        </div>
+                                                        <div class="order-item-product-quantity" data-bind="text:'x'+TotalQty">
+                                                            x1
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="order-item-product-amount">
+                                                <div>
+                                                    <!--ko if: IsBonus--><!--/ko-->
+                                                    <!--ko if:Price > 0 && !IsBonus-->
+                                                    <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)">đ270,000</span>
+                                                    <span class="order-item-product-amount-content order-item-product-new-price" data-bind="text:'đ'+Price.format(0,3)">đ243,000</span>
+                                                    <!--/ko-->
+                                                    <!--ko if:Price == 0 && !IsBonus--><!--/ko-->
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="order-item-product-line"></div>
+                                </div>
+                            </div>
+
+                            <div class="order-item-space"></div>
+                        </div>
+                    </div>
+                    <div class="order-item-full-line">
+                        <div class="order-item-full-line-left"></div>
+                        <div class="order-item-full-line-right"></div>
+                    </div>
+                    <div class="order-item-calc">
+                        <div class="order-item-calc-inner">
+                            <div class="order-item-calc-lable">Tổng số tiền:</div>
+                            <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">đ243,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-view-more" data-bind="visible: TotalPages() > 1" style="display: none">
+                <ul class="pagination">
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link pagination-link-prev" data-bind="click: PrevPage">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z" fill="rgba(0,0,0,.85"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <!--ko foreach:Pages--><!--/ko-->
+
+                    <li class="pagination-item">
+                        <a class="pagination-link pagination-link-next" data-bind="click: NextPage">
+
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80522 3.1875 9.86817 3.1875 9.9338V10.9691C3.1875 11.0588 3.29063 11.1083 3.36027 11.0534L9.39777 6.33781C9.44908 6.29779 9.4906 6.24658 9.51915 6.1881C9.5477 6.12962 9.56254 6.06539 9.56254 6.00031C9.56254 5.93523 9.5477 5.87101 9.51915 5.81253C9.4906 5.75404 9.44908 5.70284 9.39777 5.66281Z" fill="rgba(0,0,0,.85)"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!--/ko-->
+            <!--ko if:PurchaseItems().length == 0--><!--/ko-->
+        </div>
+        <div class="custom-tab-content-item" id="order-tab-pending-confirm">
+            <!--ko if:PurchaseItems().length > 0-->
+            <div data-bind="foreach:PurchaseItems">
+                <div class="order-item">
+                    <div>
+                        <div class="order-item-inner">
+                            <div class="order-item-header">
+                                <div class="order-item-header-left">
+                                </div>
+                                <div class="order-item-header-right">
+                                    <!--ko if:Status != 6-->
+                                    <div class="order-item-status">
+                                        <a class="order-item-status-link" href="#">
+                                            <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon icon-free-shipping-line">
+                                                <g>
+                                                    <line fill="none" stroke-linejoin="round" stroke-miterlimit="10" x1="8.6" x2="4.2" y1="9.8" y2="9.8">
+                                                    </line>
+                                                    <circle cx="3" cy="11.2" fill="none" r="2" stroke-miterlimit="10">
+                                                    </circle>
+                                                    <circle cx="10" cy="11.2" fill="none" r="2" stroke-miterlimit="10"></circle>
+                                                    <line fill="none" stroke-miterlimit="10" x1="10.5" x2="14.4" y1="7.3" y2="7.3">
+                                                    </line>
+                                                    <polyline fill="none" points="1.5 9.8 .5 9.8 .5 1.8 10 1.8 10 9.1" stroke-linejoin="round" stroke-miterlimit="10">
+                                                    </polyline>
+                                                    <polyline fill="none" points="9.9 3.8 14 3.8 14.5 10.2 11.9 10.2" stroke-linejoin="round" stroke-miterlimit="10">
+                                                    </polyline>
+                                                </g>
+                                            </svg>
+                                            <span class="order-item-status-text" data-bind="text:StatusName">
+                                                Chờ xác
+                                                nhận
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <!--/ko-->
+                                    <!--ko if:Status == 6--><!--/ko-->
+                                </div>
+                            </div>
+                            <div class="order-item-line"></div>
+                            <a href="#">
+                                <div class="order-item-body">
+                                    <div class="order-item-product">
+                                        <div data-bind="foreach:DetailItems">
+                                            <span class="order-item-product-grid">
+                                                <div></div>
+                                                <div class="order-item-product-info-grid">
+                                                    <div class="order-item-product-thumb">
+                                                        <div class="shopee-image__wrapper">
+                                                            <div class="shopee-image__content">
+                                                                <img src="https://img.mwc.com.vn/giay-thoi-trang?w=78&amp;h=78&amp;FileInput=/Resources/Product/2023/04/11/z4254834402341_084ef787c70d56019a8a4aae2ba6a4ba.jpg" data-bind="attr:{src:ImageUrl}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-item-product-info">
+                                                        <div>
+                                                            <div class="order-item-product-title">
+                                                                <span class="order-item-product-title-inner" data-bind="text:ProductName">
+                                                                    Giày
+                                                                    Sandal Nữ MWC - 2934
+                                                                    Sandal Đế Bánh Mì
+                                                                    Cao 5cm Siêu Hack
+                                                                    Dáng Phối Khóa Với 2
+                                                                    Quai Ngang Nhún Tiểu
+                                                                    Thư Sang
+                                                                    Chảnh
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <div class="order-item-product-variants">
+                                                                Phân loại hàng: <span data-bind="text:Color +' - ' + Size">
+                                                                    kem
+                                                                    - 35
+                                                                </span>
+                                                            </div>
+                                                            <div class="order-item-product-quantity" data-bind="text:'x'+TotalQty">
+                                                                x1
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-item-product-amount">
+                                                    <div>
+                                                        <!--ko if:Price > 0-->
+                                                        <span class="order-item-product-old-price" data-bind="text:'đ'+Price">đ243000</span>
+                                                        <span class="order-item-product-amount-content order-item-product-new-price" data-bind="text:'đ'+RegularPrice">đ270000</span>
+                                                        <!--/ko-->
+                                                        <!--ko if:Price == 0--><!--/ko-->
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="order-item-product-line"></div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="order-item-space"></div>
+                        </div>
+                    </div>
+                    <div class="order-item-full-line">
+                        <div class="order-item-full-line-left"></div>
+                        <div class="order-item-full-line-right"></div>
+                    </div>
+                    <div class="order-item-calc">
+                        <div class="order-item-calc-inner">
+                            <div class="order-item-calc-lable">Tổng số tiền:</div>
+                            <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">đ243,000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-view-more" data-bind="visible: TotalPages() > 1" style="display: none">
+                <ul class="pagination">
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link pagination-link-prev" data-bind="click: PrevPage">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z" fill="rgba(0,0,0,.85"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <!--ko foreach:Pages--><!--/ko-->
+
+                    <li class="pagination-item">
+                        <a class="pagination-link pagination-link-next" data-bind="click: NextPage">
+
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80522 3.1875 9.86817 3.1875 9.9338V10.9691C3.1875 11.0588 3.29063 11.1083 3.36027 11.0534L9.39777 6.33781C9.44908 6.29779 9.4906 6.24658 9.51915 6.1881C9.5477 6.12962 9.56254 6.06539 9.56254 6.00031C9.56254 5.93523 9.5477 5.87101 9.51915 5.81253C9.4906 5.75404 9.44908 5.70284 9.39777 5.66281Z" fill="rgba(0,0,0,.85)"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!--/ko-->
+            <!--ko if:PurchaseItems().length == 0--><!--/ko-->
+        </div>
+        <div class="custom-tab-content-item" id="order-tab-pending-pick">
+            <!--ko if:PurchaseItems().length > 0--><!--/ko-->
+            <!--ko if:PurchaseItems().length == 0-->
+            <div class="no-orders">
+                <div class="no-orders-thumb"></div>
+                <div class="no-orders-title">Chưa có đơn hàng</div>
+            </div>
+            <!--/ko-->
+        </div>
+        <div class="custom-tab-content-item" id="order-tab-process">
+            <!--ko if:PurchaseItems().length > 0--><!--/ko-->
+            <!--ko if:PurchaseItems().length == 0-->
+            <div class="no-orders">
+                <div class="no-orders-thumb"></div>
+                <div class="no-orders-title">Chưa có đơn hàng</div>
+            </div>
+            <!--/ko-->
+        </div>
+        <div class="custom-tab-content-item" id="order-tab-done">
+            <!--ko if:PurchaseItems().length > 0--><!--/ko-->
+            <!--ko if:PurchaseItems().length == 0-->
+            <div class="no-orders">
+                <div class="no-orders-thumb"></div>
+                <div class="no-orders-title">Chưa có đơn hàng</div>
+            </div>
+            <!--/ko-->
+        </div>
+        <div class="custom-tab-content-item" id="order-tab-cancel">
+            <!--ko if:PurchaseItems().length > 0--><!--/ko-->
+            <!--ko if:PurchaseItems().length == 0-->
+            <div class="no-orders">
+                <div class="no-orders-thumb"></div>
+                <div class="no-orders-title">Chưa có đơn hàng</div>
+            </div>
+            <!--/ko-->
+        </div>
+    </div>
+</div>

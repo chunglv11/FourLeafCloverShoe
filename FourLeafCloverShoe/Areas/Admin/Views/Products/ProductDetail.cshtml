@@ -1,0 +1,91 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.ProductDetail>
+
+@{
+    ViewBag.Title = "Danh sách";
+    ViewBag.pTitle = "Sản phẩm chi tiết";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-sm-12">
+        <div class="card table-card">
+            <div class="card-body">
+                <div class="text-end p-sm-4 pb-sm-2">
+                    <a asp-action="CreateProductDetail" asp-route-productId="@ViewBag.productId" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover tbl-product" id="tb-sorting">
+                        <thead>
+                            <tr>
+                                <th >STT</th>
+                                <th >Tên Sản phẩm</th>
+                                <th >Biến thể</th>
+                                <th >Số lượng</th>
+                                <th >Giá bán</th>
+                                <th >Trạng thái</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @{
+                                            stt++;
+                                            <span>@stt</span>
+                                        }
+                                    </td>
+                                    <td>@item.Products.ProductName</td>
+                                    <td>@item.Size.Name / @item.Colors.ColorName</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.PriceSale?.ToString("N0")</td>
+                                    <td class="text-center">
+                                        @if (item.Status == 1)
+                                        {
+                                            <span class="badge text-bg-primary">Đang bán</span>
+                                        }
+                                        else if (item.Status == 0)
+                                        {
+                                            <span class="badge text-bg-danger">Ngừng bán</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-warning">Hàng lỗi</span>
+                                        }
+                                        
+                                        <div class="prod-action-links">
+                                            <ul class="list-inline me-auto mb-0">
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                                    <a asp-action="EditProductDetail" asp-route-productDetailId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                        <i class="ti ti-edit-circle f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
+                                                    <a asp-action="DeleteProductDetail" asp-route-Id="@item.Id" asp-route-productId="@item.ProductId" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                        <i class="ti ti-trash f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Tải xuống QR code">
+                                                        <a  href="@Url.Action("DownloadQrCode", "Products", new { productDetailId = item.Id })" data-product-detail-id="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                        <i class="fas fa-qrcode"></i>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ sample-page ] end -->
+</div>

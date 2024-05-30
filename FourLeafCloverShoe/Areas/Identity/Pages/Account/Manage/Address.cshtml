@@ -1,0 +1,125 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.AddressModel
+@using FourLeafCloverShoe.Share.Models
+
+
+<link rel="stylesheet" href="~/css/Address.css" />
+<div class="fkIi86">
+    <div class="CAysXD" role="main" id="DIV_2">
+        <div class="YTmAr0" id="DIV_3">
+            <div class="qtYn7m" id="DIV_4">
+                <div class="Oe_bEi" id="DIV_5">
+                    <div class="lOB9lY" id="DIV_6">Địa chỉ của tôi</div>
+                    <div class="rT9Vbd" id="DIV_7"></div>
+                </div>
+                <div id="DIV_8">
+                    <div class="y3hZ9E" id="DIV_9">
+                        <div style="display: flex;" id="DIV_10">
+                            <a asp-page="./AddressAdd" class="shopee-button-solid shopee-button-solid--primary qTzF0g" id="BUTTON_11">
+                                <div class="psXjeQ" id="DIV_12">
+                                    <div class="zNqMl2" id="DIV_13">
+                                        <svg enable-background="new 0 0 10 10"
+                                             viewBox="0 0 10 10" x="0" y="0" class="shopee-svg-icon icon-plus-sign"
+                                             id="svg_14">
+                                            <polygon points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"
+                                                     id="polygon_15"></polygon>
+                                        </svg>
+                                    </div>
+                                    <div id="DIV_16">Thêm địa chỉ mới</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="KK80cT" id="DIV_17">
+                <div class="stardust-spinner--hidden stardust-spinner" id="DIV_18">
+                    <div class="stardust-spinner__background" id="DIV_19">
+                        <div class="stardust-spinner__main" role="img" id="DIV_20">
+                            <svg width="34" height="12"
+                                 viewBox="-1 0 33 12" id="svg_21">
+                                <circle class="stardust-spinner__spinner" cx="4" cy="6" r="4" fill="#EE4D2D"
+                                        id="circle_22"></circle>
+                                <circle class="stardust-spinner__spinner" cx="16" cy="6" r="4" fill="#EE4D2D"
+                                        id="circle_23"></circle>
+                                <circle class="stardust-spinner__spinner" cx="28" cy="6" r="4" fill="#EE4D2D"
+                                        id="circle_24"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="OrZkCF" id="DIV_25">
+                    @foreach (var item in Model.ListAddress)
+                    {
+                        <div class="UUD4No SXp5o_" id="DIV_27">
+                            <div class="_RPpod" id="DIV_28">
+                                <div role="heading" class="X57SfF V4So7f" id="DIV_29">
+                                    <div id="DIV_30" class="QyRpwQ lWXnp3">
+                                        <span class="Fi1zsg OwAhWT" id="SPAN_31">
+                                            <div class="mjiDsj" id="DIV_32">@item.RecipientName</div>
+                                        </span>
+                                        <div class="YJU6OK" id="DIV_33"></div>
+                                        <div role="row" class="N_WJUf lw_xYb E24UKj" id="DIV_34">@item.RecipientPhone</div>
+                                    </div>
+                                    <div class="YziUfM" id="DIV_35">
+                                        <a asp-page="./AddressUpdate" asp-route-id="@item.Id" class="T_oZqJ" id="BUTTON_36">Cập nhật</a>
+                                    </div>
+                                    @if (item.IsDefault != true)
+                                    {
+                                        <div class="YziUfM" id="DIV_35">
+                                            <form method="post" asp-page="./Address" asp-page-handler="Delete">
+                                                <input type="hidden" name="idDelete" value="@item.Id">  <button type="submit" class="T_oZqJ" id="BUTTON_36">Xoá</button>
+                                            </form>
+                                        </div>
+
+                                    }
+                                </div>
+                                <div id="DIV_37" role="heading" class="X57SfF V4So7f">
+                                    <div class="QyRpwQ lWXnp3" id="DIV_38">
+                                        <div class="We6XvC" id="DIV_39">
+                                            <div role="row" class="E24UKj" id="DIV_40">
+                                                @item.Description
+                                            </div>
+                                            <div role="row" class="E24UKj" id="DIV_41">
+                                               @item.WardName,  @item.DistrictName, @item.ProvinceName
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (item.IsDefault == true)
+                                    {
+                                        <div class="KFu3R3 YziUfM" id="DIV_42">
+                                            <button class="k8tV5Y zvyzwn zDPndA" disabled=""
+                                                    id="BUTTON_43">
+                                                Thiết lập mặc định
+                                            </button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="SetDefault">
+                                            <div class="KFu3R3 YziUfM" id="DIV_62">
+                                                <input type="hidden" name="id" value="@item.Id">
+                                                <button type="submit" class="k8tV5Y zvyzwn zDPndA"
+                                                        id="BUTTON_63">
+                                                    Thiết lập mặc định
+                                                </button>
+                                            </div>
+                                        </form>
+                                    }
+                                </div>
+                                @if (item.IsDefault == true)
+                                {
+                                    <div id="DIV_44" role="row" class="vy2yND E24UKj">
+                                        <span role="mark"
+                                              class="wZ_1w7 aCY_5O ZDVTqW" id="SPAN_45">Mặc định</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

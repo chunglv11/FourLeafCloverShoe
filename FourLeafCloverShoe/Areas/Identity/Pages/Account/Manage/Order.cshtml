@@ -1,0 +1,308 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.OrderModel
+@using FourLeafCloverShoe.Share.Models
+
+<div class="orders-page">
+    <div class="custom-tab-nav">
+        <a class="custom-tab-nav-item " href="#" data-target="#order-tab-all" id="no0">
+            <span class="_0rjE9m">Tất cả</span>
+        </a>
+
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no1">
+
+            <span class="_0rjE9m">Chờ xác nhận</span>
+        </a>
+
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no2">
+
+            <span class="_0rjE9m">Chờ lấy hàng</span>
+
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no3">
+
+            <span class="_0rjE9m">Đang giao</span>
+
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no4">
+
+            <span class="_0rjE9m">Đã giao</span>
+
+        </a>
+        <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no5">
+
+            <span class="_0rjE9m">Đã Hủy</span>
+        </a>
+         <a class="custom-tab-nav-item" href="#" data-target="#order-tab-all" id="no6">
+
+            <span class="_0rjE9m">Trả hàng/ Hoàn tiền</span>
+        </a>
+
+    </div>
+    <form method="post" id="myForm">
+        <input hidden name="type" id="myInput"  value="0"/>
+    </form>
+    <div class="custom-tab-contents">
+        <div class="custom-tab-content-item custom-tab-content-item--active" id="order-tab-all">
+            <!--ko if:PurchaseItems().length > 0-->
+            @if (Model.ListOrder.Count() > 0)
+            {
+                <div data-bind="foreach:PurchaseItems">
+                    @foreach (var item in Model.ListOrder.OrderByDescending(c=>c.CreateDate))
+                {
+
+                        <div class="order-item">
+                            <div>
+                                <div class="order-item-inner">
+                                    <div class="order-item-header">
+                                        <div class="order-item-header-left">
+                                            <a class="order-item-status-link" href="/Identity/Account/Manage/orderdetail?orderId=@item.Id">
+
+                                                <span>Mã đơn hàng: <span style="color:red">@item.OrderCode</span></span>
+                                            </a>
+                                        </div>
+                                        <div class="order-item-header-right">
+                                            <!--ko if:Status != 6-->
+                                            <div class="order-item-status">
+                                                <a class="order-item-status-link" href="/Identity/Account/Manage/orderdetail?orderId=@item.Id">
+                                                    <svg enable-background="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" class="shopee-svg-icon icon-free-shipping-line">
+                                                        <g>
+                                                            <line fill="none" stroke-linejoin="round" stroke-miterlimit="10" x1="8.6" x2="4.2" y1="9.8" y2="9.8">
+                                                            </line>
+                                                            <circle cx="3" cy="11.2" fill="none" r="2" stroke-miterlimit="10">
+                                                            </circle>
+                                                            <circle cx="10" cy="11.2" fill="none" r="2" stroke-miterlimit="10"></circle>
+                                                            <line fill="none" stroke-miterlimit="10" x1="10.5" x2="14.4" y1="7.3" y2="7.3">
+                                                            </line>
+                                                            <polyline fill="none" points="1.5 9.8 .5 9.8 .5 1.8 10 1.8 10 9.1" stroke-linejoin="round" stroke-miterlimit="10">
+                                                            </polyline>
+                                                            <polyline fill="none" points="9.9 3.8 14 3.8 14.5 10.2 11.9 10.2" stroke-linejoin="round" stroke-miterlimit="10">
+                                                            </polyline>
+                                                        </g>
+                                                    </svg>
+                                                    @if (item.OrderStatus==0)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Chờ thanh toán
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 1)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Chờ xác nhận (Đã thanh toán)
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 2)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Chờ xác nhận
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 3)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Chờ lấy hàng
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 4)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Đang giao hàng
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 5)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu huỷ đơn
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 6)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Giao hàng thất bại
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 7)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu huỷ đơn không được chấp nhận
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 8)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Giao hàng thành công
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 9)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Mua hàng thành công (Tại quầy)
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 10)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu đổi/trả
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 11)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu đổi trả được chấp nhận
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 12)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu đổi trả bị từ chối
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 13)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Đã huỷ đơn
+                                                        </span>
+                                                    }
+                                                    else if (item.OrderStatus == 14)
+                                                    {
+                                                        <span class="order-item-status-text" data-bind="text:StatusName">
+                                                            Yêu cầu huỷ đơn được chấp nhận
+                                                        </span>
+                                                    }
+                                                    
+                                                </a>
+                                            </div>
+                                            <!--/ko-->
+                                            <!--ko if:Status == 6--><!--/ko-->
+                                        </div>
+                                    </div>
+                                    <div class="order-item-body">
+                                        <div class="order-item-product">
+                                            <div data-bind="foreach:DetailItems">
+                                                    @foreach (var product in item.OrderItems)
+                                                    {
+                                                <span class="order-item-product-grid">
+
+                                                        <div class="order-item-product-info-grid">
+                                                            <div class="order-item-product-thumb">
+                                                                <div class="shopee-image__wrapper">
+                                                                    <div class="shopee-image__content">
+                                                                        <a href="/Products/ProductDetail?productId=@product.ProductDetails.ProductId">
+                                                                            <img src="@product.ProductDetails.Products.ProductImages.First().ImageUrl">
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="order-item-product-info">
+                                                                <div>
+                                                                    <div class="order-item-product-title">
+                                                                        <a href="/Products/ProductDetail?productId=@product.ProductDetails.ProductId">
+                                                                            <span class="order-item-product-title-inner" data-bind="text:ProductName">
+                                                                                @product.ProductDetails.Products.ProductName
+                                                                            </span>
+                                                                        </a>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="order-item-product-variants">
+                                                                        Kích cỡ: <span>
+                                                                            @product.ProductDetails.Size.Name
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="order-item-product-quantity" data-bind="text:'x'+TotalQty">
+                                                                        x @product.Quantity
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="order-item-product-amount">
+                                                            <div>
+                                                                <!--ko if: IsBonus--><!--/ko-->
+                                                                <!--ko if:Price > 0 && !IsBonus-->
+                                                                <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)">đ270,000</span>
+                                                                <span class="order-item-product-amount-content order-item-product-new-price">@product.Price?.ToString("N0") đ</span>
+                                                                <!--/ko-->
+                                                                <!--ko if:Price == 0 && !IsBonus--><!--/ko-->
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                    <div class="order-item-line"></div>
+                                                }
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-item-space"></div>
+                                </div>
+                            </div>
+                            <div class="order-item-full-line">
+                                <div class="order-item-full-line-left"></div>
+                                <div class="order-item-full-line-right"></div>
+                            </div>
+                            <div class="order-item-calc">
+                                <div class="order-item-calc-inner">
+                                    <div class="order-item-calc-lable">Tổng số tiền:</div>
+                                    <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">@item.TotalAmout?.ToString("N0") đ</div>
+                                </div>
+                            </div>
+                    </div>
+
+                }
+                </div>
+            }
+            else
+            {
+                <div class="no-orders">
+                    <div class="no-orders-thumb"></div>
+                    <div class="no-orders-title">Chưa có đơn hàng</div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#no0').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val('0');
+            $('#myForm').submit(); // Gửi form
+        });
+        $('#no1').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val('1');
+            $('#myForm').submit(); // Gửi form
+        });
+        $('#no2').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val('2');
+            $('#myForm').submit(); // Gửi form
+        });
+        $('#no3').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val('3');
+            $('#myForm').submit(); // Gửi form
+        });
+        $('#no4').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val(4);
+            $('#myForm').submit(); // Gửi form
+        });
+        $('#no5').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val(5);
+            $('#myForm').submit(); // Gửi form
+        });
+         $('#no6').click(function (e) {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+            $('#myInput').val(6);
+            $('#myForm').submit(); // Gửi form
+        });
+
+    });
+</script>

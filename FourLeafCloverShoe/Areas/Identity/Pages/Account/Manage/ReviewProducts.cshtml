@@ -1,0 +1,211 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.OrderItemModel
+@{
+    var lstorderIterm = ViewData["OrderIterm"] as OrderItem;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+<style>
+    @@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+    div, label {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin: 10px;
+    }
+
+    #ratingS {
+        border: none;
+        float: left;
+    }
+
+        #ratingS > input {
+            display: none;
+        }
+
+        #ratingS > label:before {
+            margin: 5px;
+            font-size: 1.25em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
+        /*1 ngôi sao*/
+        #ratingS > .half:before {
+            content: "\f089";
+            position: absolute;
+        }
+        /*0.5 ngôi sao*/
+        #ratingS > label {
+            color: #ddd;
+            float: right;
+        }
+        /*float:right để lật ngược các ngôi sao lại đúng theo thứ tự trong thực tế*/
+        /*thêm màu cho sao đã chọn và các ngôi sao phía trước*/
+        #ratingS > input:checked ~ label,
+        #ratingS:not(:checked) > label:hover,
+        #ratingS:not(:checked) > label:hover ~ label {
+            color: #FFD700;
+        }
+            /* Hover vào các sao phía trước ngôi sao đã chọn*/
+            #ratingS > input:checked + label:hover,
+            #ratingS > input:checked ~ label:hover,
+            #ratingS > label:hover ~ input:checked ~ label,
+            #ratingS > input:checked ~ label:hover ~ label {
+                color: #FFED85;
+            }
+</style>
+<div class="account-forgot-password-form">
+    <div class="account-forgot-password-header">
+        <h1 class="account-forgot-password-header-title">Thông tin sản phẩm được đánh giá </h1>
+        <div class="account-forgot-password-header-des">
+            <span></span>
+        </div>
+    </div>
+</div>
+<div class="order-item">
+    <div>
+        <div class="order-item-inner">
+            <div class="order-item-header">
+                <div class="order-item-header-left">
+                    <a class="order-item-status-link" href="">
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div id="errorMessage" class="alert alert-danger" role="alert">
+                                @errorMessage
+                            </div>
+                        }
+
+                    </a>
+                </div>
+
+            </div>
+            <div class="order-item-body">
+                <div class="order-item-product">
+                    <div>
+
+                        <span class="order-item-product-grid">
+
+                            <div class="order-item-product-info-grid">
+                                <div class="order-item-product-thumb">
+                                    <div class="shopee-image__wrapper">
+                                        <div class="shopee-image__content">
+                                            <a href="/Products/ProductDetail?productId=@lstorderIterm.ProductDetails.ProductId">
+                                                <img src="@lstorderIterm.ProductDetails.Products.ProductImages.First().ImageUrl">
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="order-item-product-info">
+                                    <div>
+                                        <div class="order-item-product-title">
+                                            <a href="/Products/ProductDetail?productId=@lstorderIterm.ProductDetails.ProductId">
+                                                <span class="order-item-product-title-inner" data-bind="text:ProductName">
+                                                    @lstorderIterm.ProductDetails.Products.ProductName
+                                                </span>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="order-item-product-variants">
+                                            Kích cỡ: <span>
+                                                @lstorderIterm.ProductDetails.Size.Name
+                                            </span>
+                                        </div>
+                                        <div class="order-item-product-quantity" data-bind="text:'x'+TotalQty">
+                                            x @lstorderIterm.Quantity
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-item-product-amount">
+                                <div>
+                                    <!--ko if: IsBonus--><!--/ko-->
+                                    <!--ko if:Price > 0 && !IsBonus-->
+                                    @* <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)">đ270,000</span> *@
+                                    <span style="margin-right:10px" class="order-item-product-amount-content order-item-product-new-price">@lstorderIterm.Price?.ToString("N0") đ</span>
+                                    <!--/ko-->
+                                    <!--ko if:Price == 0 && !IsBonus--><!--/ko-->
+                                </div>
+                            </div>
+                            <form method="post" action="/Products/RateProducts" enctype="multipart/form-data">
+                                <div id="ratingS">
+                                    <input type="radio" id="star5" name="rating" value="5" />
+                                    <label class="full" for="star5" title="Tuyệt vời - 5 stars"></label>
+
+                                    <input type="radio" id="star4half" name="rating" value="4.5" />
+                                    <label class="half" for="star4half" title="Tốt - 4.5 stars"></label>
+
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label class="full" for="star4" title="Tốt - 4 stars"></label>
+
+                                    <input type="radio" id="star3half" name="rating" value="3.5" />
+                                    <label class="half" for="star3half" title="Tạm ổn - 3.5 stars"></label>
+
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label class="full" for="star3" title="Tạm ổn - 3 stars"></label>
+
+                                    <input type="radio" id="star2half" name="rating" value="2.5" />
+                                    <label class="half" for="star2half" title="Bình thường - 2.5 stars"></label>
+
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label class="full" for="star2" title="Bình thường - 2 stars"></label>
+
+                                    <input type="radio" id="star1half" name="rating" value="1.5" />
+                                    <label class="half" for="star1half" title="Hơi tệ - 1.5 stars"></label>
+
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label class="full" for="star1" title="Tệ - 1 star"></label>
+
+                                    <input type="radio" id="starhalf" name="rating" value="0.5" />
+                                    <label class="half" for="starhalf" title="Quá tệ - 0.5 stars"></label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="danhGia" class="form-label">Đánh giá</label>
+                                    <textarea name="danhGia" id="danhGia" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="danhGia" class="form-label">Hình ảnh</label>
+                                    <input type="file" name="uploadedImages" id="uploadedImages" multiple />
+                                </div>
+                                <div>
+                                    <div class="order-item-calc-inner">
+                                        <input type="hidden" id="id" name="id" value="@lstorderIterm.Rate.Id" />
+                                        <input type="hidden" id="idCTHD" name="idCTHD" value="@lstorderIterm.Id" />
+                                        <input type="hidden" id="idHD" name="idHD" value="@lstorderIterm.OrderId" />
+                                        <button type="submit" @* id="btnRateProduct"  *@ class="btn btn-solid-primary btn--m btn--inline">Đánh giá sản phẩm</button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-item-space"></div>
+        </div>
+    </div>
+    <div class="order-item-full-line">
+        <div class="order-item-full-line-left"></div>
+        <div class="order-item-full-line-right"></div>
+    </div>
+
+</div>
+<script>
+    setTimeout(function () {
+        document.getElementById("errorMessage").style.display = "none";
+    }, 1000); // Thời gian tính bằng mili giây (ở đây là 1 giây)
+</script>

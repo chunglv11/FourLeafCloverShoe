@@ -1,0 +1,148 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model IndexModel
+@{
+
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="profile-main__account-inner">
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div class="profile-main__account-header">
+            <h1 class="profile-main__account-header__title">Hồ sơ của tôi</h1>
+            <div class="profile-main__account-header__des">
+                Quản lý thông tin hồ sơ
+                để bảo mật tài khoản
+            </div>
+        </div>
+        <div class="profile-main__account-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="profile-main__account-body__info">
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label>Tên đăng nhập</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <div class="input-with-validator">
+                                    <input asp-for="Input.UserName"  disabled >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label>Tên</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                    <input asp-for="Input.FullName" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label>Email</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <div class="input-with-validator">
+                                    <input asp-for="Input.Email" disabled id="Email" name="Email" placeholder="Email">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label>Số điện thoại *</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="input-with-validator-wrapper">
+                                <div class="input-with-validator">
+                                    <input asp-for="Input.PhoneNumber" placeholder="Số điện thoại">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-account__custom-form__group">
+                    <div class="profile-account__custom-form__items">
+                        <div class="profile-account__custom-form__label">
+                            <label>Ngày sinh</label>
+                        </div>
+                        <div class="profile-account__custom-form__form">
+                            <div class="profile-account__custom-form__form-select-flex">
+                                <input class="form-control" asp-for="Input.DateOfBirth" type="date" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-main__account-body__right">
+                <div class="profile-main__account-body__right-avatar">
+                    <div class="profile-main__account-body__right-avatar__thumb">
+                        <div class="profile-main__account-body__right-avatar__img" style="background-color: #f5f5f5;">
+                            
+                            @if (UserManager.GetUserAsync(User).Result.ProfilePicture == null)
+                            {
+                                <img class="shopee-avatar__img" src="~/fileuser/Assets/App/images/user.png" id="avatar" />
+                            }
+                            else
+                            {
+                                <img class="shopee-avatar__img" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))" id="avatar">
+                            }
+                        </div>
+                    </div>
+                    <input id="fileImport" name="file" type="file" accept=".jpg,.jpeg,.png" asp-for="Input.ProfilePicture">
+                    <button type="button" data-btn-file-trigger="#fileImport" class="btn btn-light btn--m btn--inline">
+                        Chọn ảnh
+                    </button>
+                    <div class="profile-account__upload-note">
+                        <div class="profile-account__upload-note__item">
+                            Dụng lượng
+                            file tối đa 1 MB
+                        </div>
+                        <div class="profile-account__upload-note__item">
+                            Định
+                            dạng:.JPEG, .PNG
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="profile-account__custom-form__footer">
+            <input data-val="true" data-val-required="The Id field is required." id="Id" name="Id" type="hidden" value="214313">
+            <button type="submit" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false">
+                Lưu
+            </button>
+        </div>
+       
+    </form>
+</div>
+
+<script type="text/javascript">
+    fileImport.onchange = evt => {
+        const [file] = fileImport.files
+        if (file) {
+            avatar.src = URL.createObjectURL(file)
+        }
+    }
+
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

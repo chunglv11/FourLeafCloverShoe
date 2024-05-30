@@ -1,0 +1,67 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.Brand>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-sm-12">
+        <div class="card table-card">
+            <div class="card-body">
+                <div class="text-end p-sm-4 pb-sm-2">
+                    <a asp-action="Create" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover tbl-product" id="tb-sorting">
+                        <thead>
+
+                            <tr>
+                                <th>STT</th>
+                                <th>Hãng</th>
+                                <th>Chức năng</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @{
+                                            stt++;
+                                            <span>@stt</span>
+                                        }
+                                    </td>
+                                    <td>@item.Name</td>
+                                    <td class="text-center">
+                                        <div>
+                                            <ul class="list-inline me-auto mb-0">
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                                    <a asp-action="Edit" asp-route-Id="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                        <i class="ti ti-edit-circle f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                        <i class="ti ti-trash f-18"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ sample-page ] end -->
+</div>
+
+
+@Html.Partial("~/Areas/Admin/Shared/SuccessMessage.cshtml")

@@ -1,0 +1,105 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.ViewModels.OrderDetailViewModel>
+@{
+    ViewData["Title"] = "OrderDetail";
+
+}
+<link rel="stylesheet" href="~/fileadmin/Orderdetail.css">
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<div class="container-fluid">
+    <div class="header">
+        <h2>Chi tiết đơn hàng</h2>
+    </div>
+    <div class="tabs">
+        <button class="tablinks active" onclick="openTab(event, 'thongtin')">Thông tin</button>
+        <button class="tablinks" onclick="openTab(event, 'giaohang')">Thông tin giao hàng</button>
+        <button class="tablinks" onclick="openTab(event, 'lichsudiem')">Lịch sử điểm</button>
+    </div>
+    <div id="thongtin" class="tab-content" style="display: block;">
+        <div class="details">
+            <div class="details-left">
+                <p>Mã hóa đơn: <span>@Model.FirstOrDefault().OrderCode</span></p>
+                <p>Ngày tạo: <span>@Model.FirstOrDefault().CreateDate</span></p>
+                <p>Ngày thanh toán: <span>@Model.FirstOrDefault().PaymentDate</span></p>
+                <p>Phương thức thanh toán: <span>@Model.FirstOrDefault().PaymentType</span></p>
+                <p>Khách hàng: @Model.FirstOrDefault().FullName</p>
+                <p>Nhân viên: <span></span></p>
+            </div>
+            <div class="details-right note">
+                <label for="note">Ghi chú:</label>
+                <textarea id="note"></textarea>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Mã hàng</th>
+                    <th>Mặt hàng</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Giá bán</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.SKU</td>
+                        <td>@item.ProductName /<span>@item.SizeName - @item.ColorName</span></td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.Value.ToString("N0")</td>
+                        <td>@item.PriceSale.Value.ToString("N0")</td>
+                        @{
+                            var tt = item.Price * item.Quantity;
+                        }
+                        <td>@tt.Value.ToString("N0")</td>
+                    </tr>
+                }
+                
+                
+            </tbody>
+        </table>
+        <div class="details">
+            <div class="details-right">
+                <h6>Tổng số lượng: <span>@Model.FirstOrDefault().Quantity</span></h6>
+                <h6>Tổng tiền hàng: <span></span></h6>
+                <h6>Trừ tiêu điểm: <span>@Model.FirstOrDefault().CoinUsed</span></h6>
+                <h6>Trừ voucher: <span>@Model.FirstOrDefault().VoucherValue</span></h6>
+                <h6>Phí vận chuyển: <span>@Model.FirstOrDefault().ShippingFee.Value.ToString("N0")</span></h6>
+                <h6>Tổng cộng: <span>@Model.FirstOrDefault().TotalAmout.Value.ToString("N0")</span></h6>
+            </div>
+        </div>
+    </div>
+    <div id="giaohang" class="tab-content" style="display: none;">
+        <p>Họ tên: @Model.FirstOrDefault().RecipientName</p>
+        <p>Số điện thoại: @Model.FirstOrDefault().RecipientPhone</p>
+        <p>Địa chỉ nhận hàng: @Model.FirstOrDefault().RecipientAddress</p>
+        
+    </div>
+    <div id="lichsudiem" class="tab-content" style="display: none;">
+        <p>Đơn này dùng: @Model.FirstOrDefault().CoinUsed.Value.ToString("N0") xu</p>
+        <p>Xu còn lại: @Model.FirstOrDefault().Coin.Value.ToString("N0") xu</p>
+    </div>
+    <div class="buttons">
+        <button type="button" class="btn btn-primary">Hoàn hàng</button>
+        <button type="button" class="btn btn-success">Lưu ghi chú</button>
+        <button type="button" class="btn btn-secondary">In Hóa đơn</button>
+        <button type="button" class="btn btn-dark">Xuất PDF</button>
+        <button type="button" class="btn btn-danger">Huỷ đơn</button>
+    </div>
+</div>

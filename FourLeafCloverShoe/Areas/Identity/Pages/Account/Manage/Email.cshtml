@@ -1,0 +1,74 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Manage Email";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<form id="change-password-form" method="post">
+    <div class="account-forgot-password-form">
+        <div class="account-forgot-password-header">
+            <h1 class="account-forgot-password-header-title">Đổi Địa chỉ Email</h1>
+            <div class="account-forgot-password-header-des">
+                Để bảo mật tài khoản,
+                vui lòng không chia sẻ mật khẩu cho người khác
+            </div>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+         @if (Model.IsEmailConfirmed)
+            {
+            <div class="account-forgot-password-group">
+                <div class="account-forgot-password-item">
+                    <div class="account-forgot-password-item-flex">
+                        <div class="account-forgot-password-label"><label class="account-forgot-password-label-text" for="newPassword">Email</label></div>
+                        <div class="account-forgot-password-input-full-area">
+                            <input asp-for="Email" class="account-forgot-password-input account-forgot-password-input-full" disabled />
+                            <div class="input-group-append">
+                                <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+            else
+        {
+            <div class="account-forgot-password-group">
+                <div class="account-forgot-password-item">
+                    <div class="account-forgot-password-item-flex">
+                        <div class="account-forgot-password-label"><label class="account-forgot-password-label-text" for="newPassword">Email</label></div>
+                        <div class="account-forgot-password-input-full-area">
+                            <input asp-for="Email" class="account-forgot-password-input account-forgot-password-input-full" disabled />
+                            <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Xác minh email</button>
+
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="account-forgot-password-group">
+            <div class="account-forgot-password-item">
+                <div class="account-forgot-password-item-flex">
+                    <div class="account-forgot-password-label"><label class="account-forgot-password-label-text" for="newPassword">Email mới</label></div>
+                    <div class="account-forgot-password-input-full-area">
+                        <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" class="account-forgot-password-input account-forgot-password-input-full" />
+                        <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+            <div class="account-forgot-password-group">
+                <div class="account-forgot-password-left-space"></div>
+                <div class="account-forgot-password-right-space">
+                    <button type="submit" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="true">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

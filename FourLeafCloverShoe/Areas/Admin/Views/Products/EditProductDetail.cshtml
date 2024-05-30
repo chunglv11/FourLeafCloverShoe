@@ -1,0 +1,91 @@
+﻿@model FourLeafCloverShoe.Share.Models.ProductDetail
+@{
+    ViewBag.Title = "Cập nhật";
+    ViewBag.pTitle = "Sản phẩm chi tiết";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form asp-action="EditProductDetail">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label class="form-label">Kích cỡ</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                @foreach (var item in ViewBag.ListSizeitems as List<SelectListItem>)
+                                {
+                                    <div class="col-auto">
+                                        <input asp-for="SizeId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
+                                        <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <span asp-validation-for="SizeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Màu sắc</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                @foreach (var item in ViewBag.ListColorsitems as List<SelectListItem>)
+                                {
+                                    <div class="col-auto">
+
+                                        <input asp-for="ColorId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
+                                        <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <span asp-validation-for="ColorId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số lượng sản phẩm</label>
+                        <input asp-for="Quantity" value="@Model.Quantity" type="number" class="form-control">
+                        <input asp-for="ProductId" value="@ViewBag.productId" hidden class="form-control">
+                        <input asp-for="Id" value="@Model.Id" hidden class="form-control">
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giá bán sản phẩm</label>
+                        <input asp-for="PriceSale" value="@Model.PriceSale?.ToString("N0")" class="form-control">
+                        <span asp-validation-for="PriceSale" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label">Status</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="1">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">Bán ngay</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="0">
+                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không bán</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="card-body text-end btn-page">
+                        <button type="submit" class="btn btn-primary mb-0">Lưu thay đổi</button>
+                        <button class="btn btn-outline-secondary mb-0">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+

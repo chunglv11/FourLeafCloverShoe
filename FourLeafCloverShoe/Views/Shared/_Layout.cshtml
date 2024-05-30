@@ -1,0 +1,679 @@
+﻿@using FourLeafCloverShoe.Share.Models;
+<!DOCTYPE html>
+<style>
+    .outerHeightHeader {
+        position: absolute;
+        z-index: 999;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .main-header {
+        background: none;
+        -webkit-transition: background 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out, -webkit-box-shadow 0.3s ease-in-out;
+    }
+
+    #key_search {
+        height: 35px;
+        border-radius: 10px;
+        border: 0;
+        width: 100%;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        outline: none;
+        padding: 0 76px 0 26px;
+    }
+
+    #btn_search {
+        border-radius: 10px;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 35px;
+        width: 50px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        z-index: 2;
+        border: 0;
+        background-color: transparent;
+        font-size: 23px;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-transition: all 0.25s;
+        -o-transition: all 0.25s;
+        transition: all 0.25s;
+    }
+
+</style>
+
+<html lang="en">
+
+<!-- Mirrored from mwc.com.vn/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Apr 2024 09:53:13 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop gi&#xE0;y FLC, gi&#xE0;y nam, gi&#xE0;y n&#x1EEF; HN - FLC</title>
+    <meta name="description">
+    <meta name="keywords">
+    <meta name="robots" content="noodp,index,follow">
+    <meta name="revisit-after" content="1 days">
+    <meta name="language" content="vietnamese">
+    <link rel="canonical" href="#">
+    <!-- Product meta ================================================== -->
+    <meta name="facebook-domain-verification" content="pylm3e3ou8g14uo3dqaa7erz5se74q">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Shop gi&#xE0;y FLC, gi&#xE0;y nam, gi&#xE0;y n&#x1EEF; HCM">
+    <meta property="og:image">
+    <meta property="og:description">
+    <meta property="og:url" content="#">
+    <meta property="og:site_name" content="FLC Shop">
+
+    <link rel="icon" href="~/fileuser/Assets/App/images
+/favicon.png" />
+
+@*    <script src="~/lib/signalr/dist/browser/signalr.min.js</script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+    <link href="~/fileuser/Assets/App/fonts/mwc-icon-v1.0/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/App/fonts/Roboto/css/Roboto.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/OwlCarousel/assets/owl.carousel.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/OwlCarousel/assets/owl.theme.default.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/App/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/slick-1.8.1/slick/slick.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/slick-1.8.1/slick/slick-theme.css" rel="stylesheet" type="text/css" />
+    <link href="~/fileuser/Assets/Lib/fancybox/fancybox.css" rel="stylesheet" />
+    <script src="~/fileuser/js/sitea975.js?v=T-tjfFLO8FtPWjOEpfxYRm6vmM9AX2icbps9TXlBFxg"></script>
+    <script src="~/fileuser/lib/knockoutjs/knockout-3.5.1.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/OwlCarousel/owl.carousel.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/slick-1.8.1/slick/slick.min.js" type="text/javascript"></script>
+    <script src="~/fileuser/Assets/Lib/fancybox/fancybox.umd.js"></script>
+    <script src="~/fileuser/Assets/Lib/jquery.number.js"></script>
+    <script src="~/fileuser/Assets/App/js/main.js" type="text/javascript"></script>
+
+
+ 
+    <script src="~/fileuser/lib/sweet-alert/sweetalert2%4011.js"></script>
+</head>
+@{
+    var lstproduct = new List<Product>();
+}
+
+<body>
+
+
+
+    <div class="wrapper-container">
+        <div id="page-wrapper">
+            <div class="outerHeightHeader">
+                <header id="site-header" class="menuShadown  main-header row clearfix">
+                    <div class="no-padding col-sm-12 col-md-2 d-none d-lg-block">
+                        <div class="header-mid wrap-flex-align">
+                            <div class="wrap-logo" itemscope="" itemtype="http://schema.org/Organization">
+                                <a class="link-logo-home" href="#" itemprop="url">
+                                    <img itemprop="logo" src="~/fileuser/img/logo.png" alt="FLC"
+                                         class="img-responsive logoimg">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-padding col-xs-12 col-md-7 d-none d-lg-block">
+                        <div class="menu-desktop hidden-sm hidden-xs d-none d-lg-block">
+                            <div id="nav">
+                                <nav class="main-nav text-center">
+                                    <ul class="clearfix">
+                                        <li class="home-main-menu   ">
+                                            <a data-eventlabel="GI&#xC0;Y N&#x1EEE;" class="home-main-menu"
+                                               href="/products/" title="GI&#xC0;Y N&#x1EEE;">
+                                                GI&#xC0;Y N&#x1EEE;
+                                            </a>
+                                            <ul class="sub_menu megaMenu">
+                                                <li>
+                                                    <a data-eventlabel=" GI&#xC0;Y CAO G&#xD3;T"
+                                                       href="collections/giay-cao-got.html"
+                                                       title=" GI&#xC0;Y CAO G&#xD3;T">
+                                                        GI&#xC0;Y CAO G&#xD3;T
+                                                    </a>
+                                                    <ul>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="Gi&#xE0;y Cao G&#xF3;t B&#xED;t M&#x169;i"
+                                                               class="link-vl-2"
+                                                               href="collections/giay-cao-got-1.html">
+                                                                Gi&#xE0;y Cao
+                                                                G&#xF3;t B&#xED;t M&#x169;i
+                                                            </a>
+                                                        </li>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="Gi&#xE0;y Sandal Cao G&#xF3;t "
+                                                               class="link-vl-2"
+                                                               href="collections/giay-cao-got-2.html">
+                                                                Gi&#xE0;y Sandal
+                                                                Cao G&#xF3;t
+                                                            </a>
+                                                        </li>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="D&#xE9;p cao g&#xF3;t" class="link-vl-2"
+                                                               href="collections/dep-cao-got-nu.html">
+                                                                D&#xE9;p cao
+                                                                g&#xF3;t
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="GI&#xC0;Y TH&#x1EC2; THAO "
+                                                       href="collections/giay-thoi-trang.html"
+                                                       title="GI&#xC0;Y TH&#x1EC2; THAO ">
+                                                        GI&#xC0;Y TH&#x1EC2; THAO
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="SANDAL N&#x1EEE;"
+                                                       href="collections/sandal-nu.html" title="SANDAL N&#x1EEE;">
+                                                        SANDAL N&#x1EEE;
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="D&#xC9;P S&#x1EE4;C"
+                                                       href="collections/dep-suc.html" title="D&#xC9;P S&#x1EE4;C">
+                                                        D&#xC9;P S&#x1EE4;C
+                                                    </a>
+                                                    <ul>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="S&#x1EE4;C CAO G&#xD3;T"
+                                                               class="link-vl-2"
+                                                               href="collections/suc-cao-got.html">
+                                                                S&#x1EE4;C CAO
+                                                                G&#xD3;T
+                                                            </a>
+                                                        </li>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="S&#x1EE4;C B&#x1EC6;T" class="link-vl-2"
+                                                               href="collections/suc-bet.html">
+                                                                S&#x1EE4;C
+                                                                B&#x1EC6;T
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel=" GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I"
+                                                       href="collections/giay-bup-be-moi.html"
+                                                       title=" GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I">
+                                                        GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="OXFORD &amp; BOOT"
+                                                       href="collections/oxford-boot.html" title="OXFORD &amp; BOOT">
+                                                        OXFORD &amp; BOOT
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="D&#xC9;P N&#x1EEE;"
+                                                       href="collections/dep-nu.html" title="D&#xC9;P N&#x1EEE;">
+                                                        D&#xC9;P N&#x1EEE;
+                                                    </a>
+                                                    <ul>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="D&#xC9;P B&#x1EC6;T" class="link-vl-2"
+                                                               href="collections/dep-bet.html">D&#xC9;P B&#x1EC6;T</a>
+                                                        </li>
+                                                        <li class="text-truncate">
+                                                            <a data-eventlabel="D&#xC9;P &#x110;&#x1EBE; CAO"
+                                                               class="link-vl-2"
+                                                               href="collections/giay-dep-nu-ban-chay.html">
+                                                                D&#xC9;P
+                                                                &#x110;&#x1EBE; CAO
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="home-main-menu megaMenuHover  ">
+                                            <a data-eventlabel="GI&#xC0;Y NAM" class="home-main-menu"
+                                               href="collections/giay-nam.html" title="GI&#xC0;Y NAM">
+                                                GI&#xC0;Y NAM
+                                            </a>
+                                            <ul class="sub_menu megaMenu">
+                                                <li>
+                                                    <a data-eventlabel="GI&#xC0;Y TH&#x1EC2; THAO NAM"
+                                                       href="collections/giay-the-thao-nam.html"
+                                                       title="GI&#xC0;Y TH&#x1EC2; THAO NAM">
+                                                        GI&#xC0;Y TH&#x1EC2; THAO NAM
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel=" SANDAL NAM" href="collections/sandal-nam.html"
+                                                       title=" SANDAL NAM">
+                                                        SANDAL NAM
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="D&#xC9;P NAM" href="collections/sandal-dep.html"
+                                                       title="D&#xC9;P NAM">
+                                                        D&#xC9;P NAM
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="GI&#xC0;Y T&#xC2;Y &amp; SLIP ON"
+                                                       href="collections/giay-tay-slip-on.html"
+                                                       title="GI&#xC0;Y T&#xC2;Y &amp; SLIP ON">
+                                                        GI&#xC0;Y T&#xC2;Y &amp; SLIP ON
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel=" BOOT NAM &amp; OXFORD"
+                                                       href="collections/boot.html" title=" BOOT NAM &amp; OXFORD">
+                                                        BOOT NAM &amp; OXFORD
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class=" ">
+                                            <a data-eventlabel="GI&#xC0;Y C&#x1EB6;P" class="home-main-menu"
+                                               href="collections/giay-cap.html" title="GI&#xC0;Y C&#x1EB6;P">
+                                                GI&#xC0;Y C&#x1EB6;P
+                                            </a>
+                                        </li>
+                                        <li class="home-main-menu megaMenuHover  ">
+                                            <a data-eventlabel="BALO - T&#xDA;I" class="home-main-menu"
+                                               href="collections/balo---tui.html" title="BALO - T&#xDA;I">
+                                                BALO - T&#xDA;I
+                                            </a>
+                                            <ul class="sub_menu megaMenu">
+                                                <li>
+                                                    <a data-eventlabel="Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang"
+                                                       href="collections/balo-laptop-du-lich-thoi-trang.html"
+                                                       title="Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang">
+                                                        Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="T&#xFA;i &#x110;eo Ch&#xE9;o"
+                                                       href="collections/tui-deo-cheo.html"
+                                                       title="T&#xFA;i &#x110;eo Ch&#xE9;o">
+                                                        T&#xFA;i &#x110;eo Ch&#xE9;o
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="home-main-menu megaMenuHover  ">
+                                            <a data-eventlabel="Ph&#x1EE5; Ki&#x1EC7;n" class="home-main-menu"
+                                               href="collections/phu-kien.html" title="Ph&#x1EE5; Ki&#x1EC7;n">
+                                                Ph&#x1EE5; Ki&#x1EC7;n
+                                            </a>
+                                            <ul class="sub_menu megaMenu">
+                                                <li>
+                                                    <a data-eventlabel="V&#x1EDB; " href="collections/vo.html"
+                                                       title="V&#x1EDB; ">
+                                                        V&#x1EDB;
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="Chai V&#x1EC7; Sinh Gi&#xE0;y"
+                                                       href="collections/chai-ve-sinh-giay.html"
+                                                       title="Chai V&#x1EC7; Sinh Gi&#xE0;y">
+                                                        Chai V&#x1EC7; Sinh Gi&#xE0;y
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="D&#xE2;y Gi&#xE0;y"
+                                                       href="collections/day-giay.html" title="D&#xE2;y Gi&#xE0;y">
+                                                        D&#xE2;y Gi&#xE0;y
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="&#x110;&#x1EBF; L&#xF3;t"
+                                                       href="collections/de-lot.html" title="&#x110;&#x1EBF; L&#xF3;t">
+                                                        &#x110;&#x1EBF; L&#xF3;t
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class=" ">
+                                            <a data-eventlabel="S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y"
+                                               class="home-main-menu" href="collections/giay-dep-ban-chay.html"
+                                               title="S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y">
+                                                S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-padding col-xs-12 hidden-sm hidden-xs col-md-2 d-none d-lg-block">
+                        <div class="searchFormHeader">
+                            <form class="searchHeader searchDesktop ng-pristine ng-valid"
+                                  asp-controller="Products"  asp-action="Index" method="get">
+
+                                <div class="searchBox">
+                                    <input autocomplete="off" type="text" name="searchString" class="searchInput"
+                                           placeholder="Tìm kiếm" value="@ViewBag.SearchString">
+                                    <button type="submit" class="btnSearch" style="background:none;">
+                                        <svg width="14" height="13" viewBox="0 0 14 13" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11.3457 5.49982C11.3457 8.26112 9.10717 10.4996 6.34572 10.4996C3.58427 10.4996 1.3457 8.26112 1.3457 5.49982C1.3457 2.73851 3.58427 0.5 6.34572 0.5C9.10717 0.5 11.3457 2.73851 11.3457 5.49982Z"
+                                                  stroke="#2D2D2D"></path>
+                                            <line y1="-0.5" x2="4.94967" y2="-0.5"
+                                                  transform="matrix(0.70712 0.707094 -0.70712 0.707094 9.3457 9.50012)"
+                                                  stroke="#2D2D2D" stroke-linejoin="round"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <partial name="_LoginPartial">
+
+
+                </header>
+            </div>
+
+
+            <section id="site-content">
+                <div id="main">
+                 
+                    @RenderBody()
+                    <!-- chèn quảng cáo -->
+                    <!-- <div class="home-popup" id="home-popup">
+                        <div class="home-popup__background">
+                            <div class="home-popup__content">
+                                <a href="#">
+                                    <img
+                                        src="../img.mwc.com.vn/mwc.jpg%3b%20filename_%3dUTF-8%27%27mwc5c13.jpg?w=640&amp;h=640&amp;FileInput=/Resources/Silde/2023/03/03/900x603-uudaikhmoi4d86cd65-368a-4393-a8c8-6d8b882ac495.png">
+                                </a>
+
+                                <div class="home-popup__close-area">
+                                    <div class="popup__close-btn" onclick="closepopup()">
+                                        <svg viewBox="0 0 16 16" stroke="#EE4D2D" class="home-popup__close-button">
+                                            <path stroke-linecap="round" d="M1.1,1.1L15.2,15.2"></path>
+                                            <path stroke-linecap="round" d="M15,1L0.9,15.1"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </section>
+
+            <section id="sectionInfoFooter" class="clearfix">
+                <div class="container clearfix">
+                    <hr class="end-sec">
+                    <div class="innerInfoFooter row clearfix">
+                        <div class="col-xs-12 col-sm-4 site-animation">
+                            <h4>
+                                GỌI MUA HÀNG ONLINE (08:00 - 21: 00 mỗi ngày)
+                            </h4>
+                            <div class="infoContent">
+                                <p>
+                                    <span class="titleHotline"><a href="tel:0376810024">0376.810.024</a></span>
+                                    <span class="moreInfoFooter">Tất cả các ngày trong tuần (Trừ tết Âm Lịch)</span>
+                                </p>
+                            </div>
+
+                            <h4 style="margin-top: 50px" class="xxx">
+                                GÓP Ý &amp; KHIẾU NẠI (08:30 - 20:30)
+                            </h4>
+                            <div class="infoContent">
+                                <p>
+                                    <span class="titleHotline"><a href="tel:0376810024">0376.810.024</a></span>
+                                    <span class="moreInfoFooter">Tất cả các ngày trong tuần (Trừ tết Âm Lịch)</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 site-animation info-ft">
+                            <h4>
+                                THÔNG TIN
+                            </h4>
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i>
+                                        Gi&#x1EDB;i thi&#x1EC7;u v&#x1EC1; FLC
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i> Than Phi&#x1EC1;n G&#xF3;p &#xDD;
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i> Ch&#xED;nh s&#xE1;ch v&#xE0; quy
+                                        &#x111;&#x1ECB;nh
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 site-animation">
+                            <h4>
+                                FAQ
+                            </h4>
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i>
+                                        V&#x1EAD;n chuy&#x1EC3;n
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i> Ch&#xED;nh s&#xE1;ch
+                                        &#x111;&#x1ED5;i tr&#x1EA3;
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="mwc-icon-angle-right"></i> Ch&#xED;nh s&#xE1;ch &#x111;&#x1ED5;i
+                                        tr&#x1EA3; b&#x1EA3;o h&#xE0;nh
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <ul class="navbar-social">
+                                <li class="social">
+                                    <a data-eventlabel="facebook" class="link-social"
+                                       href="https://www.facebook.com/trung27012003/" target="_blank" rel="nofollow">
+                                        <i class="mwc-icon-mwc-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a data-eventlabel="instagram" class="link-social" href="#" target="_blank"
+                                       rel="nofollow">
+                                        <i class="mwc-icon-mwc-instagram"></i>
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a data-eventlabel="youtube" class="link-social"
+                                       href="#" target="_blank" rel="nofollow">
+                                        <img src="~/fileuser/Assets/App/images/icons8-youtube-logo.svg" width="30" />
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a data-eventlabel="zalo" class="link-social" href="#"
+                                       target="_blank" rel="nofollow">
+                                        <img src="~/fileuser/Assets/App/images/shoppe-icon.svg" width="30" />
+                                    </a>
+                                </li>
+                                <li class="social">
+                                    <a data-eventlabel="tiktok" class="link-social"
+                                       href="#" target="_blank" rel="nofollow">
+                                        <i class="fa" style="margin-left: 5px">
+                                            <svg style="width: 30px; height: 30px;" enable-background="new 0 0 512 512"
+                                                 height="512" viewBox="0 0 512 512" width="512"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <g>
+                                                    <g fill="#f00044">
+                                                        <path d="m182.1 265.4c-40.6 0-73.4 32.8-72.8 73 .4 25.8 14.6 48.2 35.5 60.7-7.1-10.9-11.3-23.8-11.5-37.7-.6-40.2 32.2-73 72.8-73 8 0 15.7 1.3 22.9 3.6v-80.5c-7.5-1.1-15.2-1.7-22.9-1.7-.4 0-.7 0-1.1 0v59.2c-7.2-2.3-14.9-3.6-22.9-3.6z">
+                                                        </path>
+                                                        <path d="m357.6 24h-.6-20.8c6 30.1 22.9 56.3 46.5 74.1-15.5-20.5-24.9-46.1-25.1-74.1z">
+                                                        </path>
+                                                        <path d="m480 146.5c-7.9 0-15.5-.8-23-2.2v57.7c-27.2 0-53.6-5.3-78.4-15.9-16-6.8-30.9-15.5-44.6-26l.4 177.9c-.2 40-16 77.5-44.6 105.8-23.3 23-52.8 37.7-84.8 42.4-7.5 1.1-15.2 1.7-22.9 1.7-34.2 0-66.8-11.1-93.3-31.6 3 3.6 6.2 7.1 9.7 10.5 28.8 28.4 67 44.1 107.7 44.1 7.7 0 15.4-.6 22.9-1.7 32-4.7 61.5-19.4 84.8-42.4 28.6-28.3 44.4-65.8 44.6-105.8l-1.5-177.9c13.6 10.5 28.5 19.3 44.6 26 24.9 10.5 51.3 15.9 78.4 15.9">
+                                                        </path>
+                                                    </g>
+                                                    <path d="m98.2 254.1c28.5-28.3 66.4-44 106.8-44.3v-21.3c-7.5-1.1-15.2-1.7-22.9-1.7-40.8 0-79.1 15.7-107.9 44.3-28.3 28.1-44.5 66.5-44.4 106.4 0 40.2 15.9 77.9 44.6 106.4 4.6 4.5 9.3 8.7 14.3 12.5-22.6-26.9-34.9-60.5-35-95.9.1-39.9 16.2-78.3 44.5-106.4z"
+                                                          fill="#08fff9"></path>
+                                                    <path d="m457 144.3v-21.4h-.2c-27.8 0-53.4-9.2-74-24.8 17.9 23.6 44.1 40.4 74.2 46.2z"
+                                                          fill="#08fff9"></path>
+                                                    <path d="m202 432.2c9.5.5 18.6-.8 27-3.5 29-9.5 49.9-36.5 49.9-68.3l.1-119v-217.4h57.2c-1.5-7.5-2.3-15.1-2.4-23h-78.8v217.3l-.1 119c0 31.8-20.9 58.8-49.9 68.3-8.4 2.8-17.5 4.1-27 3.5-12.1-.7-23.4-4.3-33.2-10.1 12.3 19 33.3 31.9 57.2 33.2z"
+                                                          fill="#08fff9"></path>
+                                                    <path d="m205 486.2c32-4.7 61.5-19.4 84.8-42.4 28.6-28.3 44.4-65.8 44.6-105.8l-.4-177.9c13.6 10.5 28.5 19.3 44.6 26 24.9 10.5 51.3 15.9 78.4 15.9v-57.7c-30.1-5.8-56.3-22.6-74.2-46.2-23.6-17.8-40.6-44-46.5-74.1h-57.3v217.3l-.1 119c0 31.8-20.9 58.8-49.9 68.3-8.4 2.8-17.5 4.1-27 3.5-24-1.3-44.9-14.2-57.2-33.1-20.9-12.4-35.1-34.9-35.5-60.7-.6-40.2 32.2-73 72.8-73 8 0 15.7 1.3 22.9 3.6v-59.2c-40.4.3-78.3 16-106.8 44.3-28.3 28.1-44.5 66.5-44.4 106.3 0 35.4 12.3 69 35 95.9 26.6 20.5 59.1 31.6 93.3 31.6 7.7.1 15.4-.5 22.9-1.6z">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </i>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <footer class="footer" id="footer">
+                <div class="container">
+                    <div class="footer-inner">
+                        <div class="footer-middle">
+                            <div class="col-12">
+                                <div class="footer-section-title">
+                                    <p class="text-center footer-section-main">Hệ thống cửa hàng</p>
+                                    <p class="text-center footer-section-des">
+                                        <a href="#">
+                                            Xem địa chỉ các cửa hàng
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-bottom">
+                            <div class="row">
+                                <div class="col-12 col-lg-8">
+                                    <p class="footer-company-name">SHOP GI&#xC0;Y MWC</p>
+
+                                    <p class="footer-company-add">
+                                        Địa chỉ: <span>
+                                           Số 2, Ngõ 8, Vạn Phúc, Hà Đông, Hà Nội
+                                        </span>
+                                    </p>
+
+                                    <p class="footer-company-tel">MST: <span></span></p>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="btc-sign">
+                                        <a href="#">
+                                            <img src="~/fileuser/Assets/App/images/general/bocongthuong.png"
+                                                 alt="Đã đăng ký bộ công thương">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+
+    <div id="sidebar-cart" class="cart-widget-side wd-side-hidden wd-right">
+        <div class="wd-heading widget-heading">
+            <span class="title widget-title">Giỏ hàng</span>
+            <div class="close-side-widget wd-action-btn wd-style-text wd-cross-icon">
+                <a href="javascript:;" onclick="closecart()">
+                    <img src="/fileuser/Assets/App/images/iconclose.png"
+                         style="width:17px;padding-right:5px;" />Đóng
+                </a>
+            </div>
+        </div>
+   
+    </div>
+    <div>
+
+
+    </div>
+    <div id="mm-blocker" class="mm-slideout"></div>
+    <div id="loading-ico"></div>
+    <div id="bttop" style="display: none;">
+        <span>Về đầu trang</span>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+             x="0px" y="0px" viewBox="0 0 32.635 32.635" style="enable-background:new 0 0 32.635 32.635;"
+             xml:space="preserve">
+        <g>
+        <path d="M32.135,16.817H0.5c-0.276,0-0.5-0.224-0.5-0.5s0.224-0.5,0.5-0.5h31.635c0.276,0,0.5,0.224,0.5,0.5
+							     S32.411,16.817,32.135,16.817z"></path>
+        <path d="M19.598,29.353c-0.128,0-0.256-0.049-0.354-0.146c-0.195-0.195-0.195-0.512,0-0.707l12.184-12.184L19.244,4.136
+							     c-0.195-0.195-0.195-0.512,0-0.707s0.512-0.195,0.707,0l12.537,12.533c0.094,0.094,0.146,0.221,0.146,0.354
+							     s-0.053,0.26-0.146,0.354L19.951,29.206C19.854,29.304,19.726,29.353,19.598,29.353z"></path>
+            </g>
+        </svg>
+    </div>
+    <div class="hotline-phone-ring-wrap">
+        <div class="hotline-phone-ring">
+            <div class="hotline-phone-ring-circle"></div>
+            <div class="hotline-phone-ring-circle-fill"></div>
+            <div class="hotline-phone-ring-img-circle">
+                <a href="tel:376810024" class="pps-btn-img">
+                    <img src="~/fileuser/Assets/App/images/icon-2.png" alt="Số điện thoại" width="50">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       
+       
+
+        //info , success , warning ,error
+        function ShowNotify(type, message) {
+            var heading = 'Thông báo';
+
+            $.toast({
+                heading: heading,
+                text: message,
+                icon: type,
+                position: 'top-right',
+            })
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+<!-- Mirrored from mwc.com.vn/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Apr 2024 09:55:05 GMT -->
+
+</html>
+
+
+

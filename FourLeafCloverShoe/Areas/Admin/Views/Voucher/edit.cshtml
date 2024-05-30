@@ -1,0 +1,139 @@
+﻿@model FourLeafCloverShoe.Share.ViewModels.VoucherViewModel
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form method="post" asp-action="edit">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Mã voucher</label>
+                        <input asp-for="VoucherCode" type="text" class="form-control">
+                        <span asp-validation-for="VoucherCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mô tả cho voucher</label>
+                        <input asp-for="Title" type="text" class="form-control">
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số lượng </label>
+                        <input asp-for="Quantity" type="number" class="form-control">
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Loại mã</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="VoucherType" class="btn-check" id="btnrdolite11" value="1">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">%</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="VoucherType" class="btn-check" id="btnrdolite13" value="0">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite13">VNĐ</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giá trị </label>
+                        <input asp-for="VoucherValue" type="" class="form-control">
+                        <span asp-validation-for="VoucherValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giảm cho đơn từ </label>
+                        <input asp-for="MinimumOrderValue" type="number" class="form-control">
+                        <span asp-validation-for="MinimumOrderValue" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group" id="giamtoida">
+                        <label class="form-label">Giảm tối đa </label>
+                        <input asp-for="MaximumOrderValue" type="number"  class="form-control">
+                        <span asp-validation-for="MaximumOrderValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày bắt đầu</label>
+                        <input asp-for="StartDate" type="datetime-local" class="form-control">
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ngày kết thúc</label>
+                        <input asp-for="EndDate" type="datetime-local" class="form-control">
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group mb-0">
+                        <label class="form-label">Trạng thái</label>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite0" value="1">
+                                    <label class="btn btn-sm btn-light-success" for="btnrdolite0">Xuất bản</label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite1" value="0">
+                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite1">Không xuất bản</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Đối tượng áp dụng</label>
+                        <select class="form-control" multiple id="reset-multiple" asp-for="Ranks">
+                            @if (Model.Ranks != null)
+                            {
+                                foreach (var rank in Model.Ranks)
+                                {
+                                    <option value="@rank">@rank</option>
+                                }
+                                if (ViewBag.Ranks == null)
+                                {
+                                }
+                                else
+                                {
+                                    foreach (var role in ViewBag.Ranks)
+                                    {
+                                        <option value="@role.Value">@role.Text</option>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (ViewBag.Ranks == null)
+                                {
+                                }
+                                else
+                                {
+                                    foreach (var role in ViewBag.Ranks)
+                                    {
+                                        <option value="@role.Value">@role.Text</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+<script>
+    document.getElementById('btnrdolite13').addEventListener('click', function () {
+        document.getElementById('giamtoida').style.display = 'none';
+    });
+
+    document.getElementById('btnrdolite11').addEventListener('click', function () {
+        document.getElementById('giamtoida').style.display = 'block';
+    });
+
+
+</script>
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")

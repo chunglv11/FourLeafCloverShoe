@@ -1,0 +1,79 @@
+﻿
+<style>
+
+
+.gif {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem; /* Add some spacing below the GIF */
+}
+
+.content {
+    margin: 0; /* Remove top margin for better layout */
+    text-align: center;
+}
+
+.content .main-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+p {
+    font-size: 1.3rem;
+    padding: 0.7rem 0;
+}
+
+button {
+    padding: 1rem;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+    background: #0046d4;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+</style>
+
+    <div class="container">
+      <div class="gif">
+        <img src="https://i.postimg.cc/2yrFyxKv/giphy.gif" alt="gif_ing" />
+      </div>
+      <div class="content">
+        <h1 class="main-heading">Đặt hàng không thành công.</h1>
+        <p> Chuyển hướng tới trang chủ sau <span id="countdown">5</span> giây...</p>
+      </div>
+    </div>
+    <br />
+
+<script>
+
+    var countdownElement = document.getElementById('countdown');
+    var cancelButton = document.getElementById('cancelButton');
+    var countdown = 5;
+
+    var countdownInterval = setInterval(function () {
+        countdown--;
+        countdownElement.textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = 'https://localhost:7116/';
+        }
+    }, 1000);
+
+    cancelButton.addEventListener('click', function () {
+        clearInterval(countdownInterval);
+        window.location.href = 'https://localhost:7116/';
+    });
+
+
+    $(function () {
+        $.mousedirection();
+        $("body").bind("mousedirection", function (e) {
+        });
+    });
+
+
+</script>

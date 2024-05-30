@@ -1,0 +1,300 @@
+﻿@model X.PagedList.IPagedList<FourLeafCloverShoe.Share.Models.Product>;
+@using X.PagedList.Mvc.Core;
+<style>
+    .filter-sidebar-body {
+        overflow-y: auto;
+        max-height: 90vh; /* Điều chỉnh độ cao tối đa theo nhu cầu */
+    }
+
+</style>
+<form method="get" action="@Url.Action("Index")">
+    <input hidden value="@ViewBag.SearchString" name="searchString" />
+    <div class="container-fluid">
+        <div class="section-padding">
+            <div class="row">
+                <div class="col-12">
+                    <div class="category-top-info">
+                        <h2 class="category-title">
+                            SẢN PHẨM BÁN CHẠY
+                        </h2>
+                        <div class="toolbar-mode">
+                            <div class="filter-collection-left">
+                                <a href="#">
+                                    <div class="togglelines-btn">
+                                        <span class="togglelines"></span>
+                                    </div>
+                                    <span class="shop-filter-text">
+                                        <span class="closetext">Bộ lọc</span>
+                                        <span class="opentext">Đóng</span>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="toolbar-right">
+                                <div class="browse-tags">
+                                    <label>Sắp xếp theo:</label>
+                                    @Html.DropDownList("sortSelect", ViewBag.SortSelect as SelectList, new { @class = "sort-by" })
+
+                                    <i class="mwc-icon-angle-down"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="category-product-list">
+                        <div class="row">
+                            @foreach (var item in Model)
+                            {
+                                <div class="col-12 col-xs-custom-6 col-sm-4 col-lg-3 mb-32px">
+                                    <div class="product-grid-item">
+                                        <div class="product-grid-thumb">
+
+
+                                            <div class="product-grid-sale-wishlist" id="wishlist-id-4198">
+                                                <i class="mwc-icon-heart" onclick="likeFunction(4198, 4198)"></i>
+                                            </div>
+
+                                            <a asp-action="ProductDetail" asp-route-productId="@item.Id" class="product-grid-image pl-id-4198" title="@item.ProductName">
+                                                <img class="mcl-id-4198" src="@item.ProductImages.First().ImageUrl" alt="@item.ProductName">
+                                            </a>
+
+                                        </div>
+
+                                        <a class="product-grid-info pl-id-4198" asp-action="ProductDetail" asp-route-productId="@item.Id" title="@item.ProductName">
+                                            <div class="product-grid-info-top">
+                                                <p class="product-grid-title">
+                                                    @item.ProductName
+                                                </p>
+                                                <p class="product-grid-price">
+                                                    <span class="product-grid-price-new">
+                                                        <span class="product-grid-price-new-text">
+                                                            @{
+                                                                int count = item.ProductDetails.Count();
+                                                                decimal? minprice = 0;
+                                                                decimal? maxprice = 0;
+                                                                if (count != 0)
+                                                                {
+                                                                    minprice = item.ProductDetails.Min(c => c.PriceSale);
+                                                                    maxprice = item.ProductDetails.Max(c => c.PriceSale);
+
+                                                                }
+                                                            }
+
+                                                            @if (minprice == maxprice)
+                                                            {
+                                                                <span>@minprice?.ToString("N0") đ</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@minprice?.ToString("N0") đ - <span>@maxprice?.ToString("N0") đ</span></span>
+                                                            }
+                                                        </span>
+                                                    </span>
+
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt-3 p-3 pagin-history">
+                        <div class="shadow-sm">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-center align-items-center">
+                                    <!-- Đây là phần mới -->
+                                    <div class="pagin-left font-weight-lighter">
+                                        Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                                    </div>
+                                    <div class="pagin-right ml-auto">
+                                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, searchString = ViewBag.SearchString, category_group = ViewBag.SelectedCategory, size_group = ViewBag.SelectedSize, brand_group = ViewBag.SelectedBrand, price_range = ViewBag.PriceRange, sortSelect = ViewBag.SortSelect }),
+                                                 new PagedListRenderOptions
+                                        {
+
+                                            DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+                                            DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+                                            DisplayLinkToPreviousPage = PagedListDisplayMode.IfNeeded,
+                                            DisplayLinkToNextPage = PagedListDisplayMode.IfNeeded,
+                                            DisplayLinkToIndividualPages = true,
+                                            MaximumPageNumbersToDisplay = 5, // Số lượng trang tối đa hiển thị
+                                            DisplayEllipsesWhenNotShowingAllPageNumbers = true, // Hiển thị dấu ba chấm khi không hiển thị tất cả các số trang
+                                            LinkToFirstPageFormat = "Trang đầu", // Định dạng liên kết đến trang đầu tiên
+                                            LinkToPreviousPageFormat = "<",
+                                            LinkToNextPageFormat = ">",
+                                            LinkToLastPageFormat = "Trang cuối", // Định dạng liên kết đến trang cuối cùng
+                                            ContainerDivClasses = new string[] { "section-view-more" }, // Class cho div bao ngoài
+                                            UlElementClasses = new string[] { "pagination" }, // Class cho thẻ ul
+                                            LiElementClasses = new string[] { "pagination-item" }, // Class cho thẻ li
+                                            PageClasses = new string[] { "pagination-link" }, // Class cho các liên kết trang
+                                            // ActiveLiElementClass = "btn-solid-primary",
+                                        })
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @*     <div class="section-view-more">
+                        <ul class="pagination">
+                            <li class="pagination-item">
+                                <a href="#" class="pagination-link pagination-link-prev pagination-link-disabled">
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z" fill="rgba(0,0,0,.85"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="pagination-item">
+                                <a class="pagination-link pagination-link-active" href="/collections/giay-dep-ban-chay?page=1">1</a>
+                            </li>
+                            <li class="pagination-item">
+                                <a class="pagination-link" href="/collections/giay-dep-ban-chay?page=2">2</a>
+                            </li>
+                            <li class="pagination-item">
+                                <a class="pagination-link" href="/collections/giay-dep-ban-chay?page=3">3</a>
+                            </li>
+
+                            <li class="pagination-item">
+                                <a class="pagination-link pagination-link-next" href="/collections/giay-dep-ban-chay?page=2">
+
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80522 3.1875 9.86817 3.1875 9.9338V10.9691C3.1875 11.0588 3.29063 11.1083 3.36027 11.0534L9.39777 6.33781C9.44908 6.29779 9.4906 6.24658 9.51915 6.1881C9.5477 6.12962 9.56254 6.06539 9.56254 6.00031C9.56254 5.93523 9.5477 5.87101 9.51915 5.81253C9.4906 5.75404 9.44908 5.70284 9.39777 5.66281Z" fill="rgba(0,0,0,.85)"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div> *@
+                </div>
+
+                <div class="filter-sidebar1" id="filter-sidebar1">
+
+                    <div class="filter-sidebar-header">
+                        <h3 class="filter-sidebar-title">
+                            Bộ lọc
+                        </h3>
+                        <a href="#" class="filter-sidebar-close">
+                            <i class="mwc-icon-close"></i>
+                        </a>
+                    </div>
+                    <div class="filter-sidebar-body">
+                        <div class="filter-sidebar-group">
+                            <div class="filter-sidebar-group-content">
+                                <div class="filter-sidebar-subgroup">
+                                    <div class="filter-sidebar-subgroup-title">
+                                        Kích cỡ
+                                    </div>
+
+                                    <div class="filter-sidebar-subgroup-content">
+                                        <div class="filter-price-grid1">
+                                            @{
+                                                List<string> SelectedSize = ViewBag.SelectedSize as List<string>;
+                                                List<string> SelectedBrand = ViewBag.SelectedBrand as List<string>;
+                                                List<string> SelectedCategory = ViewBag.SelectedCategory as List<string>;
+                                            }
+                                            @foreach (var item in ViewBag.Size)
+                                            {
+                                                <div class="form-check1">
+                                                    <input name="size_group" class="form-check-input" type="checkbox" value="@item" id="@item" @(SelectedSize != null && SelectedSize.Contains(item) ? "checked" : "")>
+                                                    <label class="form-check-label" for="@item">
+                                                        @item
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-sidebar-subgroup">
+                                    <div class="filter-sidebar-subgroup-title">
+                                        Thương hiệu
+                                    </div>
+
+                                    <div class="filter-sidebar-subgroup-content">
+                                        <div class="filter-price-grid1">
+                                            @foreach (var item in ViewBag.Brand)
+                                            {
+                                                <div class="form-check1">
+                                                    <input name="brand_group" class="form-check-input" type="checkbox" value="@item" id="@item" @(SelectedBrand != null && SelectedBrand.Contains(item) ? "checked" : "")>
+                                                    <label class="form-check-label" for="@item">
+                                                        @item
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-sidebar-subgroup">
+                                    <div class="filter-sidebar-subgroup-title">
+                                        Loại
+                                    </div>
+
+                                    <div class="filter-sidebar-subgroup-content">
+                                        <div class="filter-price-grid1">
+                                            @foreach (var item in ViewBag.Category)
+                                            {
+                                                <div class="form-check1">
+                                                    <input name="category_group" class="form-check-input" type="checkbox" value="@item" id="@item" @(SelectedCategory != null && SelectedCategory.Contains(item) ? "checked" : "")>
+                                                    <label class="form-check-label" for="@item">
+                                                        @item
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filter-sidebar-subgroup">
+                                    <div class="filter-sidebar-subgroup-title">
+                                        Giá
+                                    </div>
+                                    <div class="filter-sidebar-subgroup-content">
+                                        <div class="filter-price-grid">
+                                            <div class="form-check">
+                                                <input name="price_range" class="form-check-input" type="radio" value="duoi100" id="duoi100" @(ViewBag.PriceRange == "duoi100" ? "checked" : "")>
+                                                <label class="form-check-label" for="duoi100">
+                                                    Dưới 100.000đ
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input name="price_range" class="form-check-input" type="radio" value="100-200" id="100-200" @(ViewBag.PriceRange == "100-200" ? "checked" : "")>
+                                                <label class="form-check-label" for="100-200">
+                                                    100.000đ - 200.000đ
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input name="price_range" class="form-check-input" type="radio" value="200-300" id="200-300" @(ViewBag.PriceRange == "200-300" ? "checked" : "")>
+                                                <label class="form-check-label" for="200-300">
+                                                    200.000đ - 300.000đ
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input name="price_range" class="form-check-input" type="radio" value="tren300" id="tren300" @(ViewBag.PriceRange == "tren300" ? "checked" : "")>
+                                                <label class="form-check-label" for="tren300">
+                                                    Trên 300.000đ
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-overlay-filter"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#sortSelect').change(function () {
+            $(this).closest('form').submit();
+        });
+        $('.active.pagination-item').on('click', function () {
+            $('.pagination-link').removeClass('pagination-link-active'); // Xóa class 'pagination-link-active' khỏi tất cả các liên kết
+            $(this).find('.pagination-link').addClass('pagination-link-active'); // Thêm class 'pagination-link-active' vào liên kết được nhấp
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @Html.Partial("~/Areas/Admin/Shared/TitleMeta.cshtml")
+
+    @RenderSection("styles", required: false)
+    @RenderSection("css", required: false)
+    @Html.Partial("~/Areas/Admin/Shared/HeadCSS.cshtml")
+</head>
+<body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
+
+    @Html.Partial("~/Areas/Admin/Shared/LayoutVertical.cshtml")
+
+    <div class="pc-container">
+        <div class="pc-content">
+
+            @Html.Partial("~/Areas/Admin/Shared/Breadcrumb.cshtml")
+            <div data-pc-direction="ltr"> @*THÔNG BÁO*@
+                <div class="toast-container position-fixed top-0 end-0 p-3 " style="z-index: 99999"></div>
+            </div>
+            @RenderBody()
+
+        </div>
+    </div>
+
+
+    @Html.Partial("~/Areas/Admin/Shared/Footer.cshtml")
+
+    @Html.Partial("~/Areas/Admin/Shared/Customizer.cshtml")
+
+    @Html.Partial("~/Areas/Admin/Shared/VendorScripts.cshtml")
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

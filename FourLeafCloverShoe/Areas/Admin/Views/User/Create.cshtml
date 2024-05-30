@@ -1,0 +1,64 @@
+﻿@using FourLeafCloverShoe.Share.ViewModels;
+
+@model UserViewModel
+@{
+    ViewBag.Title = "Thêm mới";
+    ViewBag.pTitle = "Người dùng";
+}
+
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+           
+            <form method="post" asp-action="Create">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên</label>
+                        <input asp-for="FullName" type="text" class="form-control" placeholder="Nhập tên">
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên đăng nhập</label>
+                        <input asp-for="UserName" type="text" class="form-control" >
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại</label>
+                        <input asp-for="PhoneNumber" type="tel" class="form-control" >
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mật khẩu</label>
+                        <input asp-for="Password" type="password" class="form-control" >
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Role">Chức vụ</label>
+                        <select class="form-control " multiple id="reset-multiple" asp-for="Roles">
+                            @foreach (var role in ViewBag.Roles)
+                            {
+                                <option value="@role.Value">@role.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Thêm mới</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+

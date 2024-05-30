@@ -1,0 +1,60 @@
+﻿@model FourLeafCloverShoe.Share.Models.Ranks
+
+@{
+    ViewData["Title"] = "Rank";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Edit";
+    ViewBag.pTitle = "Rank";
+}
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-xl-12">
+        <div class="card">
+            <form method="post" asp-action="Edit">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="form-label">Rank</label>
+                        <input asp-for="Name" type="text" class="form-control" placeholder="Nhập rank">
+                        <input asp-for="Id" type="text" class="form-control" hidden>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PointsMin</label>
+                        <input asp-for="PointsMin" type="text" class="form-control" placeholder="Nhập PointsMin">
+                        <input asp-for="Id" type="number" min="0" max="1000000000" class="form-control" hidden>
+                        <span asp-validation-for="PointsMin" class="text-danger"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">PointsMax</label>
+                        <input asp-for="PoinsMax" type="text" class="form-control" placeholder="Nhập PointsMax">
+                        <input asp-for="Id" type="number" min="0" max="1000000000" class="form-control" hidden>
+                        <span asp-validation-for="PoinsMax" class="text-danger"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mô Tả</label>
+                        <input asp-for="Description" type="text" class="form-control" placeholder="Nhập kích cỡ">
+                        <input asp-for="Id" type="text" class="form-control" hidden>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- [ sample-page ] end -->
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

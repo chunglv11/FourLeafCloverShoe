@@ -1,0 +1,108 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
+
+
+@{
+    ViewBag.Title = "Danh sách";
+    ViewBag.pTitle = "Bài viết";
+}
+
+
+<div class="row">
+    <!-- [ sample-page ] start -->
+    <div class="col-sm-12">
+        <div class="card table-card">
+            <div class="card-body">
+
+
+                <div class="text-end p-sm-4 pb-sm-2">
+                    <a asp-action="Create" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover tbl-product" id="tb-sorting">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tiêu đề</th>
+                                <th>Tác giả</th>
+                                <th>Ngày đăng</th>
+                                <th>Ngày cập nhật</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 0;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @{
+                                            stt++;
+                                            <span>@stt</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-auto pe-0">
+                                                    <img src="@item.TittleImage" alt="user-image" class="wid-40 rounded">
+                                            </div>
+                                            <div class="col">
+                                                <p class="text-muted f-12 mb-0">@item.Tittle</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @item.Users.UserName
+                                    </td>
+                                     <td>
+                                        @item.CreateAt?.ToString("HH:mm dd/MM/yyyy")
+                                    </td>
+                                     <td>
+                                        @if (item.UpdateAt != null)
+                                        {
+                                            @item.UpdateAt?.ToString("HH:mm dd/MM/yyyy")
+                                        }
+                                        else
+                                        {
+                                            <span>Chưa cập nhật</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.Status == true)
+                                        {
+                                            <span class="badge rounded-pill text-bg-primary">Đã xuất bản</span>
+
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill text-bg-danger">Ngừng xuất bản</span>
+                                        }
+                                        <div class="prod-action-links">
+                                            <ul class="list-inline me-auto mb-0">
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                                    <a asp-action="Edit" asp-route-Id="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                        <i class="ti ti-edit-circle f-18"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
+                                                        <i class="ti ti-trash f-18"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ sample-page ] end -->
+</div>
+
+
