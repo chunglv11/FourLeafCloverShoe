@@ -13,12 +13,12 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label class="form-label">Màu sắc</label>
-                        <input asp-for="ColorName" type="text" class="form-control" placeholder="Nhập màu">
+                        <input asp-for="ColorName" type="text" id="exampleColorInput" class="form-control" placeholder="Nhập màu">
                         <span asp-validation-for="ColorName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Mã màu</label>
-                        <input asp-for="ColorCode" type="text" class="form-control" placeholder="Nhập mã">
+                        <input asp-for="ColorCode" type="color" class="form-control form-control-color" value="#563d7c" placeholder="Nhập mã">
                         <span asp-validation-for="ColorCode" class="text-danger"></span>
                     </div>
                     <div class="col-sm-12">
