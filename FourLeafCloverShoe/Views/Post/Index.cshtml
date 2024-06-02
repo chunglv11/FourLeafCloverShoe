@@ -1,0 +1,116 @@
+﻿@using FourLeafCloverShoe.Share.Models
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Index";
+}
+@if (Model == null || !Model.Any())
+{
+    <h3 style="text-align:center">Chưa có bài viết nào</h3>
+}
+else
+{
+    <section class="category-layout">
+        <div class="container post-list">
+            <div class="section-padding" style="padding: 30px 0 10px 0; ">
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <div class="category-top-info">
+                            <h2 class="category-title">
+                                Xu hướng thời trang
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section id="blog-new-section--2">
+                <div class="blog-new-section--inner-2">
+                    <div class="row blog-new-section--content ">
+                        @foreach (var item in Model)
+                        {
+                            <div class="items-normal col-xs-12 col-sm-6" style="">
+                                <div class="items-normal--inner ">
+                                    <div class="items-normal--img">
+                                        <a href="post/top-9-mau-giay-the-thao-nam-mwc-duoc-ua-chuong.html">
+                                            <img src="@item.TittleImage" alt="Top 9 m&#x1EAB;u gi&#xE0;y th&#x1EC3; thao nam MWC &#x111;&#x1B0;&#x1EE3;c &#x1B0;a chu&#x1ED9;ng">
+                                        </a>
+                                    </div>
+                                    <div class="items-normal--title">
+                                        <h3>@item.Tittle</h3>
+                                        <h3>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                var user = await UserManager.GetUserAsync(User);
+                                                <span id="account-handle" class="icon-cart">
+                                                    <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                                        @if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+                                                        {
+                                                            <img src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))" class="avatar rounded-circle" width="30">
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
+
+                                                        }
+                                                    </a>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span id="account-handle" class="icon-cart">
+                                                    <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Login">
+                                                        <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M6.99952 8C4.79727 8 2.98828 6.19608 2.98828 4C2.98828 1.80392 4.79727 0 6.99952 0C9.20176 0 11.0108 1.80392 11.0108 4C11.0108 6.19608 9.20176 8 6.99952 8ZM6.99952 1.01961C5.34783 1.01961 4.01075 2.35294 4.01075 4C4.01075 5.64706 5.34783 6.98039 6.99952 6.98039C8.6512 6.98039 9.98828 5.64706 9.98828 4C9.98828 2.35294 8.6512 1.01961 6.99952 1.01961Z"
+                                                                  fill="#2D2D2D"></path>
+                                                            <path d="M13.5281 15.9998H0.47191C0.157303 15.9998 0 15.7645 0 15.5292V12.0782C0 11.5292 0.235955 11.0586 0.707865 10.8233C4.48315 8.47036 9.59551 8.47036 13.3708 10.8233C13.764 11.0586 14.0787 11.6076 14.0787 12.0782V15.5292C14 15.7645 13.764 15.9998 13.5281 15.9998ZM1.02247 14.9802H13.0562V12.0782C13.0562 11.9213 12.9775 11.7645 12.8202 11.686C9.35955 9.5684 4.7191 9.5684 1.25843 11.686C1.10112 11.7645 1.02247 11.9213 1.02247 12.0782V14.9802Z"
+                                                                  fill="#2D2D2D"></path>
+                                                        </svg>
+                                                    </a>
+                                                </span>
+                                            }
+                                            <a href="post/top-9-mau-giay-the-thao-nam-mwc-duoc-ua-chuong.html">
+                                              @item.Users.UserName
+                                            </a>
+                                        </h3>
+                                   
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+            </section>
+            <div class="section-view-more">
+                <ul class="pagination">
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link pagination-link-prev pagination-link-disabled">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z"
+                                      fill="rgba(0,0,0,.85" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="pagination-item">
+                        <a class="pagination-link pagination-link-active" href="blogs2679.html?page=1">1</a>
+                    </li>
+
+                    <li class="pagination-item">
+                        <a href="#" class="pagination-link pagination-link-next pagination-link-disabled">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80522 3.1875 9.86817 3.1875 9.9338V10.9691C3.1875 11.0588 3.29063 11.1083 3.36027 11.0534L9.39777 6.33781C9.44908 6.29779 9.4906 6.24658 9.51915 6.1881C9.5477 6.12962 9.56254 6.06539 9.56254 6.00031C9.56254 5.93523 9.5477 5.87101 9.51915 5.81253C9.4906 5.75404 9.44908 5.70284 9.39777 5.66281Z"
+                                      fill="rgba(0,0,0,.85)" />
+                            </svg>
+
+                        </a>
+                </ul>
+            </div>
+        </div>
+    </section>
+}
