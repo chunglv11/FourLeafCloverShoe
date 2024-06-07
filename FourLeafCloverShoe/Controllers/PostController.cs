@@ -9,7 +9,7 @@ namespace FourLeafCloverShoe.Controllers
         private readonly IPostService _postService;
         public PostController(IPostService postService)
         {
-           _postService = postService;
+            _postService = postService;
         }
         public async Task<IActionResult> Index()
         {
@@ -21,9 +21,13 @@ namespace FourLeafCloverShoe.Controllers
             var postnoti = await _postService.GetsNoti();
             return View(postnoti);
         }
+ 
         public async Task<IActionResult> show(Guid Id)
         {
             var ressult = await _postService.GetById(Id);
+            bool status = (bool)ressult.Status;
+            var getAnotherNoti = await _postService.Getsanotherpost(Id, status);
+            ViewBag.lstanothernoti = getAnotherNoti;
             return View(ressult);
         }
     }

@@ -3,7 +3,7 @@
 @model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
 @inject UserManager<User> UserManager
 <style>
-    #title_hidden{
+    #title_hidden {
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -27,7 +27,7 @@ else
                     <div class="col-12 col-lg-12">
                         <div class="category-top-info">
                             <h2 class="category-title">
-                                Xu hướng thời trang
+                                Khuyến Mãi
                             </h2>
                         </div>
                     </div>
@@ -50,24 +50,40 @@ else
                                             <h3 id="title_hidden">@item.Tittle</h3>
                                         </a>
                                         <h3>
-                                          
+
                                             <span id="account-handle" class="icon-cart">
                                                 <a class="account-handle-icon" asp-action="show" asp-route-Id="@item.Id" title="Manage">
                                                     @if (item.Users.ProfilePicture != null && item.Users.ProfilePicture.Length > 0)
                                                     {
                                                         <img src="data:image/*;base64,@(Convert.ToBase64String(item.Users.ProfilePicture))" width="25">
                                                         ;
-                                                    }else
+                                                    }
+                                                    else
                                                     {
                                                         <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
                                                     }
                                                 </a>
-                                            </span>      
-                                            <a href="post/top-9-mau-giay-the-thao-nam-mwc-duoc-ua-chuong.html">
-                                              @item.Users.UserName
-                                            </a>
+                                            </span>
+                                            @item.Users.UserName
                                         </h3>
-                                   
+                                        <h3>
+                                            @{
+                                                DateTime now = DateTime.Now;
+
+                                                if (item.CreateAt?.Day == now.Day && item.CreateAt?.Month == now.Month && item.CreateAt?.Year == now.Year) // Kiểm tra nếu ngày của itemCreateAt và ngày hiện tại là giống nhau
+                                                {
+                                                    <span id="account-handle" class="icon-cart">
+                                                        @item.CreateAt?.ToString("HH:mm");
+                                                    </span>
+                                                    // Nếu cùng ngày, hiển thị thời gian
+                                                }
+                                                else
+                                                {
+                                                    @item.CreateAt?.ToString("dd/MM/yyyy");
+                                                    // Nếu khác ngày, hiển thị ngày
+                                                }
+                                            }
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
