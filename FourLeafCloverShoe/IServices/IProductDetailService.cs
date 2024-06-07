@@ -12,5 +12,7 @@ namespace FourLeafCloverShoe.IServices
         public Task<ProductDetail> GetById(Guid Id);
         public Task<List<ProductDetail>> GetByProductId(Guid ProductId);
         public Task<List<ProductDetail>> Gets();
+        public Task<bool> UpdateQuantityById(Guid? productDetailId, int? quantity);
+        public Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int? quantity);
     }
 }

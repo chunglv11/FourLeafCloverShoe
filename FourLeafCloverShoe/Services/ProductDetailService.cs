@@ -9,10 +9,7 @@ namespace FourLeafCloverShoe.Services
     {
         private readonly MyDbContext _myDbContext;
 
-        public ProductDetailService()
-        {
-        }
-
+       
         public ProductDetailService(MyDbContext myDbContext)
         {
             _myDbContext = myDbContext;
@@ -183,5 +180,38 @@ namespace FourLeafCloverShoe.Services
                 return false;
             }
         }
+        public async Task<bool> UpdateQuantityById(Guid? productDetailId, int? quantity)
+        {
+            try
+            {
+                var productDetail = _myDbContext.ProductDetails.FirstOrDefault(c => c.Id == productDetailId);
+                productDetail.Quantity -= quantity;
+                _myDbContext.ProductDetails.Update(productDetail);
+                await _myDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
+        public async Task<bool> UpdateQuantityOrderFail(Guid productDetailId, int? quantity)
+        {
+            try
+            {
+                var productDetail = _myDbContext.ProductDetails.FirstOrDefault(c => c.Id == productDetailId);
+                productDetail.Quantity += quantity;
+                _myDbContext.ProductDetails.Update(productDetail);
+                await _myDbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
     }
 }
