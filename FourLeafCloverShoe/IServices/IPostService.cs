@@ -12,6 +12,9 @@ namespace FourLeafCloverShoe.IServices
         public Task<List<Post>> Gets();
         public Task<List<Post>> GetsNoti();
         public Task<List<Post>> Getssell();
+        public Task<List<Post>> Getsanotherpost(Guid id,bool status);
+
+
 
     }
 }
