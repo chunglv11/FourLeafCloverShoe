@@ -11,6 +11,13 @@ namespace FourLeafCloverShoe.IServices
         public Task<bool> DeleteMany(List<Order> lstobj);
         public Task<Order> GetById(Guid Id);
         public Task<List<Order>> Gets();
-        public bool UpdateOrderStatus(Guid idOrder, int? Status, Guid? IdStaff);
+        public Task<bool> UpdateOrderStatus(Guid idOrder, int? Status, string? IdStaff);
+        
+        public bool ThanhCong(Guid idHoaDon, string? idNhanVien);
+        public Task<bool> HuyHD(Guid idhd, string idnv);
+
+        public Task<bool> UpdateRank(int? point);
+        public bool UpdateGhiChuHD(Guid idhd, string? idnv, string ghichu);
+
     }
 }
