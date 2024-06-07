@@ -66,6 +66,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 post.CreateAt = DateTime.Now;
                 post.UserId = user.Id;
                 post.TittleImage = TitleImage;
+                post.Users = user;
                 var createPostResult = await _postService.Add(post);
                 if (createPostResult)
                 {

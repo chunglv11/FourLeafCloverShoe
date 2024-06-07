@@ -1,4 +1,5 @@
 ﻿using FourLeafCloverShoe.IServices;
+using FourLeafCloverShoe.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourLeafCloverShoe.Controllers
@@ -19,6 +20,11 @@ namespace FourLeafCloverShoe.Controllers
         {
             var postnoti = await _postService.GetsNoti();
             return View(postnoti);
+        }
+        public async Task<IActionResult> show(Guid Id)
+        {
+            var ressult = await _postService.GetById(Id);
+            return View(ressult);
         }
     }
 }

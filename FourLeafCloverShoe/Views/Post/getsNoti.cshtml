@@ -1,18 +1,10 @@
-﻿@using FourLeafCloverShoe.Share.Models
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
+
+@using FourLeafCloverShoe.Share.Models
 @using Microsoft.AspNetCore.Identity
-@model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
 @inject UserManager<User> UserManager
-<style>
-    #title_hidden{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        max-height: 3em; /* Chiều cao tối đa của hai dòng */
-    }
-</style>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Khuyến mãi";
 }
 @if (Model == null || !Model.Any())
 {
@@ -41,28 +33,45 @@ else
                             <div class="items-normal col-xs-12 col-sm-6" style="">
                                 <div class="items-normal--inner ">
                                     <div class="items-normal--img">
-                                        <a asp-action="show" asp-route-Id="@item.Id">
+                                        <a href="post/top-9-mau-giay-the-thao-nam-mwc-duoc-ua-chuong.html">
                                             <img src="@item.TittleImage" alt="Top 9 m&#x1EAB;u gi&#xE0;y th&#x1EC3; thao nam MWC &#x111;&#x1B0;&#x1EE3;c &#x1B0;a chu&#x1ED9;ng">
                                         </a>
                                     </div>
                                     <div class="items-normal--title">
-                                        <a asp-action="show" asp-route-Id="@item.Id">
-                                            <h3 id="title_hidden">@item.Tittle</h3>
-                                        </a>
+                                        <h3>@item.Tittle</h3>
                                         <h3>
-                                          
-                                            <span id="account-handle" class="icon-cart">
-                                                <a class="account-handle-icon" asp-action="show" asp-route-Id="@item.Id" title="Manage">
-                                                    @if (item.Users.ProfilePicture != null && item.Users.ProfilePicture.Length > 0)
-                                                    {
-                                                        <img src="data:image/*;base64,@(Convert.ToBase64String(item.Users.ProfilePicture))" width="25">
-                                                        ;
-                                                    }else
-                                                    {
-                                                        <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
-                                                    }
-                                                </a>
-                                            </span>      
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                var user = await UserManager.GetUserAsync(User);
+                                                <span id="account-handle" class="icon-cart">
+                                                    <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                                        @if (user != null && user.ProfilePicture != null && user.ProfilePicture.Length > 0)
+                                                        {
+                                                            <img src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfilePicture))" class="avatar rounded-circle" width="30">
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
+
+                                                        }
+                                                    </a>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span id="account-handle" class="icon-cart">
+                                                    <a class="account-handle-icon" asp-area="Identity" asp-page="/Account/Login">
+                                                        <svg width="15" height="16" viewBox="0 0 15 16" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M6.99952 8C4.79727 8 2.98828 6.19608 2.98828 4C2.98828 1.80392 4.79727 0 6.99952 0C9.20176 0 11.0108 1.80392 11.0108 4C11.0108 6.19608 9.20176 8 6.99952 8ZM6.99952 1.01961C5.34783 1.01961 4.01075 2.35294 4.01075 4C4.01075 5.64706 5.34783 6.98039 6.99952 6.98039C8.6512 6.98039 9.98828 5.64706 9.98828 4C9.98828 2.35294 8.6512 1.01961 6.99952 1.01961Z"
+                                                                  fill="#2D2D2D"></path>
+                                                            <path d="M13.5281 15.9998H0.47191C0.157303 15.9998 0 15.7645 0 15.5292V12.0782C0 11.5292 0.235955 11.0586 0.707865 10.8233C4.48315 8.47036 9.59551 8.47036 13.3708 10.8233C13.764 11.0586 14.0787 11.6076 14.0787 12.0782V15.5292C14 15.7645 13.764 15.9998 13.5281 15.9998ZM1.02247 14.9802H13.0562V12.0782C13.0562 11.9213 12.9775 11.7645 12.8202 11.686C9.35955 9.5684 4.7191 9.5684 1.25843 11.686C1.10112 11.7645 1.02247 11.9213 1.02247 12.0782V14.9802Z"
+                                                                  fill="#2D2D2D"></path>
+                                                        </svg>
+                                                    </a>
+                                                </span>
+                                            }
                                             <a href="post/top-9-mau-giay-the-thao-nam-mwc-duoc-ua-chuong.html">
                                               @item.Users.UserName
                                             </a>
