@@ -33,10 +33,9 @@ namespace FourLeafCloverShoe.Controllers
         private readonly IRateService _rateService;
         private readonly UserManager<User> _userManager;
         private readonly IColorsService _colorsService;
+        private readonly IMaterialService _materialService;
 
-        public ProductsController(IProductService productService, IOrderItemService orderItemService, IBrandService brandService, ICategoryService categoryService, IProductDetailService productDetailService, ISizeService sizeService, IWebHostEnvironment webHostEnvironment, IRateService rateService, IOrderService orderService, UserManager<User> userManager,
-            IColorsService colorsService
-            )
+        public ProductsController(IProductService productService, IProductDetailService productDetailService, ISizeService sizeService, ICategoryService categoryService, IBrandService brandService, IOrderItemService orderItemService, IOrderService orderService, IWebHostEnvironment webHostEnvironment, IRateService rateService, UserManager<User> userManager, IColorsService colorsService, IMaterialService materialService)
         {
             _productService = productService;
             _productDetailService = productDetailService;
@@ -44,11 +43,12 @@ namespace FourLeafCloverShoe.Controllers
             _categoryService = categoryService;
             _brandService = brandService;
             _orderItemService = orderItemService;
+            _orderService = orderService;
             _webHostEnvironment = webHostEnvironment;
             _rateService = rateService;
-            _orderService = orderService;
             _userManager = userManager;
             _colorsService = colorsService;
+            _materialService = materialService;
         }
 
         public async Task<List<Product>> Filter(string searchString, string sortSelect, string[] size_group, string[] brand_group, string[] category_group, string price_range, List<Product> lstProduct)
@@ -387,27 +387,29 @@ namespace FourLeafCloverShoe.Controllers
             var orderServiceGets = await _orderService.Gets();
             var sizeServiceGets = await _sizeService.Gets();
             var colorServiceGets = await _colorsService.Gets();
+            var mateServiceGets = await _materialService.Gets();
             List<RateViewModel> lstRate = (from sp in productServiceGets
-
                                            join ctsp in productDetailServiceGets on sp.Id equals ctsp.ProductId
                                            join cthd in orderItemServiceGets on ctsp.Id equals cthd.ProductDetailId
                                            join dg in rateServiceGets on cthd.Id equals dg.OrderItemId
                                            join hd in orderServiceGets on cthd.OrderId equals hd.Id
                                            join kc in sizeServiceGets on ctsp.SizeId equals kc.Id
                                            join ms in colorServiceGets on ctsp.ColorId equals ms.Id
+                                           //join cl in mateServiceGets on ctsp.MaterialId equals cl.Id
                                            where sp.Id == IdPro && dg.Status == 1
                                            select new RateViewModel
                                            {
                                                ID = dg.Id,
+                                               IDPro = sp.Id,
                                                Rating = dg.Rating,
                                                Contents = dg.Contents,
                                                Status = dg.Status,
                                                ImageUrl = dg.ImageUrl,
                                                CreateDate = dg.CreateDate.GetValueOrDefault().ToString("dd/MM/yyyyy HH:mm:ss"),
                                                TenKH = _userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).FullName,
-                                               AnhKh = Convert.ToBase64String(_userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).ProfilePicture),
+                                               AnhKh =  _userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).ProfilePicture != null ? Convert.ToBase64String(_userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).ProfilePicture) : "",
                                                Size = kc.Name,
-                                               Color = ms.ColorName
+                                               Color = ms.ColorName,
                                            }).ToList();
             return Json(lstRate);
         }

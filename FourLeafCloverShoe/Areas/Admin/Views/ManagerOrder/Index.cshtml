@@ -5,12 +5,11 @@
     int?[] selectStatus = ViewBag.SelectedStatuses;
     Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
 }
-@* section css {
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @* <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/flatpickr.min.css">
-    <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/datepicker-bs5.min.css"> 
-} *@
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+@* <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/flatpickr.min.css"> *@
+@* <link rel="stylesheet" href="~/fileadmin/assets/css/plugins/datepicker-bs5.min.css">  *@
+
 <style>
     body {
         background-color: #f8f9fa;
@@ -46,11 +45,11 @@
                 <h4>Hóa đơn</h4>
                 <div class="form-group">
                     <label for="start-time">Bắt đầu</label>
-                    <input type="text" class="form-control" id="start" name="startDate">
+                    <input type="text" name="startDate" class="form-control" id="start">
                 </div>
                 <div class="form-group">
                     <label for="end-time">Kết thúc</label>
-                    <input type="text" id="end" name="endDate" class="form-control">
+                    <input type="text" name="endDate" class="form-control" id="end">
                 </div>
                 <h5>Trạng thái</h5>
             
@@ -96,8 +95,8 @@
                         <tr>
                             <td><a href="@Url.Action("OrderDetail", "ManagerOrder", new { orderId = item.Id })">@item.OrderCode</a></td>
                             <td>@item.CreateDate</td>
-                            <td>@item.Users.FullName</td>
-                            <td>@item.Users.FullName</td>
+                            <td>FullName</td>
+                            <td>FullName</td>
                             @if (item.OrderStatus == -1)
                             {
                                 <td><span class="badge badge-info">Đơn chờ</span></td>
@@ -170,9 +169,19 @@
                         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
                             <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Tiếp</a>
                         </li>
-                        <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
-                        </li>
+                        @if(Model.PageCount > 0)
+                        {
+                            <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                                <a class="page-link" href="#">Cuối</a>
+                            </li>
+                        }
+                        
                     </ul>
                 </nav>
             </div>
@@ -181,7 +190,5 @@
 </div>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-<script type="text/javascript">
-   
-</script>
+@* <script src="~/fileadmin/assets/js/plugins/datepicker-full.min.js"></script> *@
+@* <script src="~/fileadmin/assets/js/pages/ac-datepicker.js"></script> *@

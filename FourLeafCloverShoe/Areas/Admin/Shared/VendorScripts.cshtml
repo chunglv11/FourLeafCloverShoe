@@ -12,6 +12,37 @@
 <script src="~/fileadmin/assets/js/plugins/simple-datatables.js"></script>
 <script src="~/fileadmin/assets/js/plugins/flatpickr.min.js"></script>
 <script src="~/fileadmin/assets/js/plugins/choices.min.js"></script>
+<script src="~/fileadmin/bootstrap/js/bootstrap-datepicker.js"></script>
+<script src="~/fileadmin/bootstrap/js/bootstrap-datepicker.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#start').datepicker({
+            format: 'mm/dd/yyyy',
+            todayHighlight: true
+        })
+        // .on('changeDate', function (e) {
+        //     var checkinDate = $('#start').datepicker('getDate');
+        //     var minCheckoutDate = new Date(checkinDate);
+        //     minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
+        //     $('#end').datepicker('setStartDate', minCheckoutDate);
+        //     $('#end').datepicker('update', minCheckoutDate);
+        //     $('#end').val($.datepicker.formatDate('mm/dd/yy', minCheckoutDate));
+        // });
+
+        //tự động điền vào ngày bắt đầu và disable những ngày < ngày kết thúc
+        $('#end').datepicker({
+            format: 'mm/dd/yyyy',
+            todayHighlight: true
+        }).on('changeDate', function (e) {
+            var checkoutDate = $('#end').datepicker('getDate');
+            var maxCheckinDate = new Date(checkoutDate);
+            maxCheckinDate.setDate(maxCheckinDate.getDate() - 1);
+            $('#start').datepicker('setEndDate', maxCheckinDate);
+            $('#start').datepicker('update', maxCheckinDate);
+            $('#start').val($.datepicker.formatDate('mm/dd/yy', maxCheckinDate));
+        });
+    });
+</script>
 <script>
     var datatable = new simpleDatatables.DataTable('#tb-sorting');
     var dataTable1 = new simpleDatatables.DataTable('#pc-dt-simple');

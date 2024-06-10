@@ -177,6 +177,10 @@
                                     <label for="danhGia" class="form-label">Hình ảnh</label>
                                     <input type="file" name="uploadedImages" id="uploadedImages" multiple />
                                 </div>
+                                <div class="mb-3">
+                                    <div id="preview-images"></div>
+                                </div>
+                                
                                 <div>
                                     <div class="order-item-calc-inner">
                                         <input type="hidden" id="id" name="id" value="@lstorderIterm.Rate.Id" />
@@ -204,8 +208,82 @@
     </div>
 
 </div>
+<style>
+    #preview-images {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        #preview-images img {
+            width: 100px;
+            height: 70px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+            #preview-images img:nth-child(4n) {
+                margin-right: 0;
+            }
+</style>
 <script>
     setTimeout(function () {
         document.getElementById("errorMessage").style.display = "none";
     }, 1000); // Thời gian tính bằng mili giây (ở đây là 1 giây)
+</script>
+<script>
+    let selectedImages = []; // Mảng để lưu giữ ảnh đã chọn
+    const maxAllowedFiles = 3; // Số lượng tối đa ảnh được chọn
+
+    $(document).ready(function () {
+        $("#uploadedImages").change(function (e) {
+            // Lấy danh sách file được chọn
+            var files = e.target.files;
+            if (selectedImages.length + files.length > maxAllowedFiles) {
+                alert("Bạn chỉ được chọn tối đa 3 ảnh.");
+                e.target.value = '';
+                return;
+            }
+            //còn check khi click
+            for (var i = 0; i < files.length; i++) {
+                // Đọc file
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // Tạo thẻ img và hiển thị ảnh
+                    var img = $('<img>')
+                        .attr('src', e.target.result)
+                        .addClass('img-preview');
+
+                    // Thêm ảnh vào mảng
+                    selectedImages.push(e.target.result);
+
+                    // Hiển thị ảnh preview
+                    $('#preview-images').append(img);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        });
+    });
+    
+</script>
+<script>
+    // $(document).ready(function () {
+    //     $("#uploadedImages").change(function () {
+    //         // Lấy danh sách file được chọn
+    //         var files = $(this)[0].files;
+    //         for (var i = 0; i < files.length; i++) {
+    //             // Đọc file
+    //             var reader = new FileReader();
+    //             reader.onload = function (e) {
+    //                 // Tạo thẻ img và hiển thị ảnh
+    //                 var img = $('<img>')
+    //                     .attr('src', e.target.result)
+    //                     .addClass('img-preview');
+
+    //                 // Hiển thị ảnh preview
+    //                 $('#preview-images').append(img);
+    //             };
+    //             reader.readAsDataURL(files[i]);
+    //         }
+    //     });
+    // });
 </script>

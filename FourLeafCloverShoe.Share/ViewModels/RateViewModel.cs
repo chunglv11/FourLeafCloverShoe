@@ -18,6 +18,6 @@ namespace FourLeafCloverShoe.Share.ViewModels
         public string TenKH { get; set; }
         public string ImageUrl { get; set; }
         public string? CreateDate { get; set; }
-        public string AnhKh { get; set; }
+        public string? AnhKh { get; set; }
     }
 }
