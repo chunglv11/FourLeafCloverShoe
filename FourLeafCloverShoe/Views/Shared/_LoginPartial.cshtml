@@ -1,11 +1,11 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @using FourLeafCloverShoe.Share.Models
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
 <div class="no-padding col-xs-12 hidden-sm hidden-xs col-md-1 right-cus d-none d-lg-block">
-    <span  title="Tìm kiếm bằng QR Code" style="float:left">
+    <span title="Tìm kiếm bằng QR Code" style="float:left">
         <a href="javascript:;" id="start" class="count-holder">
             <img src="~/fileuser/Assets/App/images/searchqr.png" width="25" />
         </a>
@@ -91,7 +91,7 @@
     var intervalId; // Biến để lưu ID của hàm setInterval
 
 
-$(document).ready(function() {
+    $(document).ready(function () {
         $('#start').click(function () {
             if (!scanning) {
                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -160,7 +160,7 @@ $(document).ready(function() {
 
             }
         }
-});
+    });
 
 
 
@@ -195,8 +195,8 @@ $(document).ready(function() {
         toastHeader.classList.add('text-white');
         toastHeader.classList.add(statusmessage);
         toastHeader.innerHTML = `<strong class="me-auto"> <i class="mwc-icon-bell-o " style="width: 20px"></i> Thông báo</strong>
-                                <small>0 phút trước</small>
-                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`;
+                                    <small>0 phút trước</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>`;
         var toastBody = document.createElement('div');
 
         toastBody.classList.add('toast-body');

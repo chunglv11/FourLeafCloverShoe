@@ -107,6 +107,72 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<Post>> Getsanotherpost(Guid id, bool status)
+        {
+            try
+            {
+                var obj = await _myDbContext.Posts
+                    .Include(c => c.Users)
+                    .Where(c => c.Status == status && c.Id != id)
+                    .Take(6)
+                    .ToListAsync();
+                if (obj != null)
+                {
+                    return obj;
+                }
+                return new List<Post>();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new List<Post>();
+            }
+        }
+
+        public async Task<List<Post>> GetsNoti()
+        {
+            try
+            {
+                var obj = await _myDbContext.Posts
+                    .Include(c => c.Users)
+                    .Where(c => c.Status == false)
+                    .ToListAsync();
+                if (obj != null)
+                {
+
+                    return obj;
+                }
+                return new List<Post>();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new List<Post>();
+            }
+        }
+
+        public async Task<List<Post>> Getssell()
+        {
+            try
+            {
+                var obj = await _myDbContext.Posts
+                    .Include(c => c.Users)
+                    .Where(c=>c.Status == true)
+                    .ToListAsync();
+                if (obj != null)
+                {
+
+                    return obj;
+                }
+                return new List<Post>();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new List<Post>();
+            }
+        }
+
         public async Task<bool> Update(Post obj)
         {
             try

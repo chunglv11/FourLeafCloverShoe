@@ -22,6 +22,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductDetailService _productDetailService;
         private readonly IColorsService _colorsService;
+        private readonly IMaterialService _materialsService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private List<IFormFile> _lstIFormFile;
 
@@ -32,7 +33,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                                     IProductDetailService productDetailService,
                                     ICategoryService categoryService,
                                     IWebHostEnvironment webHostEnvironment,
-                                    IColorsService colorsService
+                                    IColorsService colorsService,
+                                    IMaterialService materialService
                                     )
         {
             _productService = productService;
@@ -42,6 +44,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             _categoryService = categoryService;
             _productDetailService = productDetailService;
             _colorsService = colorsService;
+            _materialsService = materialService;
             _lstIFormFile = new List<IFormFile>();
             _webHostEnvironment = webHostEnvironment;
         }
@@ -307,6 +310,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         {
             List<SelectListItem> ListSizeitems = new List<SelectListItem>();
             List<SelectListItem> ListColorsitems = new List<SelectListItem>();
+            List<SelectListItem> ListMaterialsitems = new List<SelectListItem>();
+
             var productDetails = await _productDetailService.GetByProductId(productId);
 
             foreach (var obj in (await _sizeService.Gets()).OrderBy(c => c.Name))
@@ -331,10 +336,21 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     });
                 //}
             }
-
+            foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
+            {
+                //if (productDetails.FirstOrDefault(p => p.ColorId == obj.Id) == null)
+                //{
+                ListMaterialsitems.Add(new SelectListItem()
+                {
+                    Text = obj.Name,
+                    Value = obj.Id.ToString()
+                });
+                //}
+            }
             ViewBag.productId = productId;
             ViewBag.ListSizeitems = ListSizeitems;
             ViewBag.ListColorsitems = ListColorsitems;
+            ViewBag.ListMaterialsitems = ListMaterialsitems;
             return View();
         }
 
@@ -343,6 +359,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         {
             List<SelectListItem> ListSizeitems = new List<SelectListItem>();
             List<SelectListItem> ListColorsitems = new List<SelectListItem>();
+            List<SelectListItem> ListMaterialsitems = new List<SelectListItem>();
             foreach (var obj in ((await _sizeService.Gets()).OrderBy(c => c.Name)))
             {
                 ListSizeitems.Add(new SelectListItem()
@@ -360,13 +377,23 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     Value = obj.Id.ToString()
                 });
             }
+            foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
+            {
+                ListMaterialsitems.Add(new SelectListItem()
+                {
+                    Text = obj.Name,
+                    Value = obj.Id.ToString()
+                });
+            }
             ViewBag.ListSizeitems = ListSizeitems;
             ViewBag.ListColorsitems = ListColorsitems;
+            ViewBag.ListMaterialsitems = ListMaterialsitems;
             if (ModelState.IsValid)
             {
                 var product = await _productService.GetById(productDetail.ProductId);
                 var size = await _sizeService.GetById(productDetail.SizeId);
                 var colors = await _colorsService.GetById(productDetail.ColorId);
+                var materials = await _materialsService.GetById(productDetail.MaterialId);
                 productDetail.CreateAt = DateTime.Now;
                 productDetail.SKU = product.ProductCode + "-" + size.Name.Trim().Replace(" ", "_").ToUpper() + colors.ColorName.Trim().Replace(" ", "_").ToUpper();
                 productDetail.Status = productDetail.Status;
@@ -413,8 +440,25 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     });
                 //}
             }
-
             ViewBag.ListColorsitems = ListColorsitems;
+
+            List<SelectListItem> ListMaterialsitems = new List<SelectListItem>();
+
+            foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
+            {
+                //if (productDetails.FirstOrDefault(p => p.ColorId == obj.Id) == null)
+                //{
+                ListMaterialsitems.Add(new SelectListItem()
+                {
+                    Text = obj.Name,
+                    Value = obj.Id.ToString(),
+                    Selected = obj.Id == productDetail.MaterialId
+
+                });
+                //}
+            }
+            ViewBag.ListMaterialsitems = ListMaterialsitems;
+
             ViewBag.productId = productDetail.ProductId;
 
             return View(productDetail);
@@ -438,6 +482,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 var product = await _productService.GetById(productDetail.ProductId);
                 var size = await _sizeService.GetById(productDetail.SizeId);
+                var material = await _materialsService.GetById(productDetail.MaterialId);
                 productDetail.UpdateAt = DateTime.Now;
                 productDetail.SKU = product.ProductCode + "-" + size.Name.Trim().Replace(" ", "_").ToUpper();
                 productDetail.Status = productDetail.Status;

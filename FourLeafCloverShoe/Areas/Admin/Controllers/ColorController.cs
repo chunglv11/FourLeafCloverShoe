@@ -29,6 +29,11 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         {
            
             var color = await _colorService.Gets();
+            if(s.ColorName == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần nhập tên màu";
+                return View();
+            }
             if (color.Any(c => c.ColorName.Trim().ToLower() == s.ColorName.Trim().ToLower()))
             {
                 TempData["ErrorMessage"] = "Màu đã có vui lòng thêm màu khác";
@@ -84,6 +89,11 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(Guid Id, Colors obj)
         {
             var color = await _colorService.Gets();
+            if (obj.ColorName == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần nhập tên màu";
+                return View();
+            }
             if (color.Any(c => c.ColorName.Trim().ToLower() == obj.ColorName.Trim().ToLower() && c.Id != Id))
             {
                 TempData["ErrorMessage"] = "Màu đã có";

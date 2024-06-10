@@ -9,6 +9,7 @@ namespace FourLeafCloverShoe.Share.ViewModels
     public class OrderDetailViewModel
     {
         public Guid ID { get; set; }
+        public Guid ProductDetailID { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? PaymentDate { get; set; }
         public string? OrderCode { get; set; } // mã bill

@@ -1,0 +1,104 @@
+﻿@model FourLeafCloverShoe.Share.Models.Post
+@using FourLeafCloverShoe.Share.Models;
+@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "show";
+    var lstanothetnoti = ViewBag.lstanothernoti as List<Post>;
+}
+<style>
+    #title_hidden {
+        overflow: hidden; /* Ẩn nội dung tràn */
+        text-overflow: ellipsis; /* Thêm dấu ba chấm vào phần bị cắt */
+        display: -webkit-box; /* Sử dụng Flexbox */
+        -webkit-box-orient: vertical; /* Đặt hướng dọc cho Flexbox */
+        -webkit-line-clamp: 2; /* Giới hạn số dòng hiển thị */
+        max-height: 2.5em; /* Chiều cao tối đa của hai dòng */
+        line-height: 1.25em; /* Điều chỉnh chiều cao dòng nếu cần */
+    }
+</style>
+@inject UserManager<User> UserManager
+
+<section class="category-layout">
+    <div class="container">
+        <div class="row wrapper-row pd-page">
+            
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <div class="content-page">
+                    <div class="article-content">
+                        <div class="box-article-heading clearfix">
+                            <h1 class="sb-title-article">@Model.Tittle</h1>
+                        </div>
+                        <h4>
+                            <span id="account-handle" class="icon-cart">
+                                <a class="account-handle-icon" asp-action="show" asp-route-Id="@Model.Id" title="Manage">
+                                    @if (@Model.Users.ProfilePicture != null && @Model.Users.ProfilePicture.Length > 0)
+                                    {
+                                        <img src="data:image/*;base64,@(Convert.ToBase64String(@Model.Users.ProfilePicture))" width="25">
+                                        ;
+                                    }
+                                    else
+                                    {
+                                        <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
+                                    }
+                                </a>
+                            </span>
+                            @Model.Users.UserName
+                        </h4>
+                        <h6 style="margin-left:40px">
+                            @{
+                                DateTime now = DateTime.Now;
+
+                                if (@Model.CreateAt?.Day == now.Day && @Model.CreateAt?.Month == now.Month && @Model.CreateAt?.Year == now.Year) // Kiểm tra nếu ngày của itemCreateAt và ngày hiện tại là giống nhau
+                                {
+                                    <span id="account-handle" class="icon-cart">
+                                        @Model.CreateAt?.ToString("HH:mm");
+                                    </span>
+                                    // Nếu cùng ngày, hiển thị thời gian
+                                }
+                                else
+                                {
+                                    @Model.CreateAt;
+                                    ;
+                                    // Nếu khác ngày, hiển thị ngày
+                                }
+                            }
+                        </h6>
+                        <hr></hr>
+                        <div class="article-pages">
+                            @Html.Raw(Model.Contents)
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-12 col-xs-12 ">
+                <div class="sidebar-blog">
+                    <div class="news-latest  clearfix">
+                        <div class="sidebarblog-title title_block">
+                            <h2>Bài viết khác</h2>
+                        </div>
+                        <div class="list-news-latest layered">
+                            @foreach (var item in lstanothetnoti)
+                            {
+                                <div class="item-article clearfix">
+
+                                    <div class="post-image">
+                                        <a asp-action="show" asp-route-Id="@item.Id"><img src=@item.TittleImage alt=@item.Tittle></a>
+                                    </div>
+                                    <div class="post-content">
+                                        <h3 id="title_hidden">
+                                            <a asp-action="show" asp-route-Id="@item.Id">@item.Tittle</a>
+                                        </h3>
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

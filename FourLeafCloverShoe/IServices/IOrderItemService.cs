@@ -12,6 +12,8 @@ namespace FourLeafCloverShoe.IServices
         public Task<bool> DeleteMany(List<OrderItem> lstobj);
         public Task<OrderItem> GetById(Guid Id);
         public Task<List<OrderDetailViewModel>> GetByIdOrder(Guid IdOrder);
+        public Task<OrderDetailViewModel1> GetByIdOrder1(Guid? IdOrder);
+        public  Task<List<OrderItem>> GetByIdOrder2(Guid IdOrder);
         public Task<List<OrderItem>> Gets();
     }
 }
