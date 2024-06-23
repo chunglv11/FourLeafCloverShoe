@@ -2,103 +2,168 @@
 @{
     ViewBag.Title = "Thêm mới sản phẩm chi tiết";
     ViewBag.pTitle = "Sản phâm chi tiết";
+    
 }
+<div id="themcolormoi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" @* aria-hidden="true" *@>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Thêm color mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <form method="post" asp-action="CreatecolorinPrDt">
+                <div class="modal-body">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label class="form-label">Màu sắc</label>
+                                    <input type="text" id="exampleColorInput" name="colorName" class="form-control" placeholder="Nhập màu">
+                                    <input type="text" hidden name="idProduct" class="form-control" value="@ViewBag.productId">
 
-<div class="row">
-    <!-- [ sample-page ] start -->
-    <div class="col-xl-12">
-        <div class="card">
-
-            <form asp-action="CreateProductDetail">
-                <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Kích cỡ</label>
-                        <div class="card-body">
-                            <div class="row g-2">
-                                @foreach (var item in ViewBag.ListSizeitems as List<SelectListItem>)
-                                {
-                                    <div class="col-auto">
-                                        <input asp-for="SizeId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
-                                        <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <span asp-validation-for="SizeId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Màu sắc</label>
-                        <div class="card-body">
-                            <div class="row g-2">
-                                @foreach (var item in ViewBag.ListColorsitems as List<SelectListItem>)
-                                {
-                                    <div class="col-auto">
-                                        <input asp-for="ColorId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
-                                        <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <span asp-validation-for="ColorId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Chất Liệu</label>
-                        <div class="card-body">
-                            <div class="row g-2">
-                                @foreach (var item in ViewBag.ListMaterialsitems as List<SelectListItem>)
-                                {
-                                    <div class="col-auto">
-                                        <input asp-for="MaterialId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
-                                        <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                        <span asp-validation-for="ColorId" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Số lượng sản phẩm</label>
-                        <input asp-for="Quantity" type="number" class="form-control" min="0" >
-                        <input asp-for="ProductId" value="@ViewBag.productId" class="form-control" hidden>
-                        <span asp-validation-for="Quantity" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Giá bán sản phẩm</label>
-                        <input asp-for="PriceSale" type="number" class="form-control" min="0" >
-                        <span asp-validation-for="PriceSale" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-0">
-                        <label class="form-label">Status</label>
-                        <div class="card-body">
-                            <div class="row g-2">
-                                <div class="col-auto">
-                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="1" checked>
-                                    <label class="btn btn-sm btn-light-success" for="btnrdolite11">Bán ngay</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="0">
-                                    <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không bán</label>
+                                <div class="form-group">
+                                    <label class="form-label">Mã màu</label>
+                                    <input type="color" class="form-control form-control-color" name="colorCode" value="#563d7c" placeholder="Nhập mã">
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="card-body text-end btn-page">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary mb-0">Thêm mới</button>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- [ sample-page ] end -->
                         </div>
-
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                        <div class="card-body text-end btn-page">
-                            <button type="submit" class="btn btn-primary mb-0">Save product</button>
-                            <button class="btn btn-outline-secondary mb-0">Reset</button>
                     </div>
                 </div>
             </form>
         </div>
-
-        <!-- [ sample-page ] end -->
     </div>
 </div>
 
+    <div class="row">
+        <!-- [ sample-page ] start -->
+        <div class="col-xl-12">
+            <div class="card">
 
+                <form asp-action="CreateProductDetail">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label class="form-label">Kích cỡ</label>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-sm btn-primary" style="width:50px" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">+</button>
+                                    </div>
+                                    @foreach (var item in ViewBag.ListSizeitems as List<SelectListItem>)
+                                    {
+                                        <div class="col-auto">
+                                            <input asp-for="SizeId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
+                                            <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="SizeId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Màu sắc</label>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-sm btn-primary" style="width:50px" data-bs-toggle="modal" data-bs-target="#themcolormoi">+</button>
+                                    </div>
+                                    @foreach (var item in ViewBag.ListColorsitems as List<SelectListItem>)
+                                    {
+                                    var selectedColorId = ViewBag.colorid as string;
+                                        <div class="col-auto">
+                                        
+                                        <input asp-for="ColorId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
+                                            <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="ColorId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Chất Liệu</label>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-sm btn-primary" style="width:50px" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">+</button>
+                                    </div>
+                                    @foreach (var item in ViewBag.ListMaterialsitems as List<SelectListItem>)
+                                    {
+
+                                        <div class="col-auto">
+                                            <input asp-for="MaterialId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
+                                            <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="ColorId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số lượng sản phẩm</label>
+                            <input asp-for="Quantity" type="number" class="form-control" min="0">
+                            <input asp-for="ProductId" value="@ViewBag.productId" class="form-control" hidden>
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Giá bán sản phẩm</label>
+                            <input asp-for="PriceSale" type="number" class="form-control" min="0">
+                            <span asp-validation-for="PriceSale" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label class="form-label">Status</label>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite11" value="1" checked>
+                                        <label class="btn btn-sm btn-light-success" for="btnrdolite11">Bán ngay</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="radio" asp-for="Status" class="btn-check" id="btnrdolite13" value="0">
+                                        <label class="btn btn-sm btn-light-danger" for="btnrdolite13">Không bán</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="card-body text-end btn-page">
+                            <button type="submit" class="btn btn-primary mb-0">Save product</button>
+                            <button class="btn btn-outline-secondary mb-0">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- [ sample-page ] end -->
+        </div>
+    </div>
+
+@section Scripts {
+    <script>
+        // Đoạn script này sẽ được thực thi sau khi trang đã được load hoàn toàn
+        document.addEventListener('DOMContentLoaded', function () {
+            // Lấy giá trị của ColorId từ ViewBag
+            var colorId = '@ViewBag.colorid';
+
+            // Tìm radio button có giá trị bằng với ColorId và chọn nó
+            var radioButton = document.querySelector('input[type="radio"][value="' + colorId + '"]');
+            if (radioButton) {
+                radioButton.checked = true;
+            }
+        });
+    </script>
+}

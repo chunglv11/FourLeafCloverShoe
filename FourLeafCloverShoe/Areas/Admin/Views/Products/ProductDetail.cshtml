@@ -12,7 +12,7 @@
         <div class="card table-card">
             <div class="card-body">
                 <div class="text-end p-sm-4 pb-sm-2">
-                    <a asp-action="CreateProductDetail" asp-route-productId="@ViewBag.productId" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
+                    <a  asp-action="CreateProductDetail" asp-route-productId="@ViewBag.productId" class="btn btn-primary"> <i class="ti ti-plus f-18"></i> Thêm mới </a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover tbl-product" id="tb-sorting">
@@ -21,6 +21,7 @@
                                 <th >STT</th>
                                 <th >Tên Sản phẩm</th>
                                 <th >Biến thể</th>
+                                <th >Chất liệu</th>
                                 <th >Số lượng</th>
                                 <th >Giá bán</th>
                                 <th >Trạng thái</th>
@@ -42,6 +43,7 @@
                                     </td>
                                     <td>@item.Products.ProductName</td>
                                     <td>@item.Size.Name / @item.Colors.ColorName</td>
+                                    <td>@item.Material.Name</td>
                                     <td>@item.Quantity</td>
                                     <td>@item.PriceSale?.ToString("N0")</td>
                                     <td class="text-center">
@@ -89,3 +91,5 @@
     </div>
     <!-- [ sample-page ] end -->
 </div>
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
+@Html.Partial("~/Areas/Admin/Shared/SuccessMessage.cshtml")

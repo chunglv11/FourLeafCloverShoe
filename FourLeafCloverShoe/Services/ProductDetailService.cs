@@ -100,6 +100,7 @@ namespace FourLeafCloverShoe.Services
                    .ThenInclude(c => c.ProductImages)
                    .Include(c => c.Size)
                    .Include(c => c.Colors)
+                   .Include(c => c.Material)
                    .ToListAsync();
                 var obj = lstobj.Where(c => c.ProductId == ProductId).ToList();
                 if (obj != null)
