@@ -1,4 +1,6 @@
 ﻿@model X.PagedList.IPagedList<FourLeafCloverShoe.Share.Models.Order>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "Manganer order";
@@ -96,8 +98,33 @@
                         <tr>
                             <td><a href="@Url.Action("OrderDetail", "ManagerOrder", new { orderId = item.Id })">@item.OrderCode</a></td>
                             <td>@item.CreateDate</td>
-                            <td>@item.Users.FullName</td>
-                            <td>@item.Users.FullName</td>
+                            <td>
+                               
+                                    @item.RecipientName
+                       
+                            </td>
+                            <td>
+
+                                @if (item.StaffId == null)
+                                {
+                                    <span>Chưa có người xác nhận</span>
+                                }
+                                else
+                                {
+                                    var user = await UserManager.FindByIdAsync(item.StaffId);
+                                    if (user != null)
+                                    {
+                                        <span>@user.UserName</span> <!-- Hoặc @user.NormalizedUserName nếu bạn có thuộc tính FullName -->
+                                    }
+                                    else
+                                    {
+                                        <span>Không tìm thấy nhân viên</span>
+                                    }
+                                }
+
+
+                               
+                            </td>
                             @if (item.OrderStatus == -1)
                             {
                                 <td><span class="badge badge-info">Đơn chờ</span></td>
