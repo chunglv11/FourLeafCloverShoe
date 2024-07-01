@@ -226,6 +226,8 @@ namespace FourLeafCloverShoe.Services
                     .Include(c => c.Rate)
                     .Include(c => c.Orders)
                         .ThenInclude(c=> c.Users)
+                      
+                        
                         
                     .Where(c => c.OrderId == IdOrder)
                     .ToListAsync();

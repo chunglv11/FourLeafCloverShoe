@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.OrderItem>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "OrderDetail";
 
@@ -37,7 +39,25 @@
                 <p>Ngày thanh toán: <span>@Model.FirstOrDefault().Orders.PaymentDate</span></p>
                 <p>Phương thức thanh toán: <span>@Model.FirstOrDefault().Orders.PaymentType</span></p>
                 <p>Khách hàng: @Model.FirstOrDefault().Orders.RecipientName</p>
-                <p>Nhân viên: <span></span></p>
+                <p>
+                    Nhân viên: <span>
+                        @if (@Model.FirstOrDefault().Orders.StaffId == null)
+                        {
+                            <span>Chưa có người xác nhận</span>
+                        }
+                        else
+                        {
+                            var user = await UserManager.FindByIdAsync(@Model.FirstOrDefault().Orders.StaffId);
+                            if (user != null)
+                            {
+                                <span>@user.UserName</span> <!-- Hoặc @user.NormalizedUserName nếu bạn có thuộc tính FullName -->
+                            }
+                            else
+                            {
+                                <span>Không tìm thấy nhân viên</span>
+                            }
+                        }
+                </p>
             </div>
             <div class="details-right note">
                 <label for="note">Ghi chú:</label>
@@ -104,7 +124,7 @@
     </div>
     <div id="lichsudiem" class="tab-content" style="display: none;">
         <p>Đơn này dùng: @Model.FirstOrDefault().Orders.CoinsUsed.Value.ToString("N0") xu</p>
-        <p>Xu còn lại: @Model.FirstOrDefault().Orders.Users.Coins?.ToString("N0") xu</p>
+        @* <p>Xu còn lại: @Model.FirstOrDefault().Orders.Users.Coins?.ToString("N0") xu</p> *@
     </div>
     <div class="d-flex flex-row justify-content-end">
 

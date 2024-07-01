@@ -201,10 +201,10 @@ namespace FourLeafCloverShoe.Services
         public async Task<bool> UpdateOrderStatus(Guid idOrder, int? status, string? idStaff)
         {
 
-            var update = await _myDbContext.Orders.FirstOrDefaultAsync(p => p.Id == idOrder);
+            var updateorder = await _myDbContext.Orders.FirstOrDefaultAsync(p => p.Id == idOrder);
             var chitiethoadon = await _myDbContext.OrderItems.Where(p => p.OrderId == idOrder).ToListAsync();
 
-            if (update != null)
+            if (updateorder != null)
             {
                 if (status == 10)
                 {
@@ -230,21 +230,23 @@ namespace FourLeafCloverShoe.Services
 
                 if (status == 8)
                 {
-                    var kh = await _myDbContext.Users.FirstOrDefaultAsync(c => c.Id == idStaff);
+                    var order = await _myDbContext.Orders.FirstOrDefaultAsync(p => p.Id == idOrder);
+
+                    var kh = await _myDbContext.Users.FirstOrDefaultAsync(c => c.Id == order.UserId);
                     var hoadon = await _myDbContext.Orders.FirstOrDefaultAsync(c => c.Id == idOrder);
                     if (kh != null && hoadon != null)
                     {
                         kh.Points += Convert.ToInt32(hoadon.TotalAmout);
                         UpdateRank(kh.Points);
                     }
-
-                    update.PaymentDate ??= DateTime.Now;
-                    update.DeliveryDate ??= DateTime.Now;
+                  
+                    updateorder.PaymentDate ??= DateTime.Now;
+                    updateorder.DeliveryDate ??= DateTime.Now;
                 }
 
-                update.OrderStatus = status;
-                update.UserId = idStaff;
-                _myDbContext.Orders.Update(update);
+                updateorder.OrderStatus = status;
+                updateorder.StaffId ??= idStaff;
+                _myDbContext.Orders.Update(updateorder);
                 await _myDbContext.SaveChangesAsync();
 
 
@@ -276,7 +278,7 @@ namespace FourLeafCloverShoe.Services
                 if (hd != null)
                 {
                     hd.OrderStatus = 8;
-                    hd.UserId = idNhanVien;
+                    hd.StaffId = idNhanVien;
                     hd.DeliveryDate = DateTime.Now;
                     hd.PaymentDate = DateTime.Now;
                     _myDbContext.Orders.Update(hd);
