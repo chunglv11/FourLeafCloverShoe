@@ -106,6 +106,13 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<Voucher>> GetVouchersByIds(List<Guid> vcIDs)
+        {
+            return await _myDbContext.Vouchers
+                            .Where(v => vcIDs.Contains(v.Id))
+                            .ToListAsync();
+        }
+
         public async Task<bool> Update(Voucher obj)
         {
             try

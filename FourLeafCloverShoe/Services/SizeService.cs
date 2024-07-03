@@ -82,6 +82,25 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<Size> GetByName(string name)
+        {
+            try
+            {
+                var obj = await _myDbContext.Sizes.SingleOrDefaultAsync(c=>c.Name.ToLower().Trim() == name.ToLower().Trim());
+                if (obj != null)
+                {
+
+                    return obj;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new Size();
+            }
+        }
+
         public async Task<List<Size>> Gets()
         {
             try

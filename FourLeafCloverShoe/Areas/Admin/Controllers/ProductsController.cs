@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using ZXing;
 using ZXing.QrCode.Internal;
+using Size = FourLeafCloverShoe.Share.Models.Size;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
@@ -318,23 +319,20 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 //if (productDetails.FirstOrDefault(p => p.SizeId == obj.Id) == null)
                 //{
-                    ListSizeitems.Add(new SelectListItem()
-                    {
-                        Text = obj.Name,
-                        Value = obj.Id.ToString()
-                    });
+                ListSizeitems.Add(new SelectListItem()
+                {
+                    Text = obj.Name,
+                    Value = obj.Id.ToString()
+                });
                 //}
             }
             foreach (var obj in (await _colorsService.Gets()).OrderBy(c => c.ColorName))
             {
-                //if (productDetails.FirstOrDefault(p => p.ColorId == obj.Id) == null)
-                //{
-                    ListColorsitems.Add(new SelectListItem()
-                    {
-                        Text = obj.ColorName,
-                        Value = obj.Id.ToString()
-                    });
-                //}
+                ListColorsitems.Add(new SelectListItem()
+                {
+                    Text = obj.ColorName,
+                    Value = obj.Id.ToString(),
+                });
             }
             foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
             {
@@ -366,15 +364,16 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 {
                     Text = obj.Name,
                     Value = obj.Id.ToString(),
-                    
+
                 });
             }
             foreach (var obj in (await _colorsService.Gets()).OrderBy(c => c.ColorName))
             {
+
                 ListColorsitems.Add(new SelectListItem()
                 {
                     Text = obj.ColorName,
-                    Value = obj.Id.ToString()
+                    Value = obj.Id.ToString(),
                 });
             }
             foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
@@ -395,7 +394,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 var colors = await _colorsService.GetById(productDetail.ColorId);
                 var materials = await _materialsService.GetById(productDetail.MaterialId);
                 productDetail.CreateAt = DateTime.Now;
-                productDetail.SKU = product.ProductCode + "-" + size.Name.Trim().Replace(" ", "_").ToUpper() + colors.ColorName.Trim().Replace(" ", "_").ToUpper();
+                productDetail.SKU = product.ProductCode + "-" + size.Name.Trim().Replace(" ", "_").ToUpper() + colors.ColorName.Trim().Replace(" ", "_") + materials.Name.Trim().Replace(" ", "_").ToUpper();
                 productDetail.Status = productDetail.Status;
                 var result = await _productDetailService.Add(productDetail);
                 if (result)
@@ -406,6 +405,119 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường");
             return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
         }
+        [HttpPost("Createsize")]
+        public async Task<IActionResult> Createsizeinprdetail(string s, string idProduct)
+        {
+            var size = await _sizeService.GetByName(s);
+            if (size != null)
+            {
+                TempData["ErrorMessage"] = "Kích cỡ đã có";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else if (s == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else
+            {
+                var sizes = new Size();
+                sizes.Name = s;
+                var result = await _sizeService.Add(sizes);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Thêm thành công";
+                    return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+                }
+            }
+            return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+        }
+
+        [HttpPost("CreateMaterialinProductDetail")]
+        public async Task<IActionResult> CreateMaterialInProductDetail(string nameMaterial, string idProduct)
+        {
+            var size = await _materialsService.Gets();
+            if (size.Any(c => c.Name == nameMaterial))
+            {
+                TempData["ErrorMessage"] = "Chất Liệu đã có";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+            }
+            else if (nameMaterial == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+            }
+            else
+            {
+                var ss = new Material();
+                ss.Name = nameMaterial;
+                var result = await _materialsService.Add(ss);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Thêm thành công";
+                    return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+                }
+            }
+            return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+        }
+
+        [HttpPost("CreateinProductDetail")]
+        public async Task<ActionResult> CreatecolorinPrDt(string colorName, string colorCode, string idProduct)
+        {
+
+            var color = await _colorsService.Gets();
+            if (colorName == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần nhập tên màu";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            if (colorCode == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            if (color.Any(c => c.ColorName != null && c.ColorName.Trim().ToLower() == colorName.Trim().ToLower()))
+            {
+                TempData["ErrorMessage"] = "Màu đã có vui lòng thêm màu khác";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else if (IsValidHexColor(colorCode.Trim()) == false)
+            {
+                TempData["ErrorMessage"] = "Mã màu bạn thêm không đúng định dạng";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else if (color.Any(c => c.ColorCode != null && c.ColorCode.Trim().ToLower() == colorCode.Trim().ToLower()))
+            {
+                TempData["ErrorMessage"] = "Mã Màu đã có vui lòng thêm màu khác";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else
+            {
+                var colornew = new Colors();
+                colornew.Id = Guid.NewGuid();
+                colornew.ColorName = colorName.Trim();
+                colornew.ColorCode = colorCode.Trim();
+                TempData["colorid"] = colornew.Id;
+
+                var result = await _colorsService.Add(colornew);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Thêm thành công";
+                    return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+                }
+            }
+            return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+        }
+        private bool IsValidHexColor(string? colorCode)
+        {
+            string pattern = @"^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$";
+            return Regex.IsMatch(colorCode, pattern);
+        }
+
         public async Task<IActionResult> EditProductDetail(Guid productDetailId)
         {
             var productDetail = await _productDetailService.GetById(productDetailId);
@@ -416,12 +528,12 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 //if (productDetails.FirstOrDefault(p => p.SizeId == obj.Id) == null || obj.Id == productDetail.SizeId)
                 //{
-                    ListSizeitems.Add(new SelectListItem()
-                    {
-                        Text = obj.Name,
-                        Value = obj.Id.ToString(),
-                        Selected = obj.Id == productDetail.SizeId
-                    });
+                ListSizeitems.Add(new SelectListItem()
+                {
+                    Text = obj.Name,
+                    Value = obj.Id.ToString(),
+                    Selected = obj.Id == productDetail.SizeId
+                });
                 //}
             }
 
@@ -432,12 +544,12 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 //if (productDetails.FirstOrDefault(p => p.SizeId == obj.Id) == null || obj.Id == productDetail.SizeId)
                 //{
-                    ListColorsitems.Add(new SelectListItem()
-                    {
-                        Text = obj.ColorName,
-                        Value = obj.Id.ToString(),
-                        Selected = obj.Id == productDetail.ColorId
-                    });
+                ListColorsitems.Add(new SelectListItem()
+                {
+                    Text = obj.ColorName,
+                    Value = obj.Id.ToString(),
+                    Selected = obj.Id == productDetail.ColorId
+                });
                 //}
             }
             ViewBag.ListColorsitems = ListColorsitems;

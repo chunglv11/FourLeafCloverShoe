@@ -54,7 +54,7 @@
                         <span asp-validation-for="MinimumOrderValue" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="giamtoida">
                         <label class="form-label">Giảm tối đa </label>
                         <input asp-for="MaximumOrderValue" type="number" class="form-control">
                         <span asp-validation-for="MaximumOrderValue" class="text-danger"></span>
@@ -105,4 +105,15 @@
         <!-- [ sample-page ] end -->
     </div>
 </div>
+<script>
+    document.getElementById('btnrdolite13').addEventListener('click', function () {
+        document.getElementById('giamtoida').style.display = 'none';
+    });
+
+    document.getElementById('btnrdolite11').addEventListener('click', function () {
+        document.getElementById('giamtoida').style.display = 'block';
+    });
+
+
+</script>
 @Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
