@@ -1,0 +1,51 @@
+﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.Voucher>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (ViewBag.noti == null)
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoucherType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinimumOrderValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaximumOrderValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%"> @ViewBag.noti </h3>
+}

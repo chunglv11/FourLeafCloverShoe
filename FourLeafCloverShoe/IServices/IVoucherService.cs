@@ -10,5 +10,7 @@ namespace FourLeafCloverShoe.IServices
         public Task<bool> Delete(Guid Id);
         public Task<Voucher> GetById(Guid Id);
         public Task<List<Voucher>> Gets();
+        public Task<List<Voucher>> GetVouchersByIds(List<Guid> vcIDs);
+
     }
 }
