@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using ZXing;
 using ZXing.QrCode.Internal;
+using Size = FourLeafCloverShoe.Share.Models.Size;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
@@ -327,14 +328,11 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             }
             foreach (var obj in (await _colorsService.Gets()).OrderBy(c => c.ColorName))
             {
-                //if (productDetails.FirstOrDefault(p => p.ColorId == obj.Id) == null)
-                //{
                 ListColorsitems.Add(new SelectListItem()
                 {
                     Text = obj.ColorName,
-                    Value = obj.Id.ToString()
+                    Value = obj.Id.ToString(),
                 });
-                //}
             }
             foreach (var obj in (await _materialsService.Gets()).OrderBy(c => c.Name))
             {
@@ -371,6 +369,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             }
             foreach (var obj in (await _colorsService.Gets()).OrderBy(c => c.ColorName))
             {
+
                 ListColorsitems.Add(new SelectListItem()
                 {
                     Text = obj.ColorName,
@@ -406,6 +405,66 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường");
             return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
         }
+        [HttpPost("Createsize")]
+        public async Task<IActionResult> Createsizeinprdetail(string s, string idProduct)
+        {
+            var size = await _sizeService.GetByName(s);
+            if (size != null)
+            {
+                TempData["ErrorMessage"] = "Kích cỡ đã có";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else if (s == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+            }
+            else
+            {
+                var sizes = new Size();
+                sizes.Name = s;
+                var result = await _sizeService.Add(sizes);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Thêm thành công";
+                    return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+                }
+            }
+            return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+        }
+
+        [HttpPost("CreateMaterialinProductDetail")]
+        public async Task<IActionResult> CreateMaterialInProductDetail(string nameMaterial, string idProduct)
+        {
+            var size = await _materialsService.Gets();
+            if (size.Any(c => c.Name == nameMaterial))
+            {
+                TempData["ErrorMessage"] = "Chất Liệu đã có";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+            }
+            else if (nameMaterial == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+            }
+            else
+            {
+                var ss = new Material();
+                ss.Name = nameMaterial;
+                var result = await _materialsService.Add(ss);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "Thêm thành công";
+                    return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+                }
+            }
+            return RedirectToAction("CreateProductDetail", "Products", new { area = "Admin", productId = idProduct });
+
+        }
+
         [HttpPost("CreateinProductDetail")]
         public async Task<ActionResult> CreatecolorinPrDt(string colorName, string colorCode, string idProduct)
         {
@@ -442,7 +501,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 colornew.Id = Guid.NewGuid();
                 colornew.ColorName = colorName.Trim();
                 colornew.ColorCode = colorCode.Trim();
-                ViewBag.colorid = colornew.Id;
+                TempData["colorid"] = colornew.Id;
 
                 var result = await _colorsService.Add(colornew);
                 if (result)

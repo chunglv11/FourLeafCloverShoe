@@ -9,6 +9,8 @@ namespace FourLeafCloverShoe.IServices
         public Task<bool> Update(Size obj);
         public Task<bool> Delete(Guid Id);
         public Task<Size> GetById(Guid Id);
+        public Task<Size> GetByName(string name);
+
         public Task<List<Size>> Gets();
     }
 }
