@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using FourLeafCloverShoe.IServices;
 using System.Net.Mail;
 using System.Net;
+using FourLeafCloverShoe.Services;
 
 namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
 {
@@ -33,6 +34,8 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<User> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ICartService _cartService;
+        private readonly ICartItemService _cartItemService;
+        private readonly IProductDetailService _IProductDetailService;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
@@ -41,6 +44,7 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
             IUserStore<User> userStore,
             ILogger<ExternalLoginModel> logger,
              ICartService cartService,
+             ICartItemService cartItemService, IProductDetailService productDetailService,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;
@@ -50,6 +54,8 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _cartService = cartService;
+            _cartItemService = cartItemService;
+            _IProductDetailService = productDetailService;
         }
 
         /// <summary>
@@ -123,7 +129,42 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                var user = await _userManager.FindByEmailAsync(email);
+                var cart = await _cartService.GetByUserId(user.Id);
+
+                // Lấy danh sách các sản phẩm trong giỏ hàng từ CSDL và phiên làm việc
+                var cartItemsDb = (await _cartItemService.Gets()).Where(c => c.CartId == cart.Id).ToList();
+                var cartItemsSession = SessionServices.GetCartItems(HttpContext.Session, "Cart");
+                // Xử lý các sản phẩm trong phiên làm việc trước
+                foreach (var sessionItem in cartItemsSession)
+                {
+                    var existingItem = cartItemsDb.FirstOrDefault(c => c.ProductDetailId == sessionItem.ProductDetailId);
+                    if (existingItem == null)
+                    {
+                        // Thêm sản phẩm mới từ phiên làm việc vào giỏ hàng trong CSDL
+                        await _cartItemService.Add(new CartItem
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductDetailId = sessionItem.ProductDetailId,
+                            CartId = cart.Id,
+                            Quantity = sessionItem.Quantity
+                        });
+                    }
+                    else
+                    {
+                        // Cập nhật số lượng sản phẩm đã tồn tại trong giỏ hàng
+                        var productDetail = await _IProductDetailService.GetById((Guid)sessionItem.ProductDetailId);
+                        if (productDetail.Quantity >= sessionItem.Quantity + existingItem.Quantity)
+                        {
+                            existingItem.Quantity += sessionItem.Quantity;
+                            await _cartItemService.Update(existingItem);
+                        }
+
+                    }
+                }
+                //Xóa các sản phẩm đã xử lý khỏi phiên làm việc
+                SessionServices.SetCartItems(HttpContext.Session, "Cart", new List<CartItem>());
                 return LocalRedirect(returnUrl);
             }
 
@@ -168,6 +209,40 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
                             await _userManager.ConfirmEmailAsync(user, await _userManager.GenerateEmailConfirmationTokenAsync(user));
                             // Đăng nhập
                             await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                            var cart = await _cartService.GetByUserId(user.Id);
+
+                            // Lấy danh sách các sản phẩm trong giỏ hàng từ CSDL và phiên làm việc
+                            var cartItemsDb = (await _cartItemService.Gets()).Where(c => c.CartId == cart.Id).ToList();
+                            var cartItemsSession = SessionServices.GetCartItems(HttpContext.Session, "Cart");
+                            // Xử lý các sản phẩm trong phiên làm việc trước
+                            foreach (var sessionItem in cartItemsSession)
+                            {
+                                var existingItem = cartItemsDb.FirstOrDefault(c => c.ProductDetailId == sessionItem.ProductDetailId);
+                                if (existingItem == null)
+                                {
+                                    // Thêm sản phẩm mới từ phiên làm việc vào giỏ hàng trong CSDL
+                                    await _cartItemService.Add(new CartItem
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        ProductDetailId = sessionItem.ProductDetailId,
+                                        CartId = cart.Id,
+                                        Quantity = sessionItem.Quantity
+                                    });
+                                }
+                                else
+                                {
+                                    // Cập nhật số lượng sản phẩm đã tồn tại trong giỏ hàng
+                                    var productDetail = await _IProductDetailService.GetById((Guid)sessionItem.ProductDetailId);
+                                    if (productDetail.Quantity >= sessionItem.Quantity + existingItem.Quantity)
+                                    {
+                                        existingItem.Quantity += sessionItem.Quantity;
+                                        await _cartItemService.Update(existingItem);
+                                    }
+
+                                }
+                            }
+                            //Xóa các sản phẩm đã xử lý khỏi phiên làm việc
+                            SessionServices.SetCartItems(HttpContext.Session, "Cart", new List<CartItem>());
                             return LocalRedirect(returnUrl);
                         }
                     }
