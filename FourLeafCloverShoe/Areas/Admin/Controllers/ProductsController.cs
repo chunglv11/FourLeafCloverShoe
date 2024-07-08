@@ -394,7 +394,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 var colors = await _colorsService.GetById(productDetail.ColorId);
                 var materials = await _materialsService.GetById(productDetail.MaterialId);
                 productDetail.CreateAt = DateTime.Now;
-                productDetail.SKU = product.ProductCode + "-" + size.Name.Trim().Replace(" ", "_").ToUpper() + colors.ColorName.Trim().Replace(" ", "_") + materials.Name.Trim().Replace(" ", "_").ToUpper();
+                productDetail.SKU = product.ProductCode + "_" + size.Name.Trim().Replace(" ", "_").ToUpper() + colors.ColorName.Trim();
                 productDetail.Status = productDetail.Status;
                 var result = await _productDetailService.Add(productDetail);
                 if (result)
