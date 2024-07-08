@@ -67,6 +67,24 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<PaymentType> GetByName(string name)
+        {
+            try
+            {
+                var obj = await _myDbContext.PaymentTypes.FirstOrDefaultAsync(c=>c.Name.ToLower()==name.ToLower());
+                if (obj != null)
+                {
+                    return obj;
+                }
+                return new PaymentType();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new PaymentType();
+            }
+        }
+
         public async Task<List<PaymentType>> Gets()
         {
             try

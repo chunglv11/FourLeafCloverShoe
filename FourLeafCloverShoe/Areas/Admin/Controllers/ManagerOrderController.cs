@@ -26,7 +26,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         public async Task<IActionResult> IndexAsync(int? page, int?[] status, string searchText, DateTime? startDate, DateTime? endDate)
         {
             if (page == null) page = 1;
-            int pageSize = 1;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
             // Lưu trữ giá trị bộ lọc vào ViewBag để sử dụng trong View
