@@ -24,11 +24,13 @@ namespace FourLeafCloverShoe.Controllers
         private readonly IUserVoucherService _userVoucherService;
         private readonly IVoucherService _voucherService;
         private readonly IProductDetailService _productDetailService;
+        private readonly IPaymentService _paymentService;
         private readonly IRateService _rateService;
+        private readonly IPaymentDetailService _paymentDetailService;
         private readonly IHubContext<Hubs> _hubContext;
 
 
-        public OrderController(IHubContext<Hubs> hubContext, IProductDetailService productDetailService, UserManager<User> userManager,IVoucherService voucherService,IUserVoucherService userVoucherService , IOrderService orderService, IOrderItemService orderItemService, ICartItemService cartItemItemService, IRateService rateService)
+        public OrderController(IHubContext<Hubs> hubContext, IProductDetailService productDetailService, UserManager<User> userManager,IVoucherService voucherService,IUserVoucherService userVoucherService ,IPaymentService paymentService, IPaymentDetailService paymentDetailService, IOrderService orderService, IOrderItemService orderItemService, ICartItemService cartItemItemService, IRateService rateService)
         {
             _userManager = userManager;
             _orderItemService = orderItemService;
@@ -37,6 +39,8 @@ namespace FourLeafCloverShoe.Controllers
             _userVoucherService = userVoucherService;
             _voucherService = voucherService;
             _productDetailService = productDetailService;
+            _paymentService = paymentService;
+            _paymentDetailService = paymentDetailService;
             _hubContext = hubContext;
             _rateService = rateService;
 
@@ -114,6 +118,7 @@ namespace FourLeafCloverShoe.Controllers
                 }
                 else
                 {
+                
                     order.OrderStatus = 2; // chờ xác nhận
                 }
                 order.RecipientName = order.RecipientName;
@@ -130,6 +135,14 @@ namespace FourLeafCloverShoe.Controllers
                 {
                     var lstOrderItems = new List<OrderItem>();
                     var lstRates = new List<Rate>();
+                    await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi payment detail
+                    {
+                        IdOrder = order.Id,
+                        IdPayment = (await _paymentService.GetByName(order.PaymentType)).Id,
+                        TotalMoney = order.TotalAmout,
+                        Status =1
+                        
+                    });
                     foreach (var item in lstCartItem)
                     {
                         var orderItems = new OrderItem()
@@ -264,6 +277,13 @@ namespace FourLeafCloverShoe.Controllers
                 var result = await _orderService.Add(order); // tạo hoá đơn
                 if (result)
                 {
+                    await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                    {
+                        IdOrder = order.Id,
+                        IdPayment = (await _paymentService.GetByName(order.PaymentType)).Id,
+                        TotalMoney = order.TotalAmout,
+                        Status = 1
+                    });
                     var lstOrderItems = new List<OrderItem>();
                     foreach (var item in lstCartItem)
                     {
