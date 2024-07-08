@@ -272,7 +272,7 @@ namespace FourLeafCloverShoe.Controllers
                             OrderId = order.Id,
                             ProductDetailId = item.ProductDetailId,
                             Quantity = item.Quantity,
-                            Price = item.ProductDetails.PriceSale,
+                            Price = (await _productDetailService.GetById((Guid)item.ProductDetailId)).PriceSale,
                         };
                         lstOrderItems.Add(orderItems);
                     }
@@ -415,6 +415,7 @@ namespace FourLeafCloverShoe.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
                     var order = await _orderService.GetById(orderId);
                     if (order.PaymentType == "momo")
                     {
@@ -428,6 +429,18 @@ namespace FourLeafCloverShoe.Controllers
                             if (result)
                             {
 
+                                var lstOrderItem = await _orderItemService.GetByIdOrder(orderId);
+                                var productDetails = await _productDetailService.Gets();
+                                // trừ số lượng 
+                                foreach (var item in lstOrderItem)
+                                {
+                                    var productDetail =  productDetails.FirstOrDefault(c => c.Id == item.ProductDetailID);
+                                    if (productDetail!=null)
+                                    {
+                                        productDetail.Quantity -= item.Quantity;
+                                    }
+                                }
+                                await _productDetailService.UpdateMany(productDetails);
                                 return Redirect($"/Order/CheckOutSuccess?orderId={order.Id}");
                             }
                         }
@@ -494,6 +507,18 @@ namespace FourLeafCloverShoe.Controllers
                                 var result = await _orderService.Update(order);
                                 if (result)
                                 {
+                                    var lstOrderItem = await _orderItemService.GetByIdOrder(orderId);
+                                    var productDetails = await _productDetailService.Gets();
+                                    // trừ số lượng 
+                                    foreach (var item in lstOrderItem)
+                                    {
+                                        var productDetail = productDetails.FirstOrDefault(c => c.Id == item.ProductDetailID);
+                                        if (productDetail != null)
+                                        {
+                                            productDetail.Quantity -= item.Quantity;
+                                        }
+                                    }
+                                    await _productDetailService.UpdateMany(productDetails);
                                     return Redirect($"/Order/CheckOutSuccess?orderId={order.Id}");
                                 }
                             }
@@ -546,7 +571,18 @@ namespace FourLeafCloverShoe.Controllers
                             var result = await _orderService.Update(order);
                             if (result)
                             {
-
+                                var lstOrderItem = await _orderItemService.GetByIdOrder(orderId);
+                                var productDetails = await _productDetailService.Gets();
+                                // trừ số lượng 
+                                foreach (var item in lstOrderItem)
+                                {
+                                    var productDetail = productDetails.FirstOrDefault(c => c.Id == item.ProductDetailID);
+                                    if (productDetail != null)
+                                    {
+                                        productDetail.Quantity -= item.Quantity;
+                                    }
+                                }
+                                await _productDetailService.UpdateMany(productDetails);
                                 return Redirect($"/Order/CheckOutSuccess?orderId={order.Id}");
                             }
                         }
@@ -589,6 +625,18 @@ namespace FourLeafCloverShoe.Controllers
                                 var result = await _orderService.Update(order);
                                 if (result)
                                 {
+                                    var lstOrderItem = await _orderItemService.GetByIdOrder(orderId);
+                                    var productDetails = await _productDetailService.Gets();
+                                    // trừ số lượng 
+                                    foreach (var item in lstOrderItem)
+                                    {
+                                        var productDetail = productDetails.FirstOrDefault(c => c.Id == item.ProductDetailID);
+                                        if (productDetail != null)
+                                        {
+                                            productDetail.Quantity -= item.Quantity;
+                                        }
+                                    }
+                                    await _productDetailService.UpdateMany(productDetails);
                                     return Redirect($"/Order/CheckOutSuccess?orderId={order.Id}");
 
                                 }
