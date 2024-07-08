@@ -1034,8 +1034,12 @@
 
                 }
                 if (response.status == 0) {
-                    $('.product-availibleQuantity').text("Sản phẩm ngừng kinh doanh");
+                    $('.product-availibleQuantity').text("Sản phẩm đã ngừng kinh doanh!");
                 }
+                if (response.quantity <= 0) {
+                    $('.product-availibleQuantity').text("Sản phẩm đã hết hàng!");
+                }
+
                 $('#imgQrCode').attr('src', response.imgQrCode);
                 $('#imgQrCode').removeAttr('hidden');
             },

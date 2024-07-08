@@ -122,7 +122,7 @@
                                                     <span class="item-variation-value">@item.ProductDetails.SKU</span>
                                                 </li>
                                             </ul>
-                                            <div data-title="Price"> <span class="quantity">@item.Quantity × <span class="woocommerce-Price-amount amount"><bdi>@item.ProductDetails.PriceSale?.ToString("N0")<span class="woocommerce-Price-currencySymbol">₫</span></bdi></span></span></div>
+                                            <div data-title="Price"> <span id="quantity-sp-@item.ProductDetailId">@item.Quantity  </span> × <span class="woocommerce-Price-amount amount"><bdi>@item.ProductDetails.PriceSale?.ToString("N0")<span class="woocommerce-Price-currencySymbol">₫</span></bdi></span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -996,6 +996,7 @@
                     var totalPrice = priceValue * newQuantity;
                     var formattedTotalPrice = totalPrice.toLocaleString('en-US', { minimumFractionDigits: 0 });
                     $('#cart-item-total-' + idProductDetail).text(formattedTotalPrice + " đ");
+                    $('#quantity-sp-' + idProductDetail).text(newQuantity);
                     resetCountponse(); 
                     coinsUsed = 0;     
                     total = result.total; 
