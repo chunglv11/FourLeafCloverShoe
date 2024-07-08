@@ -19,13 +19,13 @@ namespace FourLeafCloverShoe.Controllers
     {
         private readonly ICartService _cartService;
         private readonly IAddressService _addressService;
-        private readonly ICartItemItemService _cartItemItemService;
+        private readonly ICartItemService _cartItemItemService;
         private readonly IProductDetailService _productDetailService;
         private readonly IProductService _productService;
         private readonly UserManager<User> _userManager;
         private readonly IUserVoucherService _userVoucherService;
 
-        public CartController(IAddressService addressService, IUserVoucherService userVoucherService, ICartService cartService, IProductService productService, ICartItemItemService cartItemItemService, IProductDetailService productDetailService, UserManager<User> userManager)
+        public CartController(IAddressService addressService, IUserVoucherService userVoucherService, ICartService cartService, IProductService productService, ICartItemService cartItemItemService, IProductDetailService productDetailService, UserManager<User> userManager)
         {
             _cartService = cartService;
             _addressService = addressService;

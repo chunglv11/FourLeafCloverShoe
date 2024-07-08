@@ -20,7 +20,7 @@ namespace FourLeafCloverShoe.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IOrderItemService _orderItemService;
         private readonly IOrderService _orderService;
-        private readonly ICartItemItemService _cartItemItemService;
+        private readonly ICartItemService _cartItemItemService;
         private readonly IUserVoucherService _userVoucherService;
         private readonly IVoucherService _voucherService;
         private readonly IProductDetailService _productDetailService;
@@ -28,7 +28,7 @@ namespace FourLeafCloverShoe.Controllers
         private readonly IHubContext<Hubs> _hubContext;
 
 
-        public OrderController(IHubContext<Hubs> hubContext, IProductDetailService productDetailService, UserManager<User> userManager,IVoucherService voucherService,IUserVoucherService userVoucherService , IOrderService orderService, IOrderItemService orderItemService, ICartItemItemService cartItemItemService, IRateService rateService)
+        public OrderController(IHubContext<Hubs> hubContext, IProductDetailService productDetailService, UserManager<User> userManager,IVoucherService voucherService,IUserVoucherService userVoucherService , IOrderService orderService, IOrderItemService orderItemService, ICartItemService cartItemItemService, IRateService rateService)
         {
             _userManager = userManager;
             _orderItemService = orderItemService;
@@ -277,10 +277,9 @@ namespace FourLeafCloverShoe.Controllers
                         lstOrderItems.Add(orderItems);
                     }
                     var resultCreateOrderItems = await _orderItemService.AddMany(lstOrderItems);
-                    for (int i = lstCartItem.Count - 1; i >= 0; i--)
-                    {
-                        lstCartItem.RemoveAt(i);
-                    }
+                    //Xóa các sản phẩm đã xử lý khỏi phiên làm việc
+                    SessionServices.SetCartItems(HttpContext.Session, "Cart", new List<CartItem>());
+
                     if (resultCreateOrderItems)
                     {
                         

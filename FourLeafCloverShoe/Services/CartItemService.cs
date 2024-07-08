@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FourLeafCloverShoe.Services
 {
-    public class CartItemService : ICartItemItemService
+    public class CartItemService : ICartItemService
     {
         private readonly MyDbContext _myDbContext;
 

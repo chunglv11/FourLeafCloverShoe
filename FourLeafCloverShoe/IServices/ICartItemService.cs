@@ -2,7 +2,7 @@
 
 namespace FourLeafCloverShoe.IServices
 {
-    public interface ICartItemItemService
+    public interface ICartItemService
     {
         public Task<bool> Add(CartItem obj);
         public Task<bool> AddMany(List<CartItem> lstobj);

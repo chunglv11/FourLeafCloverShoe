@@ -16,17 +16,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Net.Mail;
+using FourLeafCloverShoe.Services;
+using FourLeafCloverShoe.IServices;
+using NuGet.Configuration;
 
 namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly ICartService _cartService;
+        private readonly ICartItemService _cartItemService;
+        private readonly IProductDetailService _IProductDetailService;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, UserManager<User> userManager, ICartService cartService, ICartItemService cartItemService, IProductDetailService productDetailService, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
+            _cartService = cartService;
+            _cartItemService = cartItemService;
+            _IProductDetailService = productDetailService;
             _logger = logger;
         }
 
@@ -96,9 +107,44 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var username = new EmailAddressAttribute().IsValid(Input.Email) ? new MailAddress(Input.Email).User : Input.Email;
                 var result = await _signInManager.PasswordSignInAsync(username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var user = await _userManager.FindByNameAsync(username);
+                var cart = await _cartService.GetByUserId(user.Id);
+
+                // Lấy danh sách các sản phẩm trong giỏ hàng từ CSDL và phiên làm việc
+                var cartItemsDb = (await _cartItemService.Gets()).Where(c => c.CartId == cart.Id).ToList();
+                var cartItemsSession = SessionServices.GetCartItems(HttpContext.Session, "Cart");
+
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    // Xử lý các sản phẩm trong phiên làm việc trước
+                    foreach (var sessionItem in cartItemsSession)
+                    {
+                        var existingItem = cartItemsDb.FirstOrDefault(c => c.ProductDetailId == sessionItem.ProductDetailId);
+                        if (existingItem == null)
+                        {
+                            // Thêm sản phẩm mới từ phiên làm việc vào giỏ hàng trong CSDL
+                            await _cartItemService.Add(new CartItem
+                            {
+                                Id = Guid.NewGuid(),
+                                ProductDetailId = sessionItem.ProductDetailId,
+                                CartId = cart.Id,
+                                Quantity = sessionItem.Quantity
+                            });
+                        }
+                        else
+                        {
+                            // Cập nhật số lượng sản phẩm đã tồn tại trong giỏ hàng
+                            var productDetail = await _IProductDetailService.GetById((Guid)sessionItem.ProductDetailId);
+                            if (productDetail.Quantity >= sessionItem.Quantity + existingItem.Quantity)
+                            {
+                                existingItem.Quantity += sessionItem.Quantity;
+                               await _cartItemService.Update(existingItem);
+                            }
+
+                        }
+                    }
+                    //Xóa các sản phẩm đã xử lý khỏi phiên làm việc
+                    SessionServices.SetCartItems(HttpContext.Session, "Cart", new List<CartItem>());
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -120,5 +166,6 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
     }
 }
