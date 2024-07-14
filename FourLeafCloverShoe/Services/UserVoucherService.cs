@@ -63,11 +63,66 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<Guid>> GetAllByUserId(string userId)
+        {
+            try     
+            {
+                var userVouchers = await _myDbContext.UserVouchers
+                             .Where(c => c.UserId == userId)
+                             .Select(c => c.VoucherId)
+                             .ToListAsync();
+                var listActive = userVouchers.Where(id => id.HasValue).Select(id => id.Value).ToList();
+                return listActive;
+            }
+            catch (Exception)
+            {
+
+                return new List<Guid>();
+
+            }
+        }
+
+        public async Task<List<Guid>> GetAllByUserIdActive(string userId)
+        {
+            try
+            {
+                var userVouchers = await _myDbContext.UserVouchers
+                               .Where(c => c.UserId == userId && c.Status == 1)
+                               .Select(c => c.VoucherId)
+                               .ToListAsync();
+                var listActive = userVouchers.Where(id => id.HasValue).Select(id => id.Value).ToList();
+                return listActive;
+            }
+            catch (Exception)
+            {
+                return new List<Guid>();
+            }
+        }
+
+        public async Task<List<Guid>> GetAllByUserIdUnActive(string userId)
+        {
+            try
+            {
+                var userVouchers = await _myDbContext.UserVouchers
+                               .Where(c => c.UserId == userId && c.Status != 1)
+                               .Select(c => c.VoucherId)
+                               .ToListAsync();
+                var listActive = userVouchers.Where(id => id.HasValue).Select(id => id.Value).ToList();
+                return listActive;
+            }
+            catch (Exception)
+            {
+
+                return new List<Guid>();
+
+            }
+        }
+
         public async Task<UserVoucher> GetById(Guid Id)
         {
             try
             {
-                var obj = (await _myDbContext.UserVouchers.Include(c => c.Vouchers).ToListAsync()).FirstOrDefault(c=>c.Id==Id);
+                var obj = (await _myDbContext.UserVouchers.Include(c => c.Vouchers).ToListAsync()).FirstOrDefault(c => c.Id == Id);
                 if (obj != null)
                 {
 
@@ -88,7 +143,7 @@ namespace FourLeafCloverShoe.Services
             {
                 var userVouchers = await _myDbContext.UserVouchers
                                         .Include(c => c.Vouchers).ToListAsync();
-                var lstObjValid = userVouchers.Where(c=>c.UserId==userId&&c.Status==1&&c.Vouchers.Status==1&&c.Vouchers.StartDate<=DateTime.Now&&c.Vouchers.EndDate>DateTime.Now&&c.Vouchers.Quantity>0);
+                var lstObjValid = userVouchers.Where(c => c.UserId == userId && c.Status == 1 && c.Vouchers.Status == 1 && c.Vouchers.StartDate <= DateTime.Now && c.Vouchers.EndDate > DateTime.Now && c.Vouchers.Quantity > 0);
                 return lstObjValid.ToList();
 
             }
