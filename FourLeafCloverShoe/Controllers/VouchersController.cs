@@ -35,7 +35,7 @@ namespace FourLeafCloverShoe.Controllers
                     var vouchers = await _voucherService.GetVouchersByIds(listVcID);
                  
                     return View(vouchers);
-                }
+                }   
 
                 if (status == 1)
                 {
