@@ -13,6 +13,12 @@ namespace FourLeafCloverShoe.IServices
         public Task<bool> Delete(Guid Id);
         public Task<UserVoucher> GetById(Guid Id);
         public Task<List<UserVoucher>> GetByUserId(string userId);
+        // cái này lấy ra tất cả các voucherz
+        public Task<List<Guid>> GetAllByUserId(string userId);
+        public Task<List<Guid>> GetAllByUserIdActive(string userId);
+        public Task<List<Guid>> GetAllByUserIdUnActive(string userId);
+
+
         public Task<List<UserVoucher>> GetByVoucherId(Guid voucherId);
         public Task<List<UserVoucher>> Gets();
     }

@@ -19,27 +19,56 @@ namespace FourLeafCloverShoe.Controllers
             _userVoucherService = userVoucherService;
             _voucherService = voucherService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int status, string search)
         {
             if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
-                
-                var userVouser = await _userVoucherService.GetByUserId(user.Id);
-                if (userVouser != null)
+                ViewBag.tieude = "Danh sách vouchers của bạn";
+                if (status == 0)
                 {
-                    ViewBag.noti = "Bạn chưa có voucher nào cả";
+                    var listVcID = await _userVoucherService.GetAllByUserId(user.Id);
+                    if (listVcID == null)
+                    {
+                        ViewBag.noti = "Bạn chưa có voucher nào cả";
+                    }
+                    var vouchers = await _voucherService.GetVouchersByIds(listVcID);
+                 
+                    return View(vouchers);
+                }   
+
+                if (status == 1)
+                {
+                    var listVcID = await _userVoucherService.GetAllByUserIdActive(user.Id);
+                    if (listVcID == null)
+                    {
+                        ViewBag.noti = "Bạn chưa có voucher nào chưa dùng cả";
+                    }
+                    var vouchers = await _voucherService.GetVouchersByIds(listVcID);
+                    ViewBag.tieude = "Danh sách vouchers chưa sử dụng của bạn";
+
+                    return View(vouchers);
                 }
-                var voucherIds = userVouser
-                 .Select(uv => uv.VoucherId)
-                 .Where(id => id.HasValue)
-                 .Select(id => id.Value)
-                 .ToList();
-                var vouchers = await _voucherService.GetVouchersByIds(voucherIds);
-                return View(vouchers);
-            }else
+
+                if (status != 1 && status !=0 && status != null)
+                {
+                    var listVcID = await _userVoucherService.GetAllByUserIdUnActive(user.Id);
+                    if (listVcID == null)
+                    {
+                        ViewBag.noti = "Bạn chưa có voucher nào đã dùng cả";
+                    }
+                    var vouchers = await _voucherService.GetVouchersByIds(listVcID);
+                    ViewBag.tieude = "Danh sách vouchers đã sử dụng của bạn";
+
+                    return View(vouchers);
+                }
+                var vouchersnull = new Voucher();
+                return View(vouchersnull);
+            }
+            else
             {
                 ViewBag.noti = "Bạn cần đăng nhập để xem vouchers";
+                var vouchers = new Voucher();
                 return View();
             }
         }
