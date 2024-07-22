@@ -1,10 +1,50 @@
 ﻿@model IEnumerable<FourLeafCloverShoe.Share.Models.OrderItem>
+@using FourLeafCloverShoe.Share.ViewModels
 @using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json
 @inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "OrderDetail";
-
+    var lstSpCT = ViewBag.lstProduct as X.PagedList.IPagedList<ProductDeailViewModel>;
+    // var lstSpCT = ViewBag.lstProduct as List<ProductDeailViewModel>;
 }
+<style>
+    /* Đảm bảo hình ảnh vừa với card */
+    .custom-img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        max-height: 200px; /* Hoặc tùy chỉnh kích thước phù hợp */
+    }
+
+    /* Thu nhỏ ô input và nút "Thêm" */
+    .custom-input {
+        width: 60px; /* Tùy chỉnh kích thước phù hợp */
+    }
+
+    .custom-button {
+        padding: 5px 10px; /* Tùy chỉnh padding phù hợp */
+        color: blue;
+    }
+
+    /* Đảm bảo card không bị tràn ra ngoài */
+    .product-card {
+        overflow: hidden;
+        margin-bottom: 20px;
+        border-radius: 10px; /* Tùy chỉnh border-radius nếu muốn */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 200px;
+    }
+    /* Đảm bảo khoảng cách giữa các phần tử trong card */
+    .card-body {
+        padding: 15px;
+    }
+
+    .prod-content {
+        font-size: 14px;
+    }
+
+</style>
 <link rel="stylesheet" href="~/fileadmin/Orderdetail.css">
 <script>
     function openTab(evt, tabName) {
@@ -34,29 +74,29 @@
     <div id="thongtin" class="tab-content" style="display: block;">
         <div class="details">
             <div class="details-left">
-                <p>Mã hóa đơn: <span>@Model.FirstOrDefault().Orders.OrderCode</span></p> 
+                <p>Mã hóa đơn: <span>@Model.FirstOrDefault().Orders.OrderCode</span></p>
                 <p>Ngày tạo: <span>@Model.FirstOrDefault().Orders.CreateDate</span></p>
                 <p>Ngày thanh toán: <span>@Model.FirstOrDefault().Orders.PaymentDate</span></p>
                 <p>Phương thức thanh toán: <span>@Model.FirstOrDefault().Orders.PaymentType</span></p>
                 <p>Khách hàng: @Model.FirstOrDefault().Orders.RecipientName</p>
                 <p>
-                    Nhân viên: <span>
-                        @if (@Model.FirstOrDefault().Orders.StaffId == null)
+                    Nhân viên:
+                    @if (@Model.FirstOrDefault().Orders.StaffId == null)
+                    {
+                        <span>Chưa có người xác nhận</span>
+                    }
+                    else
+                    {
+                        var user = await UserManager.FindByIdAsync(@Model.FirstOrDefault().Orders.StaffId);
+                        if (user != null)
                         {
-                            <span>Chưa có người xác nhận</span>
+                            <span>@user.UserName</span> <!-- Hoặc @user.NormalizedUserName nếu bạn có thuộc tính FullName -->
                         }
                         else
                         {
-                            var user = await UserManager.FindByIdAsync(@Model.FirstOrDefault().Orders.StaffId);
-                            if (user != null)
-                            {
-                                <span>@user.UserName</span> <!-- Hoặc @user.NormalizedUserName nếu bạn có thuộc tính FullName -->
-                            }
-                            else
-                            {
-                                <span>Không tìm thấy nhân viên</span>
-                            }
+                            <span>Không tìm thấy nhân viên</span>
                         }
+                    }
                 </p>
             </div>
             <div class="details-right note">
@@ -64,6 +104,122 @@
                 <textarea id="note"></textarea>
             </div>
         </div>
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == -1 || Model.FirstOrDefault().Orders.OrderStatus == 2 || Model.FirstOrDefault().Orders.OrderStatus == 3 || Model.FirstOrDefault().Orders.OrderStatus == 0)
+        {
+            <div class="col-md-12 col-sm-12 py-2 align-items-center d-flex info-header justify-content-end">
+                <!-- Button trigger modal -->
+                <button type="button" onclick="loadProductDetails()" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Thêm sản phẩm
+                </button>
+
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Danh sách sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <form asp-action="OrderDetail" method="get">
+                                    <div class="form-actions no-color">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <input class="form-control" style="width:100%" type="text" value="@ViewBag.Keyword" id="keyWord" name="keyWord" placeholder="Nhập tên sản phẩm" />
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="submit" value="Tìm Kiếm" class="btn btn-info" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="message"></div>
+                            </div>
+                            <div id="productList" class="row">
+                                @if (lstSpCT != null && lstSpCT.Count > 0)
+                                {
+                                    @foreach (var item in lstSpCT)
+                                    {
+                                        <div class="col-3" style="width:20%">
+                                            <form class="formproduct" asp-controller="ManagerOrder" asp-action="AddProductDetailToOrder" asp-route-productDetailId="@item.Id" asp-route-orderId="@Model.FirstOrDefault().Orders.Id">
+                                                <div class="card product-card">
+                                                    <div class="card-img-top">
+                                                        <a href="">
+                                                            <img src="@item.ImageUrl" alt="image" class="img-prod img-fluid custom-img">
+                                                        </a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <a href="">
+                                                            <p class="prod-content mb-0 text-muted">@item.ProductName - SL: @item.Quantity</p>
+                                                        </a>
+                                                        <p class="prod-content mb-0 text-muted">@item.SizeName - @item.ColorName</p>
+                                                        <div class="d-flex align-items-center justify-content-between mt-2 mb-3 flex-wrap gap-1">
+                                                            <b class="mb-0 text-truncate"><b>Giá bán: @item.Price?.ToString("N0") VNĐ</b></b>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="d-grid">
+                                                                    <input class="form-control form-control-sm custom-input" type="number" name="Quantity" min="0" value="1" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-3">
+                                                                <div class="d-grid">
+                                                                    <button class="addProductButton btn-prod-card form-control-sm custom-button">Thêm</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    }
+                                }
+                                @if (lstSpCT != null && lstSpCT.Count > 0)
+                                {
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center">
+                                            @if (lstSpCT.HasPreviousPage)
+                                            {
+                                                <li class="page-item">
+                                                    <a class="page-link pagination-link" data-page-number="@(lstSpCT.PageNumber - 1)" href="#">Trước</a>
+                                                </li>
+                                            }
+
+                                            @for (int i = 1; i <= lstSpCT.PageCount; i++)
+                                            {
+                                                <li class="page-item @(i == lstSpCT.PageNumber ? "active" : "")">
+                                                    @if (i == lstSpCT.PageNumber)
+                                                    {
+                                                        <span class="page-link">@i <span class="sr-only">(current)</span></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="page-link pagination-link" data-page-number="@i" href="#">@i</a>
+                                                    }
+                                                </li>
+                                            }
+
+                                            @if (lstSpCT.HasNextPage)
+                                            {
+                                                <li class="page-item">
+                                                    <a class="page-link pagination-link" data-page-number="@(lstSpCT.PageNumber + 1)" href="#">Sau</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </nav>
+                                }
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        }
         <table class="table">
             <thead>
                 <tr>
@@ -75,40 +231,41 @@
                 </tr>
             </thead>
             <tbody>
-               @foreach(var item in Model)
-               {
+                @foreach (var item in Model)
+                {
                     <tr>
                         <td>@item.ProductDetails.SKU</td>
                         <td>@item.ProductDetails.Products.ProductName<span> - @item.ProductDetails.Size.Name - @item.ProductDetails.Colors.ColorName</span></td>
-                        <td>@item.Quantity</td>
+                        <td id="SL_@item.Id">@item.Quantity</td>
                         <td>@item.Price?.ToString("N0")</td>
-                       
+
                         @{
                             var tt = item.Quantity * item.ProductDetails.PriceSale;
+                           
                         }
                         <td>@tt?.ToString("N0")</td>
                     </tr>
-                 
+
                 }
-                
-                
+
+
             </tbody>
         </table>
         <div class="details">
             <div class="details-right">
                 <h6>
-                    Tổng số lượng: <span>
+                    Tổng số lượng:
+                    <span>
                         @{
                             var tongcong = @Model.Sum(c => c.Quantity);
-                                            <label class="col-sm-5 col-form-label">
-                                                <b>
-                                                    @tongcong?.ToString("n0")
-                                                </b>
-                                            </label>
+                            <label class="col-sm-5 col-form-label">
+                                <b>
+                                    @tongcong?.ToString("n0")
+                                </b>
+                            </label>
                         }
                     </span>
                 </h6>
-                <h6>Tổng tiền hàng: <span></span></h6>
                 <h6>Trừ tiêu điểm: <span>@Model.FirstOrDefault().Orders.CoinsUsed</span></h6>
                 <h6>Trừ voucher: <span>@Model.FirstOrDefault().Orders.VoucherValue</span></h6>
                 <h6>Phí vận chuyển: <span>@Model.FirstOrDefault().Orders.ShippingFee?.ToString("N0")</span></h6>
@@ -120,7 +277,7 @@
         <p>Họ tên: @Model.FirstOrDefault().Orders.RecipientName</p>
         <p>Số điện thoại: @Model.FirstOrDefault().Orders.RecipientPhone</p>
         <p>Địa chỉ nhận hàng: @Model.FirstOrDefault().Orders.RecipientAddress</p>
-        
+
     </div>
     <div id="lichsudiem" class="tab-content" style="display: none;">
         <p>Đơn này dùng: @Model.FirstOrDefault().Orders.CoinsUsed.Value.ToString("N0") xu</p>
@@ -136,7 +293,9 @@
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
             </div>
-        }   @if (@Model.FirstOrDefault().Orders.OrderStatus == 0)
+        }
+
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 0)
         {
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('1')">Chờ Thanh Toán</button>
@@ -144,7 +303,8 @@
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
             </div>
-        }   @if (@Model.FirstOrDefault().Orders.OrderStatus == 1)
+        }
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 1)
         {
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Chờ giao hàng</button>
@@ -152,7 +312,8 @@
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Huỷ Đơn</button>
             </div>
-        }   @if (@Model.FirstOrDefault().Orders.OrderStatus == 2)
+        }
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 2)
         {
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Xác nhận đơn</button>
@@ -161,14 +322,14 @@
                 <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
             </div>
         }
-        @if (@Model.FirstOrDefault().Orders.OrderStatus == 3 )
-            {
-                <div class="d-flex p-2">
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 3)
+        {
+            <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('4')">Đang Giao Hàng</button>
-                </div>
-                <div class="d-flex p-2">
-                    <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
-                </div>
+            </div>
+            <div class="d-flex p-2">
+                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+            </div>
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 4)
         {
@@ -201,42 +362,168 @@
         {
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('8')">Giao hàng thành công</button>
-           
-             </div>
-        } 
-        @if (@Model.FirstOrDefault().Orders.OrderStatus == 9 )
-            {
-                <div class="d-flex p-2">
-                        <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('9')">Thành Công</button>
-                </div>
-                <div class="d-flex p-2">
-                    <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
-                </div>
-        } 
+
+            </div>
+        }
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 9)
+        {
+            <div class="d-flex p-2">
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('9')">Thành Công</button>
+            </div>
+            <div class="d-flex p-2">
+                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+            </div>
+        }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 10)
         {
             <div class="d-flex p-2">
-                        <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('10')">Yêu cầu đổi trả</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('10')">Yêu cầu đổi trả</button>
             </div>
         }
 
+        @* <div class="d-flex p-2">
+            <button type="button" class="btn btn-success">Cập nhật đơn hàng</button>
+        </div> *@
         <div class="d-flex p-2">
-               <button type="button" class="btn btn-success">Lưu ghi chú</button>
+            <button type="button" class="btn btn-warning">Cập nhật đơn hàng</button>
         </div>
         <div class="d-flex p-2">
-                 <button type="button" class="btn btn-secondary">In Hóa đơn</button>
+            <button type="button" class="btn btn-dark">Xuất PDF</button>
         </div>
         <div class="d-flex p-2">
-                 <button type="button" class="btn btn-dark">Xuất PDF</button>
-        </div>
-        <div class="d-flex p-2">
-                 <button type="button" class="btn btn-danger">Huỷ đơn</button>
+            <button type="button" class="btn btn-danger">Huỷ đơn</button>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>S
+<script>
+    $('.addProductButton').click(function (e) {
+        e.preventDefault();
+        var form = $(this).closest('form');
+        var url = form.attr('action');
+        var data = form.serialize();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function (response) {
+                $('#message').html('<div class="alert alert-' + (response.success ? 'success' : 'danger') + '">' + response.message + '</div>');
+                if (response.id != null) {
+                    var slElement = $('#SL_' + response.id);
+                    slElement.html(response.soluong);
+                }
+                // Tự động ẩn thông báo sau 1 giây
+                setTimeout(function () {
+                    $('#message').html('');
+                }, 1000);
+            },
+            error: function () {
+                $('#message').html('<div class="alert alert-danger">Có lỗi xảy ra.</div>');
+                // Tự động ẩn thông báo sau 1 giây
+                setTimeout(function () {
+                    $('#message').html('');
+                }, 1000);
+            }
+        });
+    });
+</script>
+@* <script src="~/fileadmin/assets/js/loadProductDetail.js"></script> *@
+@* <script>
+    var orderId = '@(Model.FirstOrDefault().Orders.Id.ToString())';
+    function loadProductDetails() {
+        $.ajax({
+            type: "POST",
+            url: '/Admin/ManagerOrder/GetProductDetail',
+            success: function (response) {
+                if (response.success) {
+                    renderProductDetails(response.data);
+                } else {
+                    alert("Failed to load product details.");
+                }
+            },
+            error: function () {
+                alert("An error occurred while loading product details.");
+            }
+        });
+    }
 
+    function renderProductDetails(data) {
+        var productList = $('#productList');
+        productList.empty(); // Xóa nội dung cũ
 
+        data.forEach(function (item) {
+            var productHtml = `
+                    <div class="col-3" style="width:20%">
+                        <form class="formproduct" asp-controller="ManagerOrder" asp-action="AddProductDetailToOrder">
+                                <input hidden name="productDetailId" value="${item.id}" />
+                                    <input hidden name="orderId" value="${orderId}" />
+                            <div class="card product-card">
+                                <div class="card-img-top">
+                                    <a href="">
+                                        <img src="${item.imageUrl}" alt="image" class="img-prod img-fluid custom-img">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <a href="">
+                                        <p class="prod-content mb-0 text-muted">${item.productName} - SL: ${item.quantity}</p>
+                                    </a>
+                                    <p class="prod-content mb-0 text-muted">${item.sizeName} - ${item.colorName}</p>
+                                    <div class="d-flex align-items-center justify-content-between mt-2 mb-3 flex-wrap gap-1">
+                                        <b class="mb-0 text-truncate"><b>Giá bán: ${item.price?.toLocaleString()} VNĐ</b></b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0">
+                                            <div class="d-grid">
+                                                <input class="form-control form-control-sm custom-input" type="number" name="Quantity" min="0" value="1" />
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="d-grid">
+                                                <button class="addProductButton btn-prod-card form-control-sm custom-button">Thêm</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            productList.append(productHtml);
+        });
+    }
+    $(document).ready(function () {
+        $('.addProductButton').click(function (e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            var url = form.attr('action');
+            var data = form.serialize();
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (response) {
+                    $('#message').html('<div class="alert alert-' + (response.success ? 'success' : 'danger') + '">' + response.message + '</div>');
+                    if (response.id != null) {
+                        var slElement = $('#SL_' + response.id);
+                        slElement.html(response.soluong);
 
+                    }
+                    // Tự động ẩn thông báo sau 1 giây
+                    setTimeout(function () {
+                        $('#message').html('');
+                    }, 1000);
+                },
+                error: function () {
+                    $('#message').html('<div class="alert alert-danger">Có lỗi xảy ra.</div>');
+                    // Tự động ẩn thông báo sau 1 giây
+                    setTimeout(function () {
+                        $('#message').html('');
+                    }, 1000);
+                }
+            });
+        })
+    });
+</script> *@
 <script>
     function DoiTrangThai(trangthai) {
         var ans = confirm("Cập nhật trạng thái hóa đơn này?");
@@ -250,7 +537,7 @@
                 data: {
                     idhd: id,
                     trangthai: trangthai,
-                    
+
                 },
                 success: function (response) {
                     toastr.success(response.message, "Success Alert", { timeOut: 300 });

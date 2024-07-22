@@ -31,7 +31,7 @@ namespace FourLeafCloverShoe.Share.Models
         // 7 --> yêu cầu huỷ đơn thất bại
 
         // 8--> giao hàng thành công                                 --> admin duyệt trạng thái
-        // 9-> thanh toán tại quầy
+        // 9-> thanh toán tại quầy //bỏ
         // 10 -->yêu cầu đổi trả
         // 11 --> chấp nhận đổi trả
         // 12 --> từ chối đổi trả

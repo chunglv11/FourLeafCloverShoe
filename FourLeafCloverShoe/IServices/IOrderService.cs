@@ -1,4 +1,5 @@
 ﻿using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 
 namespace FourLeafCloverShoe.IServices
 {
@@ -18,6 +19,7 @@ namespace FourLeafCloverShoe.IServices
 
         public Task<bool> UpdateRank(int? point);
         public bool UpdateGhiChuHD(Guid idhd, string? idnv, string ghichu);
+        public Task<List<OrderViewModel>> GetOrderViewModel();
 
     }
 }

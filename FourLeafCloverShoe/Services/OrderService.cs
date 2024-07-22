@@ -1,6 +1,7 @@
 ﻿using FourLeafCloverShoe.Data;
 using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FourLeafCloverShoe.Services
@@ -389,5 +390,29 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<OrderViewModel>> GetOrderViewModel()
+        {
+            var lstOrder = await (from b in _myDbContext.Orders
+                select new OrderViewModel()
+                {
+                    Id = b.Id,
+                    CreateDate = b.CreateDate,
+                    PaymentDate = b.PaymentDate,
+                    Ship_Date = b.ShipDate,
+                    Delivery_Date = b.DeliveryDate,
+                    Description = b.Description,
+                    OrderCode = b.OrderCode,
+                    TotalAmout = b.TotalAmout,
+                    RecipientName = b.RecipientName,
+                    RecipientPhone = b.RecipientPhone,
+                    RecipientAddress = b.RecipientAddress,
+                    ShippingFee = b.ShippingFee,
+                    OrderStatus = b.OrderStatus,
+                    PaymentType = b.PaymentType,
+                    FullName = b.UserId == null ? "" : (_myDbContext.Users.FirstOrDefault(c => c.Id == b.UserId)).FullName,
+                    NameStaff = b.StaffId == null ? "" : (_myDbContext.Users.FirstOrDefault(c => c.Id == b.StaffId)).FullName,
+                }).ToListAsync();
+            return lstOrder;
+        }
     }
 }

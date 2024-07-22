@@ -1,8 +1,13 @@
 ﻿using FourLeafCloverShoe.IServices;
+using FourLeafCloverShoe.Services;
+using FourLeafCloverShoe.Share.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using X.PagedList;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
@@ -14,13 +19,17 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         private readonly IOrderItemService _iorderItemService;
         private readonly IProductDetailService _productDetailService;
         private readonly IProductService _productService;
+        private readonly ISizeService _sizeService;
+        private readonly UserManager<User> _userManager;
 
-        public ManagerOrderController(IOrderService iorderService, IOrderItemService iorderItemService, IProductDetailService productDetailService, IProductService productService)
+        public ManagerOrderController(IOrderService iorderService, IOrderItemService iorderItemService, IProductDetailService productDetailService, IProductService productService, ISizeService sizeService, UserManager<User> userManager)
         {
             _iorderService = iorderService;
             _iorderItemService = iorderItemService;
             _productDetailService = productDetailService;
             _productService = productService;
+            _sizeService = sizeService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> IndexAsync(int? page, int?[] status, string searchText, DateTime? startDate, DateTime? endDate)
@@ -72,11 +81,28 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> OrderDetail(Guid orderId)
+        public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 5)
         {
             var lstOrderIterm = await _iorderItemService.GetByIdOrder2(orderId);
+            var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1).ToList();
+            ViewBag.lstProduct = lstProductDetail.ToPagedList(pageNumber, pageSize);
+            //ViewBag.Keyword = keyWord;
+            //if (!string.IsNullOrEmpty(keyWord))
+            //{
+            //    lstProductDetail = lstProductDetail.Where(p => !string.IsNullOrEmpty(p.Products.ProductName) && p.Products.ProductName.Trim().ToLower().Contains(keyWord.Trim().ToLower())).ToList();
+            //}
             return View(lstOrderIterm);
         }
+        
+        public async Task<IActionResult> GetProductDetail()
+        {
+            int pageNumber = 1;
+            int pageSize = 6;
+            var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1).ToList();
+            ViewBag.lstProduct = lstProductDetail.ToPagedList(pageNumber, pageSize);
+            return Json(new { success = true, data = lstProductDetail });
+        }
+
         public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai)// Dùng cho trạng thái truyền  vào: 10, 3
         {
 
@@ -197,6 +223,88 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 return RedirectToAction("OrderDetail", "ManagerOrder");
 
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddProductDetailToOrder(Guid orderId, Guid productDetailId, int Quantity)
+        {
+            var order = await _iorderService.GetById(orderId);
+            var productDetail = await _productDetailService.GetById(productDetailId);
+            if (order != null && productDetail != null)
+            {
+                if (productDetail.Status != 1 || productDetail.Products.Status != true)
+                {
+
+                    return Json(new { success = false, message = "Sản phẩm ngừng kinh doanh!" });
+                }
+                else
+                {
+                    var lstOrderItems = (await _iorderItemService.Gets()).Where(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
+                    if (!lstOrderItems.Any()) // nếu sp chưa có trong orderiterm thì thêm mới
+                    {
+                        var orderItem = new OrderItem()
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductDetailId = productDetail.Id,
+                            OrderId = order.Id,
+                            Quantity = 1,
+                            Price = productDetail.PriceSale
+                        };
+                        var resultCreateOrderItem = await _iorderItemService.Add(orderItem);
+                        productDetail.Quantity -= 1;
+                        await _productDetailService.Update(productDetail);
+                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity });
+                    }
+                    else // cộng dồn số lượng
+                    {
+                        var orderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
+                        orderItem.Quantity += Quantity;
+                        var resultCreateOrderItem = await _iorderItemService.Update(orderItem);
+                        productDetail.Quantity -= Quantity;
+                        await _productDetailService.Update(productDetail);
+                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity });
+                    }
+                }
+            }
+            return Json(new { success = false, message = "Lỗi không xác định" });
+        }
+        public async Task<IActionResult> UpdateOrder(Guid orderId)
+        {
+            try
+            {
+                var hd = await _iorderService.GetById(orderId);
+                if (hd != null)
+                {
+                    var lsthdct = await _iorderItemService.Gets();
+                    var lsthdctbyIdHd = lsthdct.Where(x => x.OrderId == hd.Id);
+                    if (lsthdctbyIdHd.Count() > 0)
+                    {
+                           var user = await _userManager.GetUserAsync(HttpContext.User);
+                            hd.UpdateDate = DateTime.Now;
+                            hd.StaffId = user.Id;
+                            //hd.OrderStatus = ;
+                            var update = await _iorderService.Update(hd);
+                            if (update != null)
+                            {
+                                return Json( new { success = true, message = " Cập nhật hoá đơn thành công"});
+                            }                           
+
+                    }
+                    else
+                    {
+                        return Json(new { success = true, message = "Hóa đơn không có sản phẩm nào không thể cập nhập" });
+                        
+                    }
+                }
+                else
+                {
+                    return Json(new { success = true, message = " Cập nhật hoá đơn thất bại" });
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View("Error");
             }
         }
     }
