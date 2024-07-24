@@ -4,48 +4,76 @@
     ViewData["Title"] = "Index";
 }
 
-@if (ViewBag.noti == null)
-{
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VoucherType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinimumOrderValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaximumOrderValue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-        </tr>
-    }
-}
-else
-{
-    <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%"> @ViewBag.noti </h3>
-}
+<div style="width:100%; height:100%; display:flex; text-align:center; justify-content:center; align-items:center; flex-wrap:wrap">
+    <div style="width:100%">
+        <h2>@ViewBag.tieude</h2>
+    </div>
+    <div style="width:100%; height:80px; margin-top:30px">
+        <div>
+            <div>
+                <form method="get" asp-controller="Vouchers" asp-action="Index">
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        <select id="status" name="status" class="form-control" style="width: 200px; margin-right: 10px;">
+                            <option value="0" selected>Vouchers Của bạn</option>
+                            <option value="1">Vouchers chưa sử dụng</option>
+                            <option value="2">Vouchers đã sử dụng</option>
+                        </select>
+                        <input type="text" name="search" placeholder="Search..." style="width: 200px;margin-right: 10px;padding: 7px; flex-grow: 1;"></input>
+                        <button type="submit" style="width: 50px;margin-right: 10px;padding: 7px; flex-grow: 1;">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            @if (Model != null && Model.Any())
+            {
+
+                @if (ViewBag.noti == null)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mã voucher</th>
+                                <th>Description</th>
+                                <th>Expiry Date</th>
+                                <th>Mã voucher</th>
+                                <th>Description</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Status</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var voucher in Model)
+                            {
+                                <tr>
+                                    <td>@voucher.VoucherValue</td>
+                                    <td>@voucher.VoucherCode</td>
+                                    <td>@voucher.Title</td>
+                                    <td>@voucher.MinimumOrderValue</td>
+                                    <td>@voucher.MaximumOrderValue</td>
+                                    <td>@voucher.Quantity</td>
+                                    <td>@voucher.StartDate?.ToString("dd/MM/yyyy")</td>
+                                    <td>@voucher.EndDate?.ToString("dd/MM/yyyy")</td>
+                                    <td>@(voucher.Status == 1 ? "Chưa sử dụng" : "Đã sử dụng")</td>.
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%"> @ViewBag.noti </h3>
+                }
+            }
+            else
+            {
+                <h3 style="text-align:center; align-items:center; height:100vh; padding-top:30px">Bạn chưa có voucher nào cả </h3>
+
+            }
+        </div>
+    </div>
+
+</div>

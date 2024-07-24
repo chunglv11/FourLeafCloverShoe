@@ -4,6 +4,7 @@ using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
@@ -351,6 +352,16 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.ListMaterialsitems = ListMaterialsitems;
             return View();
         }
+        private async Task<bool> ProductExists(Guid productId, Guid sizeId, Guid colorId, Guid materialId)
+        {
+            var a = await _productDetailService.Gets();
+            return a.Any(pd =>
+                  pd.ProductId == productId &&
+                  pd.SizeId == sizeId &&
+                  pd.ColorId == colorId &&
+                  pd.MaterialId == materialId);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateProductDetail(ProductDetail productDetail)
@@ -389,6 +400,21 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.ListMaterialsitems = ListMaterialsitems;
             if (ModelState.IsValid)
             {
+                if (
+        productDetail.SizeId == Guid.Empty ||
+        productDetail.ColorId == Guid.Empty ||
+        productDetail.MaterialId == Guid.Empty || productDetail.PriceSale == null || productDetail.PriceSale < 0 || productDetail.Quantity <0 || productDetail.Quantity == null)
+                {
+                    ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường.");
+                    return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
+                }
+                bool exists = await ProductExists(productDetail.ProductId, productDetail.SizeId, productDetail.ColorId, productDetail.MaterialId);
+
+                if (exists)
+                {
+                    ModelState.AddModelError("", "Sản phẩm với kích cỡ, màu sắc và chất liệu này đã tồn tại.");
+                    return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
+                }
                 var product = await _productService.GetById(productDetail.ProductId);
                 var size = await _sizeService.GetById(productDetail.SizeId);
                 var colors = await _colorsService.GetById(productDetail.ColorId);
@@ -518,6 +544,18 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             return Regex.IsMatch(colorCode, pattern);
         }
 
+        public async Task<bool> ProductExists(Guid productId, Guid sizeId, Guid colorId, Guid materialId, Guid excludeId = default)
+        {
+            var a = await _productDetailService.Gets();
+            return a.Any(pd =>
+                    pd.ProductId == productId &&
+                    pd.SizeId == sizeId &&
+                    pd.ColorId == colorId &&
+                    pd.MaterialId == materialId &&
+                    pd.Id != excludeId);
+        }
+
+
         public async Task<IActionResult> EditProductDetail(Guid productDetailId)
         {
             var productDetail = await _productDetailService.GetById(productDetailId);
@@ -592,6 +630,22 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.ListSizeitems = ListSizeitems;
             if (ModelState.IsValid)
             {
+                bool exists = await ProductExists(productDetail.ProductId, productDetail.SizeId, productDetail.ColorId, productDetail.MaterialId, productDetail.Id);
+
+                if (exists)
+                {
+                    ModelState.AddModelError("", "Sản phẩm với kích cỡ, màu sắc và chất liệu này đã tồn tại.");
+                    return View(productDetail);
+                }
+
+                if (
+       productDetail.SizeId == Guid.Empty ||
+       productDetail.ColorId == Guid.Empty ||
+       productDetail.MaterialId == Guid.Empty || productDetail.PriceSale == null || productDetail.PriceSale < 0 || productDetail.Quantity < 0 || productDetail.Quantity == null)
+                {
+                    ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường.");
+                    return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
+                }
                 var product = await _productService.GetById(productDetail.ProductId);
                 var size = await _sizeService.GetById(productDetail.SizeId);
                 var material = await _materialsService.GetById(productDetail.MaterialId);

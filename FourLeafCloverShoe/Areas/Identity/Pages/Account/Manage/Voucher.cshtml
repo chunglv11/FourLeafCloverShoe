@@ -1,0 +1,93 @@
+﻿@page
+@model FourLeafCloverShoe.Areas.Identity.Pages.Account.Manage.VoucherModel
+@using FourLeafCloverShoe.Share.Models
+<div style="width:100%; height:100%; display:flex; text-align:center; justify-content:center; align-items:center; flex-wrap:wrap; padding:20px">
+    <div style="width:100%; height:80px; margin-top:30px">
+        <div>
+            <div>
+                <form method="post">
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        @if ((int)ViewData["type"] == 0)
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0" selected>Vouchers Của bạn</option>
+                                <option value="1">Vouchers chưa sử dụng</option>
+                                <option value="2">Vouchers đã sử dụng</option>
+                            </select>
+                        }else if ((int)ViewData["type"] == 1)
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0" >Vouchers Của bạn</option>
+                                <option value="1" selected>Vouchers chưa sử dụng</option>
+                                <option value="2">Vouchers đã sử dụng</option>
+                            </select>
+                        }else
+                        {
+                            <select id="status" name="type" class="form-control" style="width: 200px; margin-right: 10px;">
+                                <option value="0">Vouchers Của bạn</option>
+                                <option value="1" >Vouchers chưa sử dụng</option>
+                                <option value="2" selected>Vouchers đã sử dụng</option>
+                            </select>
+                        }
+                        @if (ViewData["search"] != null)
+                        {
+                            <input type="text" name="search" value="@ViewData["search"]" placeholder="Search..." style="width: 200px;margin-right: 10px;padding: 7px; flex-grow: 1;"></input>
+                        }
+                        else
+
+                        {
+                            <input type="text" name="search"  placeholder="Search..." style="width: 200px;margin-right: 10px;padding: 7px; flex-grow: 1;"></input>
+                        }
+                        <button type="submit" style="width: 30px;margin-right: 10px;padding: 7px; flex-grow: 1;">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            @if (TempData["Userlogin"] == null)
+            {
+                if (TempData["Novoucher"] != null)
+                {
+                    <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">@TempData["Novoucher"]</h3>
+                }
+                else
+                {
+                    @if (Model != null && Model.ListVoucher.Count() > 0)
+                    {
+
+                        <div class="voucher-container" style="display:flex">
+                            @foreach (var voucher in Model.ListVoucher)
+                            {
+                                <div class="voucher-card" style="background-color: #CCFFFF; width: calc(50% - 10px); margin-right: 20px; margin-top:30px; border-radius: 10px">
+                                    <div class="voucher-detail" style="padding: 5px;">
+                                        <strong>Mã voucher:</strong> @voucher.VoucherCode
+                                    </div>
+                                    <div class="voucher-detail" style="padding: 5px;">
+                                        <strong>Description:</strong> @voucher.Title
+                                    </div>
+                                    <div class="voucher-detail" style="padding: 5px;">
+                                        <strong>Expiry Date:</strong> @voucher.EndDate?.ToString("dd/MM/yyyy")
+                                    </div>
+                                    <div class="voucher-detail" style="padding: 5px;">
+                                        <strong>Status:</strong> @(voucher.Status == 1 ? "Chưa sử dụng" : "Đã sử dụng")
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">Bạn chưa có voucher nào cả</h3>
+                    }
+                }
+            }
+            else
+            {
+                <h3 style="text-align:center; align-items:center; height:100vh; padding-top:5%">@TempData["Userlogin"]</h3>
+            }
+
+        </div>
+    </div>
+
+</div>
