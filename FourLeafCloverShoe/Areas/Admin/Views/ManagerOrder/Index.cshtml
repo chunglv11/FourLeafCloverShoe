@@ -100,7 +100,7 @@
                             <td>@item.CreateDate</td>
                             <td>
                                
-                                    @item.RecipientName
+                                  @*   @item.RecipientName *@
                        
                             </td>
                             <td>
@@ -121,8 +121,6 @@
                                         <span>Không tìm thấy nhân viên</span>
                                     }
                                 }
-
-
                                
                             </td>
                             @if (item.OrderStatus == -1)
@@ -197,9 +195,19 @@
                         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
                             <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Tiếp</a>
                         </li>
-                        <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
-                        </li>
+                        @if(Model.PageCount >0 )
+                        {
+                            <li class="page-item @(Model.IsLastPage ? "disabled" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+                                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount,status = ViewBag.SelectedStatuses,searchText = ViewBag.searchText,startDate = ViewBag.startDate,endDate = ViewBag.endDate })">Cuối</a>
+                            </li>
+                        }
+                        
                     </ul>
                 </nav>
             </div>

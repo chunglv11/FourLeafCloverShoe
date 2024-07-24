@@ -13,9 +13,11 @@ namespace FourLeafCloverShoe.Share.ViewModels
         public int? Quantity { get; set; }
         public decimal? Price { get; set; }
         public string SizeName { get; set; }
+        public string ColorName { get; set; }
         public string ImageUrl { get; set; }
         public decimal? Total { get; set; }
         public bool? Status { get; set; }
+        public int StatusPro { get; set; }
 
     }
 }

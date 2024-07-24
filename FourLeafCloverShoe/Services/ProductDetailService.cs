@@ -1,6 +1,7 @@
 ﻿using FourLeafCloverShoe.Data;
 using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace FourLeafCloverShoe.Services
@@ -117,6 +118,28 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<ProductDeailViewModel>> GetProductDetails()
+        {
+            var lst = await (from a in _myDbContext.ProductDetails
+                             join b in _myDbContext.Products on a.ProductId equals b.Id
+                             join c in _myDbContext.ProductImages on a.ProductId equals c.ProductId
+                             join d in _myDbContext.Sizes on a.SizeId equals d.Id
+                             join e in _myDbContext.Colors on a.ColorId equals e.Id
+                             select new ProductDeailViewModel()
+                             {
+                                 Id = a.Id,
+                                 ProductName = b.ProductName,
+                                 Quantity = a.Quantity,
+                                 Price = a.PriceSale,
+                                 SizeName = d.Name,
+                                 ColorName = e.ColorName,
+                                 ImageUrl = c.ImageUrl,
+                                 StatusPro = (int)a.Status,
+                             }).ToListAsync();
+            return lst;
+
+        }
+
         public async Task<List<ProductDetail>> Gets()
         {
             try
@@ -125,6 +148,7 @@ namespace FourLeafCloverShoe.Services
                     .Include(c => c.Products)
                     .ThenInclude(c => c.ProductImages)
                     .Include(c => c.Size)
+                    .Include(c=>c.Colors)
                     .ToListAsync();
                 if (obj != null)
                 {
