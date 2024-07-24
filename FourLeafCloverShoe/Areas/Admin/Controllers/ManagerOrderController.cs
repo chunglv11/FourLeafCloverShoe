@@ -1,6 +1,7 @@
 ﻿using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Services;
 using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -82,15 +83,22 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 5)
+        public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 1)
         {
             var lstOrderIterm = await _iorderItemService.GetByIdOrder2(orderId);
             var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1 && c.Quantity > 0).ToList();        
             if (!string.IsNullOrEmpty(keyWord))
             {
-                lstProductDetail = lstProductDetail.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.Trim().ToLower().Contains(keyWord.Trim().ToLower())).ToList();
+                lstProductDetail = lstProductDetail.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.ToLower().Contains(keyWord.ToLower())).ToList();
             }
-            ViewBag.lstProduct = lstProductDetail.ToPagedList(pageNumber, pageSize);
+            if (lstProductDetail.Any())
+            {
+                ViewBag.lstProduct = lstProductDetail.ToPagedList(pageNumber, pageSize);
+            }
+            else
+            {
+                ViewBag.lstProduct = new List<ProductDeailViewModel>().ToPagedList(pageNumber, pageSize);
+            }
             ViewBag.Keyword = keyWord;
             return View(lstOrderIterm);
         }
@@ -351,7 +359,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 var productDetail = await _productDetailService.GetById(productDetailId);
                 var orderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
-                if (orderItem.Quantity > productDetail.Quantity)
+                if (productDetail.Quantity <= 0)
                 {
                     return Json(new { message = "Số lượng vượt quá sản phẩm trong kho", success = false });
                 }

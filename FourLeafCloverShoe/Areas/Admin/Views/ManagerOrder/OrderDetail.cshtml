@@ -124,10 +124,11 @@
                         <div class="modal-body">
                             <div class="row mb-3">
                                 <form asp-action="OrderDetail" method="get">
+                                    <input hidden name="orderId" value="@Model.FirstOrDefault().OrderId" />
                                     <div class="form-actions no-color">
                                         <div class="row">
                                             <div class="col-6">
-                                                <input class="form-control" style="width:100%" type="text" value="@ViewBag.Keyword" id="keyWord" name="keyWord" placeholder="Nhập tên sản phẩm" />
+                                                <input class="form-control" style="width:100%" type="text" id="keyWord" name="keyWord" placeholder="Nhập tên sản phẩm" />
                                             </div>
                                             <div class="col-6">
                                                 <input type="submit" value="Tìm Kiếm" class="btn btn-info" />
@@ -183,7 +184,7 @@
                                             @if (lstSpCT.HasPreviousPage)
                                             {
                                                 <li class="page-item">
-                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber - 1)">Trước</a>
+                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber - 1)" asp-route-keyWord="@ViewBag.Keyword">Trước</a>
                                                 </li>
                                             }
 
@@ -196,7 +197,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <a class="page-link" asp-action="OrderDetail" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-pageNumber="@i">@i</a>
+                                                        <a class="page-link" asp-action="OrderDetail" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-pageNumber="@i" asp-route-keyWord="@ViewBag.Keyword">@i</a>
                                                     }
                                                 </li>
                                             }
@@ -204,7 +205,7 @@
                                             @if (lstSpCT.HasNextPage)
                                             {
                                                 <li class="page-item">
-                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber + 1)" asp-route-orderId="@Model.FirstOrDefault().Orders.Id">Sau</a>
+                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber + 1)" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-keyWord="@ViewBag.Keyword">Sau</a>
                                                 </li>
                                             }
                                         </ul>
