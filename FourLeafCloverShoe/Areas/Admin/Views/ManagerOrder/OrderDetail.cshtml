@@ -181,13 +181,6 @@
                                 {
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center">
-                                            @if (lstSpCT.HasPreviousPage)
-                                            {
-                                                <li class="page-item">
-                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber - 1)" asp-route-keyWord="@ViewBag.Keyword">Trước</a>
-                                                </li>
-                                            }
-
                                             @for (int i = 1; i <= lstSpCT.PageCount; i++)
                                             {
                                                 <li class="page-item @(i == lstSpCT.PageNumber ? "active" : "")">
@@ -197,15 +190,8 @@
                                                     }
                                                     else
                                                     {
-                                                        <a class="page-link" asp-action="OrderDetail" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-pageNumber="@i" asp-route-keyWord="@ViewBag.Keyword">@i</a>
+                                                        <a class="page-link" asp-action="OrderDetail" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-pageNumber="@i" asp-route-keyWord="@ViewBag.Keyword" onclick="setModalStatus()">@i</a>
                                                     }
-                                                </li>
-                                            }
-
-                                            @if (lstSpCT.HasNextPage)
-                                            {
-                                                <li class="page-item">
-                                                    <a class="page-link" asp-action="OrderDetail" asp-route-pageNumber="@(lstSpCT.PageNumber + 1)" asp-route-orderId="@Model.FirstOrDefault().Orders.Id" asp-route-keyWord="@ViewBag.Keyword">Sau</a>
                                                 </li>
                                             }
                                         </ul>
@@ -406,7 +392,7 @@
         <button type="button" class="btn btn-success">Cập nhật đơn hàng</button>
         </div> *@
         <div class="d-flex p-2">
-            <button type="button" class="btn btn-warning">Cập nhật đơn hàng</button>
+            <button type="button" class="btn btn-warning">Hoàn trả</button>
         </div>
         <div class="d-flex p-2">
             <button type="button" class="btn btn-dark">Xuất PDF</button>
@@ -419,6 +405,16 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script type="text/javascript">
+    function setModalStatus() {
+        localStorage.setItem('modalOpen', 'true');
+    }
+
+    function checkModalStatus() {
+        if (localStorage.getItem('modalOpen') === 'true') {
+            $('#exampleModal').modal('show');
+            localStorage.removeItem('modalOpen');
+        }
+    }
     function giam(productDetailId, orderId) {
         $.ajax({
             url: '@Url.Action("GiamSL", "ManagerOrder")',
@@ -515,6 +511,9 @@
                 }, 1000);
             }
         });
+    });
+    $(document).ready(function () {
+        checkModalStatus();
     });
 </script>
 @* <script src="~/fileadmin/assets/js/loadProductDetail.js"></script> *@

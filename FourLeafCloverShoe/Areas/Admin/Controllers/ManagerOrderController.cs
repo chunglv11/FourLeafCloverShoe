@@ -239,7 +239,9 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         {
             var order = await _iorderService.GetById(orderId);
             var productDetail = await _productDetailService.GetById(productDetailId);
-            var OrderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
+            //var OrderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
+            //lỗ hổng :(
+            var OrderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.OrderId == orderId);
             if (order != null && productDetail != null)
             {
 
