@@ -123,7 +123,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row mb-3">
-                                <form asp-action="OrderDetail" method="get">
+                                <form asp-action="OrderDetail" method="get" onclick="setModalStatus()">
                                     <input hidden name="orderId" value="@Model.FirstOrDefault().OrderId" />
                                     <div class="form-actions no-color">
                                         <div class="row">

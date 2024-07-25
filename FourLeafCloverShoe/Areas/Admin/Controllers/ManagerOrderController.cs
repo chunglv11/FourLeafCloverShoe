@@ -83,7 +83,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 1)
+        public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 5)
         {
             var lstOrderIterm = await _iorderItemService.GetByIdOrder2(orderId);
             var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1 && c.Quantity > 0).ToList();        
