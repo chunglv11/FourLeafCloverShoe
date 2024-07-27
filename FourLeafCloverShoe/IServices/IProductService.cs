@@ -1,4 +1,5 @@
 ﻿using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 
 namespace FourLeafCloverShoe.IServices
 {
@@ -12,5 +13,7 @@ namespace FourLeafCloverShoe.IServices
         public Task<List<Product>> Gets();
         public Task UpdateStatusQuantity();
         public Task<bool> UpdateSLTheoSPCT();
+        public HomeViewModel GetBestSellingProducts(int count);
+
     }
 }
