@@ -1,6 +1,7 @@
 ﻿using FourLeafCloverShoe.Data;
 using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
@@ -228,5 +229,36 @@ namespace FourLeafCloverShoe.Services
                 // Xử lý exception tại đây (log, throw, ...)
             }
         }
+        public HomeViewModel GetBestSellingProducts(int count)
+        {
+            var bestSellingProductIds = _myDbContext.OrderItems
+        .Join(_myDbContext.ProductDetails,
+              oi => oi.ProductDetailId,
+              pd => pd.Id,
+              (oi, pd) => new { oi, pd })
+        .GroupBy(op => op.pd.ProductId)
+        .Select(g => new
+        {
+            ProductId = g.Key,
+            TotalQuantitySold = g.Sum(op => op.oi.Quantity)
+        })
+        .OrderByDescending(x => x.TotalQuantitySold)
+        .Take(count)
+        .Select(x => x.ProductId)
+        .ToList();
+
+
+            // Lấy các sản phẩm dựa trên danh sách ID đã sắp xếp
+            var products = _myDbContext.Products
+                .Where(p => bestSellingProductIds.Contains(p.Id))
+                .ToList();
+
+            return new HomeViewModel
+            {
+                Products = products,
+                TotalProducts = products.Count
+            };
+        }
+
     }
 }

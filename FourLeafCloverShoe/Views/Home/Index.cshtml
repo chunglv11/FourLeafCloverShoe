@@ -1,7 +1,16 @@
-﻿@{
+﻿@model X.PagedList.IPagedList<FourLeafCloverShoe.Share.Models.Product>;
+@using FourLeafCloverShoe.Share.Models
+@using X.PagedList.Mvc.Core;
+
+@{
     ViewData["Title"] = "Home Page";
+    var bestSellingProducts = ViewBag.TopSellingProducts as IEnumerable<Product>;
+    var bestSellingProducts1 = ViewBag.TopSellingProducts as IEnumerable<Product>;
+
 }
 <style>
+  
+
     .outerHeightHeader {
         position: absolute;
         z-index: 999;
@@ -30,363 +39,95 @@
         </div>
     </div>
 </section>
-<section class="home-slider d-md-none">
-    <div class="home-slider-inner">
-        <div class="owl-carousel owl-theme owl-carousel" id="home-slider-owl-mb">
-            <div class="home-slider-item">
-                <a href="#" class="home-slider-item-ratio">
-                    <img src="~/fileuser/img/banner3.jpg" loading="lazy" alt="Izi">
-                </a>
-            </div>
-
-        </div>
-    </div>
-</section>
 
 
+ @if (bestSellingProducts == null || !bestSellingProducts.Any())
+    {
+<p>No products available.</p>
+    }
+    else
+    {
+@functions {
+    private decimal? GetMinPrice(IEnumerable<dynamic> productDetails)
+    {
+        return productDetails.Min(c => (decimal?)c.PriceSale);
+    }
 
-<section class="left-banner-grid">
-    <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/giay-dep-ban-chay.html">S&#x1EA3;n Ph&#x1EA9;m B&#xE1;n Ch&#x1EA1;y</a></h2>
-            <div class="left-banner-grid-inner">
-                <div class="row">
-                    <div class="col-12 col-lg-6 mb-32px">
-                        <a href="collections/giay-dep-ban-chay.html" class="left-banner-grid-image">
-                            <img src="~/fileuser/img/banner1.jpg" loading="lazy" alt="">
-                        </a>
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <div class="row">
-                            <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-6 mb-32px">
-                                <div class="product-grid-item">
-                                    <div class="product-grid-thumb">
-                                        <a href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem" class="product-grid-image pcl-5-id-3045">
-                                            <img class="mcl-5-id-3045" src="~/fileuser/img/sanpham.jpg?">
-                                        </a>
-                                    </div>
+    private decimal? GetMaxPrice(IEnumerable<dynamic> productDetails)
+    {
+        return productDetails.Max(c => (decimal?)c.PriceSale);
+    }
+}
 
-                                    <a class="product-grid-info pcl-5-id-3045" href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem">
-                                        <div class="product-grid-info-top">
-                                            <p class="product-grid-title">
-                                                Gi&#xE0;y Sandal N&#x1EEF; MWC - 2934 Sandal &#x110;&#x1EBF; B&#xE1;nh M&#xEC; Cao 5cm Si&#xEA;u Hack D&#xE1;ng  Ph&#x1ED1;i Kh&#xF3;a V&#x1EDB;i 2 Quai Ngang Nh&#xFA;n Ti&#x1EC3;u Th&#x1B0; Sang Ch&#x1EA3;nh
-                                            </p>
-                                            <p class="product-grid-price">
-                                                <span class="product-grid-price-new">
-                                                    <span class="product-grid-price-new-text">
-                                                        270,000&#x111;
-                                                    </span>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-6 mb-32px">
-                                <div class="product-grid-item">
-                                    <div class="product-grid-thumb">
-                                        <a href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem" class="product-grid-image pcl-5-id-3045">
-                                            <img class="mcl-5-id-3045" src="~/fileuser/img/sanpham.jpg?">
-                                        </a>
-                                    </div>
-
-                                    <a class="product-grid-info pcl-5-id-3045" href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem">
-                                        <div class="product-grid-info-top">
-                                            <p class="product-grid-title">
-                                                Gi&#xE0;y Sandal N&#x1EEF; MWC - 2934 Sandal &#x110;&#x1EBF; B&#xE1;nh M&#xEC; Cao 5cm Si&#xEA;u Hack D&#xE1;ng  Ph&#x1ED1;i Kh&#xF3;a V&#x1EDB;i 2 Quai Ngang Nh&#xFA;n Ti&#x1EC3;u Th&#x1B0; Sang Ch&#x1EA3;nh
-                                            </p>
-                                            <p class="product-grid-price">
-                                                <span class="product-grid-price-new">
-                                                    <span class="product-grid-price-new-text">
-                                                        270,000&#x111;
-                                                    </span>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div><div class="col-12 col-xs-custom-6 col-sm-6 col-lg-6 mb-32px">
-                                <div class="product-grid-item">
-                                    <div class="product-grid-thumb">
-                                        <a href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem" class="product-grid-image pcl-5-id-3045">
-                                            <img class="mcl-5-id-3045" src="~/fileuser/img/sanpham.jpg?">
-                                        </a>
-                                    </div>
-
-                                    <a class="product-grid-info pcl-5-id-3045" href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem">
-                                        <div class="product-grid-info-top">
-                                            <p class="product-grid-title">
-                                                Gi&#xE0;y Sandal N&#x1EEF; MWC - 2934 Sandal &#x110;&#x1EBF; B&#xE1;nh M&#xEC; Cao 5cm Si&#xEA;u Hack D&#xE1;ng  Ph&#x1ED1;i Kh&#xF3;a V&#x1EDB;i 2 Quai Ngang Nh&#xFA;n Ti&#x1EC3;u Th&#x1B0; Sang Ch&#x1EA3;nh
-                                            </p>
-                                            <p class="product-grid-price">
-                                                <span class="product-grid-price-new">
-                                                    <span class="product-grid-price-new-text">
-                                                        270,000&#x111;
-                                                    </span>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div><div class="col-12 col-xs-custom-6 col-sm-6 col-lg-6 mb-32px">
-                                <div class="product-grid-item">
-                                    <div class="product-grid-thumb">
-                                        <a href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem" class="product-grid-image pcl-5-id-3045">
-                                            <img class="mcl-5-id-3045" src="~/fileuser/img/sanpham.jpg?">
-                                        </a>
-                                    </div>
-
-                                    <a class="product-grid-info pcl-5-id-3045" href="products/giay-sandal-nu-mwc---2934-sandal-de-banh-mi-cao-5cm-sieu-hack-dang-phoi-khoa-voi-2-quai-ngang-nhun-tieu-thu-sang-chanh3396.html?c=kem">
-                                        <div class="product-grid-info-top">
-                                            <p class="product-grid-title">
-                                                Gi&#xE0;y Sandal N&#x1EEF; MWC - 2934 Sandal &#x110;&#x1EBF; B&#xE1;nh M&#xEC; Cao 5cm Si&#xEA;u Hack D&#xE1;ng  Ph&#x1ED1;i Kh&#xF3;a V&#x1EDB;i 2 Quai Ngang Nh&#xFA;n Ti&#x1EC3;u Th&#x1B0; Sang Ch&#x1EA3;nh
-                                            </p>
-                                            <p class="product-grid-price">
-                                                <span class="product-grid-price-new">
-                                                    <span class="product-grid-price-new-text">
-                                                        270,000&#x111;
-                                                    </span>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section-view-more">
-                <a href="collections/giay-dep-ban-chay.html" class="section-view-more-link">Xem tất cả</a>
-            </div>
-        </div>
-        <div class="hr"></div>
-    </div>
-</section>
 <section class="home-block-section">
-    <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/giay-cao-got.html">Gi&#xE0;y Cao G&#xF3;t N&#x1EEF;</a></h2>
-            <div class="home-block-section-inner">
-                <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
+        <div class="container-fluid">
+            <div class="heading-title text-center">
+                <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                    <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size: 20px; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                        <span>SẢN PHẨM BÁN CHẠY</span>
+                    </a>
                 </div>
-            </div>
-            <div class="section-view-more">
-                <a href="collections/giay-cao-got.html" class="section-view-more-link">Xem tất cả</a>
-            </div>
-        </div>
-        <div class="hr"></div>
 
-    </div>
-</section>
-<section class="home-block-section">
-    <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/balo---tui.html">Balo Th&#x1EDD;i Trang</a></h2>
             <div class="home-block-section-inner">
-                <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                         @if (bestSellingProducts != null)
+                        {
+                        @foreach (var product in bestSellingProducts)
+                        {
+                            <div class="swiper-slide">
+                                <div class="product-grid-item">
+                                    <div class="product-grid-thumb">
+                                        <a href="@Url.Action("GetById", "Product", new { id = product.Id })" class="product-grid-image pcl-6-id-3571">
+                                            <img class="mcl-6-id-3571" src="@product.ProductImages.FirstOrDefault()?.ImageUrl" alt="@product.ProductName">
+                                        </a>
+                                    </div>
 
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
+                                    <a class="product-grid-info pcl-6-id-3571" href="@Url.Action("GetById", "Product", new { id = product.Id })">
+                                        <div class="product-grid-info-top">
+                                            <p class="product-grid-title" style="font-weight: bold;">
+                                                @product.ProductName
+                                            </p>
+                                            <p class="product-grid-price" style="font-size: 0.8em; font-style: italic;">
+                                                <span class="product-grid-price-new">
+                                                    <span class="product-grid-price-new-text">
+                                                        @{
+                                                            var productDetails = (IEnumerable<dynamic>)product.ProductDetails;
 
-                                        </span>
-                                    </p>
+                                                            decimal? minPrice = GetMinPrice(productDetails);
+                                                            decimal? maxPrice = GetMaxPrice(productDetails);
+                                                        }
+
+                                                        @if (minPrice.HasValue && maxPrice.HasValue)
+                                                        {
+                                                            if (minPrice == maxPrice)
+                                                            {
+                                                                <span>@minPrice.Value.ToString("N0") đ</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>@minPrice.Value.ToString("N0") đ - @maxPrice.Value.ToString("N0") đ</span>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Không có giá</span>
+                                                        }
+                                                    </span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
                             </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
+                        }
+                        }
                     </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Add Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             </div>
             <div class="section-view-more">
@@ -394,356 +135,80 @@
             </div>
         </div>
         <div class="hr"></div>
-
     </div>
 </section>
+}
+
 <section class="home-block-section">
     <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/dep-nu.html">D&#xC9;P V&#xC0; SANDAL N&#x1EEE;</a></h2>
+        <div class="heading-title text-center">
+            <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size:20px; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                    <span>Sản phẩm của chúng tôi</span>
+                </a>
+            </div>
+
             <div class="home-block-section-inner">
+
                 <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
+                            <div class="product-grid-item">
+                                <div class="product-grid-thumb">
+                                    <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
+                                        <a asp-action="ProductDetail" asp-route-productId="@item.Id" class="product-grid-image pl-id-4198" title="@item.ProductName">
+                                            <img class="mcl-id-4198" src="@item.ProductImages.First().ImageUrl" alt="@item.ProductName">
+                                        </a>
+                                    </a>
+                                </div>
+
+                                <a class="product-grid-info pcl-6-id-3571" href="#">
+                                    <div class="product-grid-info-top">
+                                        <p class="product-grid-title">
+                                            @item.ProductName
+                                        </p>
+                                        <p class="product-grid-price">
+                                            <span class="product-grid-price-new">
+                                                <span class="product-grid-price-new-text">
+                                                    @{
+                                                        int count = item.ProductDetails.Count();
+                                                        decimal? minprice = 0;
+                                                        decimal? maxprice = 0;
+                                                        if (count != 0)
+                                                        {
+                                                            minprice = item.ProductDetails.Min(c => c.PriceSale);
+                                                            maxprice = item.ProductDetails.Max(c => c.PriceSale);
+
+                                                        }
+                                                    }
+
+                                                    @if (minprice == maxprice)
+                                                    {
+                                                        <span>@minprice?.ToString("N0") đ</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@minprice?.ToString("N0") đ - <span>@maxprice?.ToString("N0") đ</span></span>
+                                                    }
+                                                </span>
+
+                                            </span>
+                                        </p>
+                                    </div>
                                 </a>
                             </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
                         </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
+                    }
 
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
 
                 </div>
             </div>
             <div class="section-view-more">
-                <a href="collections/dep-nu.html" class="section-view-more-link">Xem tất cả</a>
+                <a href="/products/" class="section-view-more-link">Xem tất cả</a>
             </div>
         </div>
         <div class="hr"></div>
-
-    </div>
-</section>
-<section class="home-block-section">
-    <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/sandal-dep.html">SANDAL V&#xC0; D&#xC9;P NAM</a></h2>
-            <div class="home-block-section-inner">
-                <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="section-view-more">
-                <a href="collections/sandal-dep.html" class="section-view-more-link">Xem tất cả</a>
-            </div>
-        </div>
-        <div class="hr"></div>
-
-    </div>
-</section>
-<section class="home-block-section">
-    <div class="container-fluid">
-        <div class="section-padding section-border-bottom">
-            <h2 class="section-title text-center"><a href="collections/giay-nam.html">GI&#xC0;Y NAM TH&#x1EDC;I TRANG</a></h2>
-            <div class="home-block-section-inner">
-                <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="section-view-more">
-                <a href="collections/giay-nam.html" class="section-view-more-link">Xem tất cả</a>
-            </div>
-        </div>
 
     </div>
 </section>
@@ -751,120 +216,119 @@
 <section class="home-block-section">
     <div class="container-fluid">
         <div class="heading-title text-center">
-            <div class="subtitle">
-                <a href="blogs.html"><span>Thời Trang MWC</span></a>
+            <div class="subtitle" style="text-align: center; margin: 20px 0;">
+                <a href="blogs.html" style="font-family: 'Wedges', sans-serif; font-size: 1.5rem; color: #333; text-decoration: none; padding: 10px 20px; border: 2px solid #000; border-radius: 5px; transition: background-color 0.3s, color 0.3s;">
+                    <span>Bài Viết Nổi Bật</span>
+                </a>
             </div>
 
         </div>
         <div class="section-padding section-border-bottom">
             <div class="home-block-section-inner post">
-                <div class="row">
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach (var post in ViewBag.LatestPosts)
+                        {
+                                <div class="swiper-slide">
+                                    <div class="product-grid-item">
+                                        <div class="product-grid-thumb">
+                                            <a href="@Url.Action("show", "Post", new { id = post.Id })" class="product-grid-image pcl-6-id-3571">
+                                                <img class="mcl-6-id-3571" src="@post.TittleImage" alt="@post.Tittle">
+                                            </a>
+                                        </div>
+                                        <a class="product-grid-info pcl-6-id-3571" href="@Url.Action("show", "Post", new { id = post.Id })">
+                                            <div class="product-grid-info-top">
+                                                <p class="product-grid-title" style=" font-weight: bold;font-size: 20px;">
+                                                @post.Tittle
+                                                </p>
+                                                <p class="product-grid-price">
+                                                    <span class="product-grid-price-new">
+                                                        <span class="product-grid-price-new-text" style="font-size: 0.8em; font-style: italic;">
+                                                        @post.CreateAt.ToString("MMMM dd, yyyy")
+                                                        </span>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </a>
-                        </div>
+                        }
                     </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xs-custom-6 col-sm-6 col-lg-3 mb-32px">
-                        <div class="product-grid-item">
-                            <div class="product-grid-thumb">
-                                <a href="products/giay-cao-got-mwc-nucg--4393bff6.html?c=den" class="product-grid-image pcl-6-id-3571">
-                                    <img class="mcl-6-id-3571" src="~/fileuser/img/sanpham.jpg">
-                                </a>
-                            </div>
-
-                            <a class="product-grid-info pcl-6-id-3571" href="#">
-                                <div class="product-grid-info-top">
-                                    <p class="product-grid-title">
-                                        Gi&#xE0;y cao g&#xF3;t MWC NUCG- 4393 Cao G&#xF3;t N&#x1EEF; Da &#xC1;nh Kim B&#xED;t M&#x169;i Ph&#x1ED1;i Quai H&#x1EAD;u G&#xF3;t Nh&#x1ECD;n 7cm Thanh L&#x1ECB;ch,Th&#x1EDD;i Trang
-                                    </p>
-                                    <p class="product-grid-price">
-                                        <span class="product-grid-price-new">
-                                            <span class="product-grid-price-new-text">
-                                                195,000&#x111;
-                                            </span>
-
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
+                    <!-- Add Pagination -->
+                    <div class="swiper-pagination"></div>
+                    <!-- Add Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             </div>
-            <div class="section-view-more">
-                <a href="blogs.html" class="section-view-more-link">Xem tất cả</a>
+            <div class="section-view-more text-center mt-4">
+                <a href="/post/index/" class="section-view-more-link">Xem tất cả</a>
             </div>
         </div>
     </div>
 </section>
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Tạo Swiper carousel
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 4,
+            spaceBetween: 30,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                },
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
+        // Lấy tất cả các tiêu đề cần áp dụng hiệu ứng
+        var sectionTitles = document.querySelectorAll('.section-title');
+
+        sectionTitles.forEach(function (title) {
+            var link = title.querySelector('a');
+            var pseudoElement = title.querySelector('span');
+
+            // Thêm sự kiện hover cho liên kết
+            link.addEventListener('mouseover', function () {
+                link.style.color = '#007bff';
+                link.style.borderColor = '#007bff';
+            });
+
+            link.addEventListener('mouseout', function () {
+                link.style.color = 'inherit';
+                link.style.borderColor = 'transparent';
+            });
+
+            // Thêm sự kiện hover cho pseudo element
+            if (pseudoElement) {
+                link.addEventListener('mouseover', function () {
+                    pseudoElement.style.backgroundColor = '#007bff';
+                });
+
+                link.addEventListener('mouseout', function () {
+                    pseudoElement.style.backgroundColor = '#007bff';
+                });
+            }
+        });
+    });
+</script>
+

@@ -86,6 +86,13 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
+        public async Task<List<Post>> GetLatestPosts(int count)
+        {
+            return await _myDbContext.Posts
+                .OrderByDescending(p => p.CreateAt)
+                .Take(count)
+                .ToListAsync();
+        }
         public async Task<List<Post>> Gets()
         {
             try
