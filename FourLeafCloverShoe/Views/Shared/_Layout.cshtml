@@ -83,6 +83,7 @@
 
     <link rel="icon" href="~/fileuser/Assets/App/images
 /favicon.png" />
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
 @*    <script src="~/lib/signalr/dist/browser/signalr.min.js</script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
@@ -105,7 +106,6 @@
     <script src="~/fileuser/Assets/Lib/fancybox/fancybox.umd.js"></script>
     <script src="~/fileuser/Assets/Lib/jquery.number.js"></script>
     <script src="~/fileuser/Assets/App/js/main.js" type="text/javascript"></script>
-
 
  
     <script src="~/fileuser/lib/sweet-alert/sweetalert2%4011.js"></script>
@@ -138,230 +138,53 @@
                                 <nav class="main-nav text-center">
                                     <ul class="clearfix">
                                         <li class="home-main-menu   ">
-                                            <a data-eventlabel="GI&#xC0;Y N&#x1EEE;" class="home-main-menu"
-                                               href="/products/" title="GI&#xC0;Y N&#x1EEE;">
-                                                GI&#xC0;Y N&#x1EEE;
-                                            </a>
-                                            <ul class="sub_menu megaMenu">
-                                                <li>
-                                                    <a data-eventlabel=" GI&#xC0;Y CAO G&#xD3;T"
-                                                       href="collections/giay-cao-got.html"
-                                                       title=" GI&#xC0;Y CAO G&#xD3;T">
-                                                        GI&#xC0;Y CAO G&#xD3;T
-                                                    </a>
-                                                    <ul>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="Gi&#xE0;y Cao G&#xF3;t B&#xED;t M&#x169;i"
-                                                               class="link-vl-2"
-                                                               href="collections/giay-cao-got-1.html">
-                                                                Gi&#xE0;y Cao
-                                                                G&#xF3;t B&#xED;t M&#x169;i
-                                                            </a>
-                                                        </li>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="Gi&#xE0;y Sandal Cao G&#xF3;t "
-                                                               class="link-vl-2"
-                                                               href="collections/giay-cao-got-2.html">
-                                                                Gi&#xE0;y Sandal
-                                                                Cao G&#xF3;t
-                                                            </a>
-                                                        </li>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="D&#xE9;p cao g&#xF3;t" class="link-vl-2"
-                                                               href="collections/dep-cao-got-nu.html">
-                                                                D&#xE9;p cao
-                                                                g&#xF3;t
-                                                            </a>
-                                                        </li>
-
-                                                    </ul>
-
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="GI&#xC0;Y TH&#x1EC2; THAO "
-                                                       href="collections/giay-thoi-trang.html"
-                                                       title="GI&#xC0;Y TH&#x1EC2; THAO ">
-                                                        GI&#xC0;Y TH&#x1EC2; THAO
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="SANDAL N&#x1EEE;"
-                                                       href="collections/sandal-nu.html" title="SANDAL N&#x1EEE;">
-                                                        SANDAL N&#x1EEE;
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="D&#xC9;P S&#x1EE4;C"
-                                                       href="collections/dep-suc.html" title="D&#xC9;P S&#x1EE4;C">
-                                                        D&#xC9;P S&#x1EE4;C
-                                                    </a>
-                                                    <ul>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="S&#x1EE4;C CAO G&#xD3;T"
-                                                               class="link-vl-2"
-                                                               href="collections/suc-cao-got.html">
-                                                                S&#x1EE4;C CAO
-                                                                G&#xD3;T
-                                                            </a>
-                                                        </li>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="S&#x1EE4;C B&#x1EC6;T" class="link-vl-2"
-                                                               href="collections/suc-bet.html">
-                                                                S&#x1EE4;C
-                                                                B&#x1EC6;T
-                                                            </a>
-                                                        </li>
-
-                                                    </ul>
-
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel=" GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I"
-                                                       href="collections/giay-bup-be-moi.html"
-                                                       title=" GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I">
-                                                        GI&#xC0;Y B&#xDA;P B&#xCA; &amp; MO&#x323;I
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="OXFORD &amp; BOOT"
-                                                       href="collections/oxford-boot.html" title="OXFORD &amp; BOOT">
-                                                        OXFORD &amp; BOOT
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="D&#xC9;P N&#x1EEE;"
-                                                       href="collections/dep-nu.html" title="D&#xC9;P N&#x1EEE;">
-                                                        D&#xC9;P N&#x1EEE;
-                                                    </a>
-                                                    <ul>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="D&#xC9;P B&#x1EC6;T" class="link-vl-2"
-                                                               href="collections/dep-bet.html">D&#xC9;P B&#x1EC6;T</a>
-                                                        </li>
-                                                        <li class="text-truncate">
-                                                            <a data-eventlabel="D&#xC9;P &#x110;&#x1EBE; CAO"
-                                                               class="link-vl-2"
-                                                               href="collections/giay-dep-nu-ban-chay.html">
-                                                                D&#xC9;P
-                                                                &#x110;&#x1EBE; CAO
-                                                            </a>
-                                                        </li>
-
-                                                    </ul>
-
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                        <li class="home-main-menu megaMenuHover  ">
-                                            <a data-eventlabel="GI&#xC0;Y NAM" class="home-main-menu"
-                                               href="collections/giay-nam.html" title="GI&#xC0;Y NAM">
-                                                GI&#xC0;Y NAM
-                                            </a>
-                                            <ul class="sub_menu megaMenu">
-                                                <li>
-                                                    <a data-eventlabel="GI&#xC0;Y TH&#x1EC2; THAO NAM"
-                                                       href="collections/giay-the-thao-nam.html"
-                                                       title="GI&#xC0;Y TH&#x1EC2; THAO NAM">
-                                                        GI&#xC0;Y TH&#x1EC2; THAO NAM
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel=" SANDAL NAM" href="collections/sandal-nam.html"
-                                                       title=" SANDAL NAM">
-                                                        SANDAL NAM
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="D&#xC9;P NAM" href="collections/sandal-dep.html"
-                                                       title="D&#xC9;P NAM">
-                                                        D&#xC9;P NAM
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="GI&#xC0;Y T&#xC2;Y &amp; SLIP ON"
-                                                       href="collections/giay-tay-slip-on.html"
-                                                       title="GI&#xC0;Y T&#xC2;Y &amp; SLIP ON">
-                                                        GI&#xC0;Y T&#xC2;Y &amp; SLIP ON
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel=" BOOT NAM &amp; OXFORD"
-                                                       href="collections/boot.html" title=" BOOT NAM &amp; OXFORD">
-                                                        BOOT NAM &amp; OXFORD
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                        <li class=" ">
-                                            <a data-eventlabel="GI&#xC0;Y C&#x1EB6;P" class="home-main-menu"
-                                               href="collections/giay-cap.html" title="GI&#xC0;Y C&#x1EB6;P">
-                                                GI&#xC0;Y C&#x1EB6;P
+                                            <a data-eventlabel="TRANG CHỦ" class="home-main-menu"
+                                               href="/home/" title="TRANG CHỦ">
+                                               TRANG CHỦ
                                             </a>
                                         </li>
                                         <li class="home-main-menu megaMenuHover  ">
-                                            <a data-eventlabel="BALO - T&#xDA;I" class="home-main-menu"
-                                               href="collections/balo---tui.html" title="BALO - T&#xDA;I">
-                                                BALO - T&#xDA;I
+                                            <a data-eventlabel="GIỚI THIỆU" class="home-main-menu"
+                                               href="collections/giay-nam.html" title="GIỚI THIỆU">
+                                               GIỚI THIỆU
+                                            </a>
+                                        </li>
+                                        <li class="home-main-menu megaMenuHover  ">
+                                            <a data-eventlabel="  SẢN PHẨM" class="home-main-menu"
+                                               href="/products/" title="SẢN PHẨM">
+                                               SẢN PHẨM
                                             </a>
                                             <ul class="sub_menu megaMenu">
                                                 <li>
-                                                    <a data-eventlabel="Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang"
+                                                    <a data-eventlabel="GIẦY SNEAKER"
                                                        href="collections/balo-laptop-du-lich-thoi-trang.html"
-                                                       title="Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang">
-                                                        Balo laptop, du l&#x1ECB;ch, th&#x1EDD;i trang
-                                                    </a>
+                                                       title="GIẦY SNEAKER">
+                                                        GIẦY SNEAKER
+                                                        </a>
                                                 </li>
                                                 <li>
-                                                    <a data-eventlabel="T&#xFA;i &#x110;eo Ch&#xE9;o"
-                                                       href="collections/tui-deo-cheo.html"
-                                                       title="T&#xFA;i &#x110;eo Ch&#xE9;o">
-                                                        T&#xFA;i &#x110;eo Ch&#xE9;o
-                                                    </a>
+                                                    <a data-eventlabel="Sản phẩm bán chạy"
+                                                       href="collections/balo-laptop-du-lich-thoi-trang.html"
+                                                       title=" Sản phẩm bán chạy">
+                                                       Sản phẩm bán chạy
+                                                       </a>
                                                 </li>
+                                                
 
                                             </ul>
                                         </li>
                                         <li class="home-main-menu megaMenuHover  ">
-                                            <a data-eventlabel="Ph&#x1EE5; Ki&#x1EC7;n" class="home-main-menu"
-                                               href="collections/phu-kien.html" title="Ph&#x1EE5; Ki&#x1EC7;n">
-                                                Ph&#x1EE5; Ki&#x1EC7;n
+                                            <a data-eventlabel="BÀI VIẾT" class="home-main-menu"
+                                               href="collections/phu-kien.html" title=" BÀI VIẾT">
+                                               BÀI VIẾT
                                             </a>
-                                            <ul class="sub_menu megaMenu">
-                                                <li>
-                                                    <a data-eventlabel="V&#x1EDB; " href="collections/vo.html"
-                                                       title="V&#x1EDB; ">
-                                                        V&#x1EDB;
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="Chai V&#x1EC7; Sinh Gi&#xE0;y"
-                                                       href="collections/chai-ve-sinh-giay.html"
-                                                       title="Chai V&#x1EC7; Sinh Gi&#xE0;y">
-                                                        Chai V&#x1EC7; Sinh Gi&#xE0;y
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="D&#xE2;y Gi&#xE0;y"
-                                                       href="collections/day-giay.html" title="D&#xE2;y Gi&#xE0;y">
-                                                        D&#xE2;y Gi&#xE0;y
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a data-eventlabel="&#x110;&#x1EBF; L&#xF3;t"
-                                                       href="collections/de-lot.html" title="&#x110;&#x1EBF; L&#xF3;t">
-                                                        &#x110;&#x1EBF; L&#xF3;t
-                                                    </a>
-                                                </li>
-
-                                            </ul>
+ 
                                         </li>
-                                        <li class=" ">
-                                            <a data-eventlabel="S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y"
+                                        <li class="home-main-menu megaMenuHover  ">
+                                            <a data-eventlabel="LIÊN HỆ - HỖ TRỢ"
                                                class="home-main-menu" href="collections/giay-dep-ban-chay.html"
-                                               title="S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y">
-                                                S&#x1EA2;N PH&#x1EA8;M B&#xC1;N CH&#x1EA0;Y
+                                               title="LIÊN HỆ - HỖ TRỢ">
+                                               LIÊN HỆ - HỖ TRỢ
                                             </a>
                                         </li>
                                     </ul>

@@ -106,8 +106,9 @@
                         </div>
                         <div class="profile-account__custom-form__form">
                             <div class="input-with-validator-wrapper">
+                                <input type="hidden" name="IsDefault" value="false">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" name="IsDefault" type="checkbox" id="flexSwitchCheckDefault">
+                                    <input class="form-check-input" name="IsDefaultCheckbox" type="checkbox" id="flexSwitchCheckDefault">
                                     <label class="form-check-label" for="flexSwitchCheckDefault">Đặt làm địa chỉ mặc định</label>
                                 </div>
                             </div>
@@ -126,48 +127,47 @@
 
 <script>
     $(document).ready(function () {
+
+        $('#flexSwitchCheckDefault').change(function () {
+            if ($(this).is(':checked')) {
+                $('input[name="IsDefault"]').val('true');
+            } else {
+                $('input[name="IsDefault"]').val('false');
+            }
+        });
+
         // Kiểm tra form trước khi submit
         $('#profile-form').on('submit', function (e) {
-            var isValid = true;
-            var errorMessage = '';
-            var isValid1 = true;
-            var errorMessage1 = '';
-            var isValid2 = true;
-            var errorMessage2 = '';
             // Kiểm tra tên người nhận
             var recipientName = $('#RecipientName').val().trim();
             if (recipientName === '') {
-                isValid = false;
-                errorMessage += 'Tên người nhận không được để trống.';
+                e.preventDefault();
+                alert('Tên người nhận không được để trống.');
+                return false;
             }
 
             // Kiểm tra số điện thoại
             var recipientPhone = $('#RecipientPhone').val().trim();
             var phonePattern = /^0\d{9}$/; // Số điện thoại bắt đầu bằng 0 và có 10 chữ số
-            if(recipientPhone === ''){
-                 isValid1 = false;
-                errorMessage1 += 'Số điện thoại không được để trống.';
-            }
-            else if (!phonePattern.test(recipientPhone)) {
-                isValid1 = false;
-                errorMessage1 += 'Số điện thoại phải là số. Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.';
-            }
-            var Description = $('#Description').val().trim();
-            if (Description === '') {
-                isValid2 = false;
-                errorMessage2 += 'Nhập địa chỉ chi tiết.';
-            }
-            // Nếu không hợp lệ, ngăn chặn việc submit form và hiển thị thông báo lỗi
-            if (!isValid) {
+            if (recipientPhone === '') {
                 e.preventDefault();
-                alert(errorMessage);
-            }else if(!isValid1){
-                 e.preventDefault();
-                alert(errorMessage1);
-            } else if (!isValid2) {
+                alert('Số điện thoại không được để trống.');
+                return false;
+            } else if (!phonePattern.test(recipientPhone)) {
                 e.preventDefault();
-                alert(errorMessage2);
+                alert('Số điện thoại phải là số. Số điện thoại phải có 10 chữ số và bắt đầu bằng 0.');
+                return false;
             }
+
+            // Kiểm tra địa chỉ chi tiết
+            var description = $('#Description').val().trim();
+            if (description === '') {
+                e.preventDefault();
+                alert('Nhập địa chỉ chi tiết.');
+                return false;
+            }
+
+            console.log("IsDefault value before submit:", $('input[name="IsDefault"]').val());
         });
 
         // Cập nhật tên tỉnh/thành phố, quận/huyện, xã/phường khi chọn
@@ -272,7 +272,7 @@
             var value2 = document.getElementById("district").value;
             $.ajax({
                 type: "GET",
-                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378?to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500 + "&service_type_id=2",
+                url: "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee?shop_id=4643378&to_ward_code=" + value1 + "&to_district_id=" + value2 + "&weight=" + 500 + "&service_type_id=2",
                 headers: { token: '9f4e42e4-fde8-11ed-a281-3aa62a37e0a5' },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
