@@ -86,7 +86,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         public async Task<IActionResult> OrderDetail(Guid orderId, string? keyWord, int pageNumber = 1, int pageSize = 5)
         {
             var lstOrderIterm = await _iorderItemService.GetByIdOrder2(orderId);
-            var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1 && c.Quantity > 0).ToList();        
+            var lstProductDetail = (await _productDetailService.GetProductDetails()).Where(c => c.StatusPro == 1 && c.Quantity > 0).ToList();  
             if (!string.IsNullOrEmpty(keyWord))
             {
                 lstProductDetail = lstProductDetail.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.ToLower().Contains(keyWord.ToLower())).ToList();
@@ -273,14 +273,15 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                             Id = Guid.NewGuid(),
                             ProductDetailId = productDetail.Id,
                             OrderId = order.Id,
-                            Quantity = 1,
+                            Quantity = Quantity,
                             Price = productDetail.PriceSale
                         };
                         var resultCreateOrderItem = await _iorderItemService.Add(orderItem);
-                        productDetail.Quantity -= 1;
+                        productDetail.Quantity -= Quantity;
                         await _productDetailService.Update(productDetail);
+                        //var tt = orderItem.Quantity * orderItem.Price;
                         await UpdateOrder(order.Id);
-                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity, total = order.TotalAmout });
+                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity/*, total =  tt, totalorder = order.TotalAmout*/});
                     }
                     else // cộng dồn số lượng
                     {
@@ -290,7 +291,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                         productDetail.Quantity -= Quantity;
                         await _productDetailService.Update(productDetail);
                         await UpdateOrder(order.Id);
-                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity, total = order.TotalAmout });
+                        //var tt = lstOrderItems.Sum(c => c.Quantity) * orderItem.Price;
+                        return Json(new { success = true, message = "Thêm sản phẩm thành công", Id = orderItem.Id, soluong = orderItem.Quantity/*, total = tt, totalorder = order.TotalAmout*/ });
                     }
                 }
             }
@@ -339,6 +341,11 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         public async Task<IActionResult> Remove(Guid productDetailId, Guid orderId)
         {
             var order = await _iorderService.GetById(orderId);
+            var orderItems = (await _iorderItemService.Gets()).Where(c => c.OrderId == orderId).ToList();
+            if (orderItems.Count <= 1)
+            {
+                return Json(new { message = "Không thể xoá vì cần ít nhất một sản phẩm trong đơn hàng", success = false });
+            }
             var orderItem = (await _iorderItemService.Gets()).FirstOrDefault(c => c.ProductDetailId == productDetailId && c.OrderId == orderId);
             if (orderItem != null)
             {
