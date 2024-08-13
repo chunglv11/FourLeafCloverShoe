@@ -47,7 +47,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.endDate = endDate;
 
             var lst = await _iorderService.Gets();
-            var lstOrder = lst.Where(c => c.Id != null);
+            //var lstOrder = lst.Where(c => c.Id != null);
+            var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue));
             // Lọc theo searchText 
             if (!string.IsNullOrEmpty(searchText))
             {
