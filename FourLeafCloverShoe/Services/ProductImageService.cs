@@ -8,7 +8,6 @@ namespace FourLeafCloverShoe.Services
     public class ProductImageService : IProductImageService
     {
         private readonly MyDbContext _myDbContext;
-
         public ProductImageService(MyDbContext myDbContext)
         {
             _myDbContext = myDbContext;

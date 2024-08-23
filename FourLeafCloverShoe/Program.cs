@@ -37,6 +37,8 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
+
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICartItemService, CartItemService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

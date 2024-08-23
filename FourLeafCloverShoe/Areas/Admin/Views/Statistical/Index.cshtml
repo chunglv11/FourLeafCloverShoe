@@ -1,0 +1,208 @@
+﻿@using FourLeafCloverShoe.Share.ViewModels
+@using System.Globalization
+@model StatisticalViewModal
+<!-- Doanh thu, số lượng đơn hàng mới, và đơn bị hủy -->
+<div class="row">
+    <div class="col-md-4">
+        <h3>Doanh Thu</h3>
+        <p>@Model.Doanhthu</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Đơn Hàng Mới</h3>
+        <p>@Model.DonHangMoi</p>
+    </div>
+    <div class="col-md-4">
+        <h3>Đơn Hàng Bị Hủy</h3>
+        <p>@Model.DonHuy</p>
+    </div>
+</div>
+
+<!-- Doanh thu trong 7 ngày qua (Biểu đồ cột) -->
+
+<div class="container">
+        <div class="row mt-4">
+            <div class="col-md-12">
+            <div class="col-md-4"><h3>Doanh Thu</h3></div>
+                <div class="col-md-8">
+                    <form method="get" action="@Url.Action("Index", "Statistical", new { area = "Admin" })">
+                        <div class="form-group">
+                            <label for="month">Tháng:</label>
+                            <select id="month" name="month" class="form-control">
+                                <option value="@ViewBag.SelectedMonth">Chọn tháng</option>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                  <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="year">Năm:</label>
+                            <select id="year" name="year" class="form-control">
+                                <option value="@ViewBag.SelectedYear">Chọn năm</option>
+                                @for (int i = DateTime.Now.Year - 10; i <= DateTime.Now.Year; i++)
+                                {
+                                    <option value="@i" >@i</option>
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Lọc</button>
+                    </form>
+                </div>
+
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+<!-- Top sản phẩm bán chạy -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Top Sản Phẩm</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mã Sản Phẩm</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng sản phẩm bán ra</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Topsp)
+                {
+                    <tr>
+                        <td>
+                            <a asp-area="admin" asp-controller="Products" asp-action="ProductDetail" asp-route-productId="@item.id">
+                                @item.MaSanPham
+                            </a>
+
+                        </td>
+                        <td>@item.TenSanPham</td>
+                        <td>@item.SoLuongSanPhamBanRaTrongTuan</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Trạng thái đơn hàng trong hôm nay -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Trạng Thái Đơn Hàng</h3>
+        <div class="row">
+            @foreach (var item in Model.TrangThai)
+            {
+                <div class="col-md-2" >
+                    <div class="status-box" style="height: 100px">
+                        <a href="/Admin/ManagerOrder?startDate=&endDate=&status=@item.trangthai">
+
+
+
+                            @switch (item.trangthai)
+                            {
+                                case -1:
+                                    <h4>Đơn chờ: @item.soluong</h4>
+                                    break;
+                                case 0:
+                                    <h4>Chờ thanh toán: @item.soluong</h4>
+                                    break;
+                                case 1:
+                                    <h4>Đã thanh toán: @item.soluong</h4>
+                                    break;
+                                case 2:
+                                    <h4>Chờ xác nhận: @item.soluong</h4>
+                                    break;
+                                case 3:
+                                    <h4>Chờ lấy hàng: @item.soluong</h4>
+                                    break;
+                                case 4:
+                                    <h4>Đang giao hàng: @item.soluong</h4>
+                                    break;
+                                case 5:
+                                    <h4>Yêu cầu hủy: @item.soluong</h4>
+                                    break;
+                                case 6:
+                                    <h4>Giao hàng thất bại: @item.soluong</h4>
+                                    break;
+                                case 7:
+                                    <h4>Yêu cầu hủy đơn thất bại: @item.soluong</h4>
+                                    break;
+                                case 8:
+                                    <h4>Giao hàng thành công: @item.soluong</h4>
+                                    break;
+                                case 10:
+                                    <h4>Yêu cầu đổi trả: @item.soluong</h4>
+                                    break;
+                                case 11:
+                                    <h4>Chấp nhận đổi trả: @item.soluong</h4>
+                                    break;
+                                case 12:
+                                    <h4>Từ chối đổi trả: @item.soluong</h4>
+                                    break;
+                                case 13:
+                                    <h4>Khách hủy đơn: @item.soluong</h4>
+                                    break;
+                                case 14:
+                                    <h4>Chấp nhận hủy đơn: @item.soluong</h4>
+                                    break;
+                                default:
+                                    <h4>Trạng thái không xác định: @item.soluong</h4>
+                                    break;
+                            }
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<style>
+    .status-box h4 {
+        margin-bottom: 10px; /* Khoảng cách dưới thẻ h4 */
+    }
+
+    .status-box p {
+        margin-top: 0; /* Khoảng cách trên thẻ p */
+    }
+</style>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('revenueChart').getContext('2d');
+            var revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.DoanhThuTrong7ngay.Select(d => d.NgayBan.ToString("dd/MM/yyyy")))),
+                    datasets: [{
+                        label: 'Doanh Thu',
+                        data: @Html.Raw(Json.Serialize(Model.DoanhThuTrong7ngay.Select(d => d.DoanhThu))),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    .status-box {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: center;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+</style>
