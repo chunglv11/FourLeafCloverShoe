@@ -175,10 +175,25 @@
                                         </li>
                                         <li class="home-main-menu megaMenuHover  ">
                                             <a data-eventlabel="BÀI VIẾT" class="home-main-menu"
-                                               href="collections/phu-kien.html" title=" BÀI VIẾT">
-                                               BÀI VIẾT
+                                               asp-controller="Post" asp-action="index" title=" BÀI VIẾT">
+                                                BÀI VIẾT
                                             </a>
- 
+                                            <ul class="sub_menu megaMenu">
+                                                <li>
+                                                    <a data-eventlabel="Khuyến Mãi"
+                                                       asp-controller="Post" asp-action="getsNoti"
+                                                       title="Khuyến Mãi">
+                                                        Khuyến Mãi
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a data-eventlabel="BÀI VIẾT"
+                                                         asp-controller="Post" asp-action="index" title="BÀI VIẾT">
+                                                        Bài Viết 
+
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li class="home-main-menu megaMenuHover  ">
                                             <a data-eventlabel="LIÊN HỆ - HỖ TRỢ"

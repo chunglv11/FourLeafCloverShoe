@@ -2,18 +2,155 @@
 @using Microsoft.AspNetCore.Identity
 @model IEnumerable<FourLeafCloverShoe.Share.Models.Post>
 @inject UserManager<User> UserManager
+
 <style>
     #title_hidden {
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2; /* Giới hạn số dòng hiển thị */
         max-height: 3em; /* Chiều cao tối đa của hai dòng */
     }
+
+    .category-layout {
+        padding: 20px 0;
+    }
+
+    .post-list {
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .category-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .items-normal {
+        margin-bottom: 30px;
+    }
+
+    .items-normal--inner {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .items-normal--img {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 200px; /* Chiều cao cố định cho tất cả hình ảnh */
+        background-color: #f4f4f4; /* Màu nền phòng khi hình ảnh không phủ kín */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .items-normal--img img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover; /* Đảm bảo rằng hình ảnh phủ kín khung hình mà không bị méo */
+        }
+    .items-normal--inner:hover {
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .items-normal--img img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .items-normal--title {
+        padding: 15px;
+    }
+
+    .items-normal--title h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+    .items-normal--title div {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    .items-normal--title a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .items-normal--title a:hover h3 {
+        color: #000;
+    }
+
+    .items-normal--title img {
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        margin-right: 5px;
+    }
+
+    .section-view-more {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        padding-left: 0;
+        margin: 0;
+        border-radius: 4px;
+    }
+
+    .pagination-item {
+        margin: 0 5px;
+    }
+
+    .pagination-link {
+        color: #333;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination-link:hover {
+        background-color: #ddd;
+    }
+
+    .pagination-link-active {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .pagination-link-disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .pagination-link-prev svg, .pagination-link-next svg {
+        vertical-align: middle;
+    }
 </style>
+
 @{
     ViewData["Title"] = "Index";
 }
+
 @if (Model == null || !Model.Any())
 {
     <h3 style="text-align:center">Chưa có bài viết nào</h3>
@@ -22,12 +159,12 @@ else
 {
     <section class="category-layout">
         <div class="container post-list">
-            <div class="section-padding" style="padding: 30px 0 10px 0; ">
+            <div class="section-padding" style="padding: 30px 0 10px 0;">
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="category-top-info">
                             <h2 class="category-title">
-                                Khuyến Mãi
+                               Bài Viết
                             </h2>
                         </div>
                     </div>
@@ -35,60 +172,51 @@ else
             </div>
             <section id="blog-new-section--2">
                 <div class="blog-new-section--inner-2">
-                    <div class="row blog-new-section--content ">
+                    <div class="row blog-new-section--content">
                         @foreach (var item in Model)
                         {
-                            <div class="items-normal col-xs-12 col-sm-6" style="">
-                                <div class="items-normal--inner ">
+                            <div class="items-normal col-xs-12 col-sm-6">
+                                <div class="items-normal--inner">
                                     <div class="items-normal--img">
                                         <a asp-action="show" asp-route-Id="@item.Id">
-                                            <img src="@item.TittleImage" alt="Top 9 m&#x1EAB;u gi&#xE0;y th&#x1EC3; thao nam MWC &#x111;&#x1B0;&#x1EE3;c &#x1B0;a chu&#x1ED9;ng">
+                                            <img src="@item.TittleImage" alt="@item.TittleImage">
                                         </a>
                                     </div>
                                     <div class="items-normal--title">
                                         <a asp-action="show" asp-route-Id="@item.Id">
                                             <h3 id="title_hidden">@item.Tittle</h3>
                                         </a>
-                                        <h3>
-
-                                            <span id="account-handle" class="icon-cart">
-                                                <a class="account-handle-icon" asp-action="show" asp-route-Id="@item.Id" title="Manage">
-                                                    @if (item.Users.ProfilePicture != null && item.Users.ProfilePicture.Length > 0)
-                                                    {
-                                                        <img src="data:image/*;base64,@(Convert.ToBase64String(item.Users.ProfilePicture))" width="25">
-                                                        ;
-                                                    }
-                                                    else
-                                                    {
-                                                        <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
-                                                    }
-                                                </a>
-                                            </span>
-                                            @item.Users.UserName
-                                        </h3>
-                                        <h3>
-                                            @{
-                                                DateTime now = DateTime.Now;
-
-                                                if (item.CreateAt?.Day == now.Day && item.CreateAt?.Month == now.Month && item.CreateAt?.Year == now.Year) // Kiểm tra nếu ngày của itemCreateAt và ngày hiện tại là giống nhau
+                                        <div>
+                                            <a class="account-handle-icon" asp-action="show" asp-route-Id="@item.Id" title="Manage">
+                                                @if (item.Users.ProfilePicture != null && item.Users.ProfilePicture.Length > 0)
                                                 {
-                                                    <span id="account-handle" class="icon-cart">
-                                                        @item.CreateAt?.ToString("HH:mm");
-                                                    </span>
-                                                    // Nếu cùng ngày, hiển thị thời gian
+                                                    <img src="data:image/*;base64,@(Convert.ToBase64String(item.Users.ProfilePicture))">
                                                 }
                                                 else
                                                 {
-                                                    @item.CreateAt?.ToString("dd/MM/yyyy");
-                                                    // Nếu khác ngày, hiển thị ngày
+                                                    <img src="~/fileuser/Assets/App/images/default-user-icon.jpg" width="25">
+                                                }
+                                            </a>
+                                            @item.Users.UserName
+                                        </div>
+                                        <div>
+                                            @{
+                                                DateTime now = DateTime.Now;
+                                                if (item.CreateAt?.Day == now.Day && item.CreateAt?.Month == now.Month && item.CreateAt?.Year == now.Year)
+                                                {
+                                                    <span id="account-handle" class="icon-cart">
+                                                        @item.CreateAt?.ToString("HH:mm")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    @item.CreateAt?.ToString("dd/MM/yyyy")
                                                 }
                                             }
-                                        </h3>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         }
                     </div>
                 </div>
@@ -97,26 +225,21 @@ else
                 <ul class="pagination">
                     <li class="pagination-item">
                         <a href="#" class="pagination-link pagination-link-prev pagination-link-disabled">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z"
-                                      fill="rgba(0,0,0,.85" />
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8.83962 2.06621V1.03094C8.83962 0.941211 8.7365 0.891658 8.66685 0.946568L2.62935 5.66219C2.57805 5.70209 2.53655 5.75317 2.50799 5.81154C2.47944 5.86992 2.4646 5.93404 2.4646 5.99902C2.4646 6.06401 2.47944 6.12813 2.50799 6.18651C2.53655 6.24488 2.57805 6.29596 2.62935 6.33585L8.66685 11.0515C8.73783 11.1064 8.83962 11.0568 8.83962 10.9671V9.93184C8.83962 9.86621 8.80882 9.80327 8.75792 9.76309L3.93649 5.99969L8.75792 2.23496C8.80882 2.19478 8.83962 2.13184 8.83962 2.06621Z" fill="rgba(0,0,0,.85" />
                             </svg>
                         </a>
                     </li>
                     <li class="pagination-item">
                         <a class="pagination-link pagination-link-active" href="blogs2679.html?page=1">1</a>
                     </li>
-
                     <li class="pagination-item">
                         <a href="#" class="pagination-link pagination-link-next pagination-link-disabled">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80522 3.1875 9.86817 3.1875 9.9338V10.9691C3.1875 11.0588 3.29063 11.1083 3.36027 11.0534L9.39777 6.33781C9.44908 6.29779 9.4906 6.24658 9.51915 6.1881C9.5477 6.12962 9.56254 6.06539 9.56254 6.00031C9.56254 5.93523 9.5477 5.87101 9.51915 5.81253C9.4906 5.75404 9.44908 5.70284 9.39777 5.66281Z"
-                                      fill="rgba(0,0,0,.85)" />
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.39777 5.66281L3.36027 0.947189C3.34449 0.934768 3.32553 0.92705 3.30557 0.924919C3.2856 0.922788 3.26544 0.926332 3.2474 0.935143C3.22936 0.943955 3.21417 0.957676 3.20357 0.974732C3.19298 0.991787 3.18741 1.01149 3.1875 1.03156V2.06683C3.1875 2.13246 3.2183 2.1954 3.2692 2.23558L8.09063 6.00031L3.2692 9.76505C3.21697 9.80523 3.1875 9.86816 3.1875 9.9338V10.9691C3.1875 11.0589 3.2893 11.1084 3.36027 11.0535L9.39777 6.33789C9.44907 6.298 9.49057 6.24692 9.51913 6.18855C9.54768 6.13017 9.56252 6.06605 9.56252 6.00107C9.56252 5.93608 9.54768 5.87196 9.51913 5.81359C9.49057 5.75521 9.44907 5.70414 9.39777 5.66424V5.66281Z" fill="rgba(0,0,0,.85" />
                             </svg>
-
                         </a>
+                    </li>
                 </ul>
             </div>
         </div>

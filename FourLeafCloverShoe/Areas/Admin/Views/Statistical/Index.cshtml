@@ -20,41 +20,39 @@
 <!-- Doanh thu trong 7 ngày qua (Biểu đồ cột) -->
 
 <div class="container">
-        <div class="row mt-4">
-            <div class="col-md-12">
-            <div class="col-md-4"><h3>Doanh Thu</h3></div>
-                <div class="col-md-8">
-                    <form method="get" action="@Url.Action("Index", "Statistical", new { area = "Admin" })">
-                        <div class="form-group">
-                            <label for="month">Tháng:</label>
-                            <select id="month" name="month" class="form-control">
-                                <option value="@ViewBag.SelectedMonth">Chọn tháng</option>
-                                @for (int i = 1; i <= 12; i++)
-                                {
-                                  <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="year">Năm:</label>
-                            <select id="year" name="year" class="form-control">
-                                <option value="@ViewBag.SelectedYear">Chọn năm</option>
-                                @for (int i = DateTime.Now.Year - 10; i <= DateTime.Now.Year; i++)
-                                {
-                                    <option value="@i" >@i</option>
-                                }
-                            </select>
-                        </div>
-
+    <div class="row">
+        <div class="col-md-4"><h3>Doanh Thu</h3></div>
+        <div class="col-md-8">
+            <form method="get" action="@Url.Action("Index", "Statistical", new { area = "Admin" })">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select id="month" name="month" class="form-control">
+                            <option value="@ViewBag.SelectedMonth">Chọn tháng</option>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="year" name="year" class="form-control">
+                            <option value="@ViewBag.SelectedYear">Chọn năm</option>
+                            @for (int i = DateTime.Now.Year - 10; i <= DateTime.Now.Year; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
                         <button type="submit" class="btn btn-primary">Lọc</button>
-                    </form>
+                    </div>
                 </div>
 
-                <canvas id="revenueChart"></canvas>
-            </div>
+            </form>
         </div>
     </div>
+    <canvas id="revenueChart"></canvas>
+</div>
 
 <!-- Top sản phẩm bán chạy -->
 <div class="row mt-4">
@@ -94,7 +92,7 @@
         <div class="row">
             @foreach (var item in Model.TrangThai)
             {
-                <div class="col-md-2" >
+                <div class="col-md-2">
                     <div class="status-box" style="height: 100px">
                         <a href="/Admin/ManagerOrder?startDate=&endDate=&status=@item.trangthai">
 
