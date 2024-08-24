@@ -22,13 +22,13 @@ namespace FourLeafCloverShoe.Controllers
             return View(postnoti);
         }
  
-        public async Task<IActionResult> show(Guid Id)
-        {
-            var ressult = await _postService.GetById(Id);
-            bool status = (bool)ressult.Status;
-            var getAnotherNoti = await _postService.Getsanotherpost(Id, status);
-            ViewBag.lstanothernoti = getAnotherNoti;
-            return View(ressult);
-        }
+        //public async Task<IActionResult> show(Guid Id)
+        //{
+        //    var ressult = await _postService.GetById(Id);
+        //    bool status = (bool)ressult.Status;
+        //    var getAnotherNoti = await _postService.Getsanotherpost(Id, status);
+        //    ViewBag.lstanothernoti = getAnotherNoti;
+        //    return View(ressult);
+        //}
     }
 }

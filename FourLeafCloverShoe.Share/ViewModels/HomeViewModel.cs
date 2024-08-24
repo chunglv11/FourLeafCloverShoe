@@ -11,7 +11,7 @@ namespace FourLeafCloverShoe.Share.ViewModels
     {
 
         public IEnumerable<Product> Products { get; set; } 
-        public int TotalProducts { get; set; }
+       
     }
 
 }

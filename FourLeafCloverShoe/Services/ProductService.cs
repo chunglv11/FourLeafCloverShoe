@@ -232,41 +232,53 @@ namespace FourLeafCloverShoe.Services
         public HomeViewModel GetBestSellingProducts(int count)
         {
             var bestSellingProductIds = _myDbContext.OrderItems
-                .Join(_myDbContext.ProductDetails,
-                      oi => oi.ProductDetailId,
-                      pd => pd.Id,
-                      (oi, pd) => new { oi, pd })
-                .GroupBy(op => op.pd.ProductId)
-                .Select(g => new
-                {
-                    ProductId = g.Key,
-                    TotalQuantitySold = g.Sum(op => op.oi.Quantity)
-                })
-                .OrderByDescending(x => x.TotalQuantitySold)
-                .Take(count)
-                .Select(x => x.ProductId)
-                .ToList();
+     .Join(_myDbContext.Orders, // Tham gia với bảng Orders
+           oi => oi.OrderId,
+           o => o.Id,
+           (oi, o) => new { oi, o })
+     .Join(_myDbContext.ProductDetails, // Tham gia với bảng ProductDetails
+           oi_o => oi_o.oi.ProductDetailId,
+           pd => pd.Id,
+           (oi_o, pd) => new { oi_o, pd })
+     .Where(op => op.oi_o.o.OrderStatus == 8) // Lọc theo điều kiện OrderStatus = 9
+     .GroupBy(op => op.pd.ProductId)
+     .Select(g => new
+     {
+         ProductId = g.Key,
+         TotalQuantitySold = g.Sum(p => p.oi_o.oi.Quantity) // Tính tổng số lượng bán
+     })
+     .OrderByDescending(x => x.TotalQuantitySold)
+     .Take(count)
+     .Select(x => x.ProductId)
+     .ToList();
+
 
             // Lấy các sản phẩm dựa trên danh sách ID đã sắp xếp và bao gồm cả hình ảnh
             var products = _myDbContext.Products
                 .Where(p => bestSellingProductIds.Contains(p.Id))
                 .Include(p => p.ProductImages) // Bao gồm bảng ProductImages
                 .ToList();
+
+            // Sắp xếp lại danh sách sản phẩm theo thứ tự của bestSellingProductIds
+            products = products.OrderBy(p => bestSellingProductIds.IndexOf(p.Id)).ToList();
+
             foreach (var product in products)
             {
                 if (product.ProductImages == null || !product.ProductImages.Any())
                 {
                     product.ProductImages = new List<ProductImages>
-            {
+                {
                 new ProductImages { ImageUrl = "/path/to/default/image.jpg" } // Đường dẫn hình ảnh mặc định
-            };
+                 };
+
                 }
             }
+
             return new HomeViewModel
             {
                 Products = products,
-                TotalProducts = products.Count
             };
+
         }
 
 
