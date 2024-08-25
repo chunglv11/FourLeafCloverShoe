@@ -395,7 +395,7 @@ namespace FourLeafCloverShoe.Controllers
                                            join hd in orderServiceGets on cthd.OrderId equals hd.Id
                                            join kc in sizeServiceGets on ctsp.SizeId equals kc.Id
                                            join ms in colorServiceGets on ctsp.ColorId equals ms.Id
-                                           //join cl in mateServiceGets on ctsp.MaterialId equals cl.Id
+                                           join cl in mateServiceGets on ctsp.MaterialId equals cl.Id
                                            where sp.Id == IdPro && dg.Status == 1
                                            select new RateViewModel
                                            {
@@ -410,6 +410,7 @@ namespace FourLeafCloverShoe.Controllers
                                                AnhKh =  _userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).ProfilePicture != null ? Convert.ToBase64String(_userManager.Users.FirstOrDefault(c => c.Id == hd.UserId).ProfilePicture) : "",
                                                Size = kc.Name,
                                                Color = ms.ColorName,
+                                               Material = cl.Name
                                            }).ToList();
             return Json(lstRate);
         }
