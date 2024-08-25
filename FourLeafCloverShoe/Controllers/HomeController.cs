@@ -202,6 +202,11 @@ namespace FourLeafCloverShoe.Controllers
         {
             return View();
         }
+
+        public IActionResult GioiThieu()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult Icon(IFormCollection formCollection)
         {
