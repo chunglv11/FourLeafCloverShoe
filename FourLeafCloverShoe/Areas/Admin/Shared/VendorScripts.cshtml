@@ -32,16 +32,16 @@
         // });
 
         //tự động điền vào ngày bắt đầu và disable những ngày < ngày kết thúc
-        $('#end').datepicker({
+        $('#endDate').datepicker({
             format: 'mm/dd/yyyy',
             todayHighlight: true
         }).on('changeDate', function (e) {
-            var checkoutDate = $('#end').datepicker('getDate');
+            var checkoutDate = $('#endDate').datepicker('getDate');
             var maxCheckinDate = new Date(checkoutDate);
             maxCheckinDate.setDate(maxCheckinDate.getDate() - 1);
-            $('#start').datepicker('setEndDate', maxCheckinDate);
-            $('#start').datepicker('update', maxCheckinDate);
-            $('#start').val($.datepicker.formatDate('mm/dd/yy', maxCheckinDate));
+            $('#startDate').datepicker('setEndDate', maxCheckinDate);
+            $('#startDate').datepicker('update', maxCheckinDate);
+            $('#startDate').val($.datepicker.formatDate('mm/dd/yy', maxCheckinDate));
         });
     });
 </script>
