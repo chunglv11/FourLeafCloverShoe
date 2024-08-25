@@ -646,7 +646,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="input-group mb-3">
             <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm..." autocomplete="off">
             <button class="btn btn-outline-success">
@@ -684,7 +684,7 @@
         <div class="tab-content">
             <div class="tab-pane show active" id="ecomtab-1" role="tabpanel" aria-labelledby="ecomtab-tab-1">
                 <div class="row">
-                    <div class="col-xl-8 card">
+                    <div class="col-xl-7 card">
                         <div class="card">
                             <div class="card-body p-0 table-body">
                                 <div class="table-responsive">
@@ -708,7 +708,7 @@
                     </div>
                     <div class="col-xl-4">
                         <div class="form-group row">
-                            <div class="col-lg-10">
+                            <div class="col-lg-9">
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="searchNumberPhone" placeholder="Nhập số điện thoại..." autocomplete="off">
                                 </div>
@@ -717,7 +717,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-lg-1">
                                 <a href="#" style="margin-top:15px;" id="themKhachHang" title="Thêm khách hàng mới" class="avtar avtar-xs btn-link-danger btn-pc-default">
                                     <i style="font-size:25px;" class="fas fa-user-plus">
 
@@ -759,7 +759,11 @@
                                     </li>
                                     <li class="list-group-item px-0">
                                         <div class="float-end">
-                                            <input type="number" value="0" min="0" id="coinsUsed" class="form-control shadow-none border-1" style="text-align:right" />
+                                            <div class="MuiFormControl-root MuiTextField-root" inputmode="numeric" style="width: calc(100% - 40px);">
+                                                <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
+                                                    <input aria-invalid="false" autocomplete="off" type="number" value="0" min="0" id="coinsUsed" class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
+                                                </div>
+                                            </div>
                                         </div><span class="text-muted">Xu sử dụng <br /> (<span id="coins">0</span>)</span>
                                     </li>
                                     <li class="list-group-item px-0">
@@ -792,7 +796,11 @@
                                     <li class="list-group-item px-0">
                                         <div>
                                             <div class="float-end">
-                                                <input type="number" value="0" min="0" id="moneyGiven" class="form-control shadow-none border-1" style="text-align:right" />
+                                                <input  class="MuiInputBase-input MuiInput-input" style="text-align:right" />
+                                                    <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
+                                                        <input aria-invalid="false" autocomplete="off" type="number" value="0" min="0" id="moneyGiven"  class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
+                                                    </div>
+                                                </div>
                                             </div><span class="text-muted">Tiền khách đưa: </span>
                                         </div>
                                         <div>
