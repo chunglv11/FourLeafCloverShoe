@@ -18,6 +18,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             var statistical = await _statisticalService.GetStatistics(month, year);
             ViewBag.SelectedMonth = month;
             ViewBag.SelectedYear = year;
+            ViewBag.pTitle = "Thống kê";
             return View(statistical);
         }
     }

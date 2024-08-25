@@ -19,6 +19,8 @@ namespace FourLeafCloverShoe.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.pTitle = "Cấp độ";
+            ViewBag.Title = "Danh sách";
             return View((await _iranksService.Gets()).OrderBy(c => c.PoinsMax));
         }
         public async Task<IActionResult> Create()

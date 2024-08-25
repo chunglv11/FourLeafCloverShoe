@@ -45,7 +45,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.searchText = searchText;
             ViewBag.startDate = startDate;
             ViewBag.endDate = endDate;
-
+            ViewBag.pTitle = "Quản lý hóa đơn";
             var lst = await _iorderService.Gets();
             //var lstOrder = lst.Where(c => c.Id != null);
             var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue));
@@ -101,6 +101,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 ViewBag.lstProduct = new List<ProductDeailViewModel>().ToPagedList(pageNumber, pageSize);
             }
             ViewBag.Keyword = keyWord;
+            ViewBag.Title = "Danh sách";
+            ViewBag.ptitle = "Quản lý hóa đơn";
             return View(lstOrderIterm);
         }
         
