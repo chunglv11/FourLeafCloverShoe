@@ -35,6 +35,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ICartService _cartService;
         private readonly IRanksService _ranksService;
+        private readonly IPaymentDetailService _paymentDetailService;
+        private readonly IPaymentService _paymentService;
         private readonly IEmailSender _emailSender;
         private readonly IHubContext<Hubs> _hubContext;
 
@@ -48,7 +50,9 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
              IEmailSender emailSender,
              IHubContext<Hubs> hubContext,
              IRanksService ranksService,
-            ICartService cartService
+            ICartService cartService,
+            IPaymentService paymentService,
+            IPaymentDetailService paymentDetailService
             )
         {
             _userManager = userManager;
@@ -60,6 +64,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             _roleManager = roleManager;
             _cartService = cartService;
             _ranksService = ranksService;
+            _paymentDetailService = paymentDetailService;
+            _paymentService = paymentService;
             _emailSender = emailSender;
             _hubContext = hubContext;
         }
@@ -141,6 +147,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             return Json(new { message = "Lỗi không xác định!", isSuccess = false });
 
         }
+
         [HttpPost]
         public async Task<JsonResult> ApplyVoucher(Guid voucherId)
         {
@@ -152,6 +159,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             }
             return Json(new { isSuccess = false });
         }
+
         public async Task<IActionResult> loadDataUserOrder(Guid orderId)
         {
             if (orderId != new Guid())
@@ -488,6 +496,77 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 return Json(new { message = "Huỷ đơn thành công", isSuccess = true });
         }
         [HttpPost]
+        public async Task<IActionResult> CheckOutMultiPayment(Guid orderId, Guid voucherId, decimal coinUsed, decimal voucherValue, decimal decimalValueTienMat, decimal decimalValueChuyenKhoan )
+        {
+            var order = await _orderService.GetById(orderId);
+            var orderItem = (await _orderItemService.Gets()).Where(c => c.OrderId == orderId);
+            if (orderItem.Count() <= 0)
+            {
+                return Json(new { message = "Đơn hàng chưa có sản phẩm nào!", isSuccess = false });
+            }
+            order.PaymentType = "off";
+            order.UpdateDate = DateTime.Now;
+            if (voucherId != new Guid())
+            {
+                order.VoucherId = voucherId;
+                order.VoucherValue = voucherValue;
+            }
+            order.CoinsUsed = coinUsed;
+            order.TotalAmout = order.TotalAmout - voucherValue - coinUsed;
+            order.OrderStatus = 1;
+            if (await _orderService.Update(order))
+            {
+
+                var coinsPlus = (order.TotalAmout + voucherValue + coinUsed) / 100;
+                if (order.UserId != null)//  cộng xu
+                {
+                    var user = await _userManager.FindByIdAsync(order.UserId);
+                    user.Coins += coinsPlus;
+                    // còn phần rank
+                    user.Points += (int)(order.TotalAmout + voucherValue + coinUsed);
+                    var rank = (await _ranksService.Gets()).FirstOrDefault(c => c.PointsMin <= user.Points && c.PoinsMax >= user.Points);
+                    if (user.RankId != rank.Id)
+                    {
+                        user.RankId = rank.Id;
+                    }
+                    await _userManager.UpdateAsync(user);
+                }
+                //  trừ voucher khi đã sử dụng
+                if (voucherId != new Guid())
+                {
+                    var voucher = await _voucherService.GetById(voucherId);
+                    voucher.Quantity -= 1;
+                    await _voucherService.Update(voucher);
+                    var userVoucher = (await _userVoucherService.Gets()).FirstOrDefault(c => c.VoucherId == voucherId && order.UserId == c.UserId);
+                    userVoucher.Status = -1;
+                    await _userVoucherService.Update(userVoucher);
+                }
+                if (decimalValueChuyenKhoan>0)
+                {
+                    await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                    {
+                        IdOrder = order.Id,
+                        IdPayment = (await _paymentService.GetByName("chuyenkhoan")).Id,
+                        TotalMoney = order.TotalAmout,
+                        Status = 1
+                    });
+                }
+                if (decimalValueTienMat > 0)
+                {
+                    await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                    {
+                        IdOrder = order.Id,
+                        IdPayment = (await _paymentService.GetByName("tienmat")).Id,
+                        TotalMoney = order.TotalAmout,
+                        Status = 1
+                    });
+                }
+
+                return Json(new { isSuccess = true, message = "Mua hàng thành công", paymentType = "off", url = $"/Admin/BanTaiQuay/CheckOutSuccess?orderId={orderId}" });
+            }
+            return Json(new { isSuccess = false, message = "Có lỗi sảy ra", paymentType = "off", url = $"/Admin/BanTaiQuay/CheckOutFailed" });
+        }
+            [HttpPost]
         public async Task<IActionResult> CheckOutAsync(Guid orderId, Guid voucherId, decimal coinUsed, decimal voucherValue, string paymentType)
         {
             var order = await _orderService.GetById(orderId);
@@ -508,7 +587,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
             if (paymentType == "off" || order.TotalAmout == 0)
             {
-                order.OrderStatus = 9;
+                order.OrderStatus = 1;
                 if (await _orderService.Update(order)) 
                 {
                     var coinsPlus = (order.TotalAmout + voucherValue + coinUsed) / 100;
@@ -535,6 +614,13 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                         userVoucher.Status = -1;
                         await _userVoucherService.Update(userVoucher);
                     }
+                    await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                    {
+                        IdOrder = order.Id,
+                        IdPayment = (await _paymentService.GetByName("tienmat")).Id,
+                        TotalMoney = order.TotalAmout,
+                        Status = 1
+                    });
                     return Json(new { isSuccess = true, message = "Mua hàng thành công", paymentType = "off", url = $"/Admin/BanTaiQuay/CheckOutSuccess?orderId={orderId}" });
                 }
                 return Json(new { isSuccess = false, message = "Có lỗi sảy ra", paymentType = "off", url = $"/Admin/BanTaiQuay/CheckOutFailed" });
@@ -645,17 +731,25 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             if (Request.Query.Count > 0)
             {
                 var order = await _orderService.GetById(orderId);
+
                 if (order.PaymentType == "momo")
                 {
                     var resultCode = Request.Query["resultCode"];
                     if (resultCode == "0")
                     {
-                        order.OrderStatus = 9; // mua tại quầy
+                        order.OrderStatus = 1; // mua tại quầy
                         order.PaymentDate = DateTime.Now;
                         order.UpdateDate = DateTime.Now;
                         var result = await _orderService.Update(order);
                         if (result)
                         {
+                            await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                            {
+                                IdOrder = order.Id,
+                                IdPayment = (await _paymentService.GetByName(order.PaymentType)).Id,
+                                TotalMoney = order.TotalAmout,
+                                Status = 1
+                            });
                             isSuccess = true;
                         }
                     }
@@ -682,13 +776,20 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                         if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                         {
 
-                            order.OrderStatus = 9;
+                            order.OrderStatus = 1;
                             order.PaymentDate = DateTime.Now;
                             order.UpdateDate = DateTime.Now;
                             var result = await _orderService.Update(order);
                             if (result)
                             {
-                            isSuccess = true;
+                                await _paymentDetailService.Add(new PaymentDetail() // tạo bản ghi paymentdetail
+                                {
+                                    IdOrder = order.Id,
+                                    IdPayment = (await _paymentService.GetByName(order.PaymentType)).Id,
+                                    TotalMoney = order.TotalAmout,
+                                    Status = 1
+                                });
+                                isSuccess = true;
                             }
                         }
                     }
@@ -739,7 +840,5 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         {
             return View();
         }
-
-
     }
 }

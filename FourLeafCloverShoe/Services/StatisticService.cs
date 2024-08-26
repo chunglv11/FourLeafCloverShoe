@@ -106,7 +106,6 @@ namespace FourLeafCloverShoe.Services
         public async Task<StatisticalViewModal> GetStatistics(int? month, int? year)
         {
             var today = DateTime.Now.Date;
-            var sevenDaysAgo = today.AddDays(-6);
 
             // Lấy tất cả các đơn hàng
             var query = _myDbContext.Orders.AsQueryable();
@@ -136,7 +135,7 @@ namespace FourLeafCloverShoe.Services
 
             // Doanh thu trong 7 ngày qua
             var doanhThuquery = await query
-                .Where(o => o.OrderStatus == 8 && o.PaymentDate >= sevenDaysAgo) // Lọc theo trạng thái đơn và ngày
+                .Where(o => o.OrderStatus == 8) // Lọc theo trạng thái đơn và ngày
                 .SelectMany(o => o.OrderItems) // Lấy tất cả OrderItems liên quan
                 .GroupBy(oi => oi.Orders.PaymentDate.Value.Date) // Nhóm theo ngày của đơn hàng
                 .Select(g => new DoanhThuViewModel

@@ -27,7 +27,8 @@
                                 <th >Đối tượng (mức rank)</th>
                                 <th >Số lượng</th>
                                 <th >Giá trị (% / vnđ)</th>
-                                <th >Giảm từ - Tối đa</th>
+                                <th >Giảm từ </th>
+                                <th>Tối đa</th>
                                 <th >Hạn sử dụng</th>
                                 <th >Trạng thái</th>
 
@@ -52,13 +53,23 @@
                                             <span>@String.Join(", ",dt)</span>
                                         }</td>
                                     <td>@item.Quantity</td>
-                                    <td>
-                                        @item.VoucherValue @{
-                                            var value = item.VoucherType == 0 ? "đ" : "%";
-                                        } 
-                                        <span> @value</span>
-                                    </td>
-                                    <td>@item.MinimumOrderValue đ - @item.MaximumOrderValue đ</td>
+                                    
+                                        @{
+                                            var value = "";
+                                            if (item.VoucherType == 0)
+                                            {
+                                                value = item.VoucherValue?.ToString("N0") + "vnd";
+                                            }
+                                            else
+                                            {
+                                            value = item.VoucherValue?.ToString("0") + "%";
+
+                                            }
+                                        <td>@value</td>
+                                        }
+                                    
+                                    <td>@item.MinimumOrderValue?.ToString("N0") vnd</td>
+                                    <td>@item.MaximumOrderValue?.ToString("N0") vnd</td>
                                     <td>@item.StartDate?.ToString("HH:mm dd/MM/yyyy") - @item.EndDate?.ToString("HH:mm dd/MM/yyyy")</td>
                                     <td class="text-center">
                                         @if (item.Status ==1)

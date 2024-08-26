@@ -537,7 +537,7 @@
 
 
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModal" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title h4" id="exampleModalFullscreenLabel">Thanh toán đơn hàng </h5>
@@ -593,6 +593,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="CheckOutMultiPayment">Thanh toán</button>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>
@@ -796,11 +799,9 @@
                                     <li class="list-group-item px-0">
                                         <div>
                                             <div class="float-end">
-                                                <input  class="MuiInputBase-input MuiInput-input" style="text-align:right" />
                                                     <div class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-formControl MuiInput-formControl">
                                                         <input aria-invalid="false" autocomplete="off" type="number" value="0" min="0" id="moneyGiven"  class="MuiInputBase-input MuiInput-input" value="0" style="text-align: right;">
                                                     </div>
-                                                </div>
                                             </div><span class="text-muted">Tiền khách đưa: </span>
                                         </div>
                                         <div>
@@ -833,7 +834,7 @@
 
 
                             </div>
-                            <button class="btn btn-outline-danger" id="btnPaymentMulti">Modal</button>
+                            <button class="btn btn-outline-primary" id="btnPaymentMulti">Hình thức thanh toán khác</button>
                         </div>
 
                     </div>
@@ -902,6 +903,8 @@
             $("#orderIdInput").val($('.tab.active').data('orderId'));
             updateTable();
         }
+        // thanh toan
+
         // Gắn sự kiện cho input search
         $('#searchInput').on('input', function (event) {
             var searchTerm = event.target.value;
@@ -1406,7 +1409,7 @@
                     myCoins = result.coins;
                     total = result.total;
                     var xuTichDuoc = Math.round(total / 100);
-                    if (result.orderStatus == 9) { // thanh toán thành công
+                    if (result.orderStatus == 1) { // thanh toán thành công
                         $("#checkOut").attr('disabled', true);
                         $("#checkOut").text("Đã thanh toán");
                         $(".tab.active").css({
@@ -1796,6 +1799,90 @@
             var tienthuatrakhach =- (tienHang - thienkKhachDua);
             $("#tienThuaTraKhach").text(tienthuatrakhach.toLocaleString("en-US", { minimumFractionDigits: 0 }) + " đ");
         });
+        function resetPaymentInputs() {
+            // Reset all payment method input fields
+            $('input[name="payment-amount"]').val('0');
+
+            // Reset the total money given and change amount displayed
+            $('#moneyGiven1').text("0 đ");
+            $('#tienThua').text("0 đ");
+
+            // Reset the `tienKhachDua` and `tienThua` variables
+            tienKhachDua = 0;
+            tienThua = tienHang;
+
+            // Remove any additional payment method rows
+            $('.MuiBox-root.jss6193').remove();
+
+            // Deselect all selected buttons
+            $('.jss6163').removeClass('Mui-selected').attr('aria-pressed', 'false');
+        }
+
+        $('#CheckOutMultiPayment').on('click', function () {
+            var orderId = $("#orderIdInput").val();
+            var voucherIds = $("#discount-select").val();
+            if (tienThua >0) {
+                showToast("Vui lòng nhập số tiền khách trả!", false);
+            }
+             else {
+                var valueTienMat = $('#payment-amount-tienMat').val();
+                var valueChuyenKhoan = $('#payment-amount-chuyenKhoan').val();
+                if (typeof valueTienMat === 'undefined' || valueTienMat === null) {
+                    valueTienMat = "0";
+                }
+                if (typeof valueChuyenKhoan === 'undefined' || valueChuyenKhoan === null) {
+                    valueChuyenKhoan = "0";
+                }
+                // convert to float
+                let decimalValueChuyenKhoan = parseFloat(valueChuyenKhoan);
+                let decimalValueTienMat = parseFloat(valueTienMat);
+
+                $.ajax({
+                    url: '/Admin/BanTaiQuay/CheckOutMultiPayment',
+                    type: 'POST',
+                    data: {
+                        orderId: orderId,
+                        coinUsed: coinUsed,
+                        voucherValue: voucherValue,
+                        voucherId: voucherIds,
+                        decimalValueChuyenKhoan:decimalValueChuyenKhoan,
+                        decimalValueTienMat: decimalValueTienMat
+                    },
+                    success: function (result) {
+                        if (result.isSuccess) {
+                            if (result.paymentType == "off") {
+                                showToast(result.message, result.isSuccess);
+                                $.ajax({
+                                    url: '/order/ExportPDF',
+                                    type: 'GET',
+                                    data: {
+                                        orderId: orderId,
+
+                                    },
+                                    success: function (result) {
+
+                                    }
+                                });
+                                loadDataUserOrder($("#orderIdInput").val());
+                                resetPaymentInputs();
+                                $("#paymentModal").modal('hide');
+                            }
+                            else {
+                                window.open(result.url, '_blank');
+                            }
+                        } else {
+                            showToast(result.message, false);
+                        }
+                    },
+                    error: function (error) {
+                        showToast("Có lỗi xảy ra, vui lòng thử lại!", false);
+                    }
+
+                });
+            }
+
+        });
+
     });
 
 

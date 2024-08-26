@@ -18,7 +18,7 @@
 <script src="~/fileadmin/bootstrap/js/bootstrap-datepicker.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#start').datepicker({
+        $('#startDate').datepicker({
             format: 'mm/dd/yyyy',
             todayHighlight: true
         })
@@ -109,6 +109,7 @@
         toastEl.setAttribute('role', 'alert');
         toastEl.setAttribute('aria-live', 'assertive');
         toastEl.setAttribute('aria-atomic', 'true');
+        toastEl.backgroundColor = '#4a934a';
 
         var toastHeader = document.createElement('div');
         toastHeader.classList.add('toast-header');
@@ -121,6 +122,7 @@
 
         toastBody.classList.add('toast-body');
         toastBody.style.display = 'flex';
+        toastBody.style.backgroundColor = 'white';
         toastBody.style.flexDirection = 'row';
         toastBody.style.alignItems = 'center';
         toastBody.style.textAlign = 'left';
