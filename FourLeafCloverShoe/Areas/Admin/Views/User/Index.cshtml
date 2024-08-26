@@ -1,5 +1,6 @@
 ﻿@using FourLeafCloverShoe.Share.ViewModels;
 @using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @model IEnumerable<UserViewModel>
@@ -83,48 +84,62 @@
 
                                         <div class="prod-action-links">
                                             <ul class="list-inline me-auto mb-0">
-                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Cập nhật">
-                                                    <a asp-action="Edit" asp-route-userId="@item.Id"
-                                                       class="avtar avtar-xs btn-link-secondary btn-pc-default">
-                                                        <i class="ti ti-edit-circle f-18"></i>
-                                                    </a>
-                                                </li>
-                                                @if (item.EmailConfirmed)
+                                                @if (User.IsInRole("Admin"))
                                                 {
-                                                    @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                                                    <!-- Chỉ hiển thị nút sửa nếu không phải chính mình -->
+                                                    @if (item.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
                                                     {
-                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Khoá tài khoản">
-                                                            <a asp-action="LockUnlock" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                                                <i class="ti ti-lock" style="font-size: 20px" ></i>
+                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Cập nhật">
+                                                            <a asp-action="Edit" asp-route-userId="@item.Id"
+                                                               class="avtar avtar-xs btn-link-secondary btn-pc-default">
+                                                                <i class="ti ti-edit-circle f-18"></i>
                                                             </a>
                                                         </li>
                                                     }
-                                                    else
+                                                }
+
+                                                @if (item.EmailConfirmed)
+                                                {
+                                                    @if ((item.LockoutEnd == null || item.LockoutEnd < DateTime.Now) && item.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
                                                     {
-                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Mở khoá tài khoản">
-                                                            <a asp-action="LockUnlock" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                                                <i class="ti ti-lock-open" style="font-size: 20px" ></i>
-                                                            </a>
-                                                        </li>
+                                                        <!-- Chỉ hiển thị nút khoá nếu không phải chính mình -->
+                                                        @if (User.IsInRole("Admin") || (User.IsInRole("Staff") && !UserManager.IsInRoleAsync(item, "Admin").Result))
+                                                        {
+                                                            <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Khoá tài khoản">
+                                                                <a asp-action="LockUnlock" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                                    <i class="ti ti-lock" style="font-size: 20px"></i>
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+                                                    else if (item.LockoutEnd != null && item.LockoutEnd > DateTime.Now && item.Id != User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                                    {
+                                                        <!-- Chỉ hiển thị nút mở khoá nếu không phải chính mình -->
+                                                        @if (User.IsInRole("Admin") || (User.IsInRole("Staff") && !UserManager.IsInRoleAsync(item, "Admin").Result))
+                                                        {
+                                                            <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Mở khoá tài khoản">
+                                                                <a asp-action="LockUnlock" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                                    <i class="ti ti-lock-open" style="font-size: 20px"></i>
+                                                                </a>
+                                                            </li>
+                                                        }
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Gửi lại mail kích hoạt">
-                                                        <a asp-action="ResendMail" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                                            <i class="fas fa-paper-plane" style="font-size: 20px" ></i>
-
-                                                        </a>
-                                                    </li>
+                                                    <!-- Hiển thị nút gửi lại mail kích hoạt cho Admin -->
+                                                    @if (User.IsInRole("Admin"))
+                                                    {
+                                                        <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Gửi lại mail kích hoạt">
+                                                            <a asp-action="ResendMail" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                                                <i class="fas fa-paper-plane" style="font-size: 20px"></i>
+                                                            </a>
+                                                        </li>
+                                                    }
                                                 }
-
-                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
-                                                    <a asp-action="Delete" asp-route-userId="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
-                                                        <i class="ti ti-trash f-18"></i>
-                                                    </a>
-                                                </li>
                                             </ul>
                                         </div>
+
                                     </td>
                                 </tr>
                             }
