@@ -48,7 +48,7 @@
                             else if (Model.Order.OrderStatus == 1)
                             {
                                 <span class="order-item-status-text" data-bind="text:StatusName">
-                                    Chờ xác nhận (Đã thanh toán)
+                                    Đã thanh toán
                                 </span>
                             }
                             else if (Model.Order.OrderStatus == 2)
@@ -93,12 +93,6 @@
                                     Giao hàng thành công
                                 </span>
                             }
-                            else if (Model.Order.OrderStatus == 9)
-                            {
-                                <span class="order-item-status-text" data-bind="text:StatusName">
-                                    Mua hàng thành công (Tại quầy)
-                                </span>
-                            }
                             else if (Model.Order.OrderStatus == 10)
                             {
                                 <span class="order-item-status-text" data-bind="text:StatusName">
@@ -129,7 +123,6 @@
                                     Yêu cầu huỷ đơn được chấp nhận
                                 </span>
                             }
-
                         </a>
                     </div>
                     <!--/ko-->
@@ -248,7 +241,7 @@
             <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.TotalAmout?.ToString("N0") đ</div>
         </div>
     </div>
-    @if (Model.Order.OrderStatus == 0 || Model.Order.OrderStatus == 1 ||Model.Order.OrderStatus==2)
+    @if (Model.Order.OrderStatus == 0  ||Model.Order.OrderStatus==2)
     {
         if (Model.Order.OrderStatus == 0)
         {

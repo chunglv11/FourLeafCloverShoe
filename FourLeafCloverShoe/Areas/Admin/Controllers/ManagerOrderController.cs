@@ -9,6 +9,7 @@ using Rotativa.AspNetCore.Options;
 using Rotativa.AspNetCore;
 using System;
 using System.Globalization;
+using FourLeafCloverShoe.Helper;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Policy;
@@ -17,6 +18,7 @@ using X.PagedList;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class ManagerOrderController : Controller
     {
         private readonly IOrderService _iorderService;
@@ -51,8 +53,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             var lst = await _iorderService.Gets();
             //var lstOrder = lst.Where(c => c.Id != null);
             var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue));
-            ;
-            lstOrder = lstOrder.OrderByDescending(c => c.CreateDate);
             // Lọc theo searchText 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -81,6 +81,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 // Nếu có cả startDate và endDate
                 else if (startDate != null && endDate != null)
                 {
+                    endDate = endDate.Value.Date.AddDays(1).AddTicks(-1);
                     lstOrder = lstOrder.Where(c => c.CreateDate >= startDate && c.CreateDate <= endDate);
                 }
             }
@@ -119,117 +120,127 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             return Json(new { success = true, data = lstProductDetail });
         }
 
-        public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai) // Dùng cho trạng thái truyền vào: 10, 3
+        public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai)// Dùng cho trạng thái truyền  vào: 10, 3
         {
+
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-                // Kiểm tra người dùng đã đăng nhập chưa
-                if (identity != null && identity.IsAuthenticated)
+
+                if (identity != null)
                 {
                     var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
+
+
                     var idnv = userID.ToString();
 
-                    if (trangthai == 3) // Chờ lấy hàng
+                    if (trangthai == 3) // chờ lấy hàng
                     {
                         var hoadonCT = await _iorderItemService.GetByIdOrder(idhd);
                         foreach (var item in hoadonCT)
                         {
                             var responseUpdateQuantityProductDetail = await _productDetailService.UpdateQuantityById(item.ProductDetailID, item.Quantity);
-                            if (!responseUpdateQuantityProductDetail)
-                            {
-                                return Json(new { success = false, message = "Cập nhật số lượng sản phẩm thất bại" });
+                            if (responseUpdateQuantityProductDetail == false)
+                            {// xác nhận đơn xong thì mới trừ số lượng sp
+                                return BadRequest();
                             }
                         }
-
                         var updateSLSPfromDb = await _productService.UpdateSLTheoSPCT();
-                        if (!updateSLSPfromDb)
-                        {
-                            return Json(new { success = false, message = "Cập nhật số lượng sản phẩm theo chi tiết thất bại" });
+                        if (updateSLSPfromDb == false)
+                        { // update lại slsp
+                            return BadRequest();
+
                         }
 
+
                         var response = await _iorderService.UpdateOrderStatus(idhd, trangthai, idnv);
-                        if (response)
+                        if (response == true)
                         {
+
+
                             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+
+                        }
+                    } 
+                    else if (trangthai == 8)
+                    {
+                        var response = await  _iorderService.ThanhCong(idhd, idnv);
+                        if (response == true)
+                        {
+
+
+                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                            
+
                         }
                     }
-                    else if (trangthai == 8) // Hoàn tất đơn hàng
-                    {
-                        var response = await _iorderService.ThanhCong(idhd, idnv);
-                        if (response)
-                        {
-                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
-                        }
-                    }
-                    else // Các trạng thái khác
+                    else 
                     {
                         var response = await _iorderService.UpdateOrderStatus(idhd, trangthai, idnv);
-                        if (response)
+                        if (response == true)
                         {
+
+
                             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+
                         }
+
                     }
 
-                    return Json(new { success = false, message = "Cập nhật trạng thái thất bại" });
+
                 }
-                else
-                {
-                    return Json(new { success = false, message = "Bạn chưa đăng nhập" });
-                }
+                return Json(new { success = true, message = "Cập nhật trạng thái thất bại " });
+             
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log lỗi nếu cần thiết
                 return RedirectToAction("OrderDetail", "ManagerOrder");
             }
         }
-
         public async Task<IActionResult> HuyHD(Guid idhd, string ghichu)
         {
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-                // Kiểm tra người dùng đã đăng nhập chưa
-                if (identity != null && identity.IsAuthenticated)
+                if (identity != null)
                 {
                     var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
 
+
+                    var idnv = userID.ToString();
                     if (ghichu != null)
                     {
-                        var idnv = userID.ToString();
                         var response = await _iorderService.HuyHD(idhd, idnv);
-
-                        if (response)
+                        if (response == true)
                         {
-                            var responseghichu =  _iorderService.UpdateGhiChuHD(idhd, idnv, ghichu);
+                        var responseghichu =  _iorderService.UpdateGhiChuHD(idhd, idnv, ghichu);
 
-                            if (responseghichu)
+                            if (responseghichu = true)
                             {
                                 return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                                return RedirectToAction("OrderDetail");
+
+
                             }
                         }
-                        return Json(new { success = false, message = "Cập nhật trạng thái thất bại" });
                     }
-                    else
-                    {
-                        return Json(new { success = false, message = "Ghi chú không được trống" });
-                    }
+                    return Json(new { success = true, message = "Ghi chú không được trống" });
+
                 }
-                else
-                {
-                    return Json(new { success = false, message = "Bạn chưa đăng nhập" });
-                }
+                return RedirectToAction("OrderDetail");
+
+
+
             }
             catch (Exception ex)
             {
-                // Log lỗi nếu cần thiết
                 return RedirectToAction("OrderDetail", "ManagerOrder");
+
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> AddProductDetailToOrder(Guid orderId, Guid productDetailId, int Quantity)
         {

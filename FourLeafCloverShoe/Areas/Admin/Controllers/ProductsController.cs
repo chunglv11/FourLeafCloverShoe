@@ -1,4 +1,5 @@
-﻿using FourLeafCloverShoe.IServices;
+﻿using FourLeafCloverShoe.Helper;
+using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Services;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using Size = FourLeafCloverShoe.Share.Models.Size;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;

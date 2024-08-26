@@ -132,11 +132,11 @@ app.UseRouting();
 
 // use session
 app.UseSession();
-
 //use authen + author
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<CheckAccountStatusMiddleware>();
 // add endpoins
 app.UseEndpoints(endpoints =>
 {
