@@ -165,38 +165,38 @@ namespace FourLeafCloverShoe.Services
                 return false;
             }
         }
-        public async Task<bool> UpdateRank(int? point)
+        public async Task<bool> UpdateRank(int? point, decimal? coin, string? userid)
         {
-            var ranks = await _myDbContext.Ranks.ToListAsync();
-            if (ranks != null)
-            {
+            
 
+               
+                    var user =  _myDbContext.Users.FirstOrDefault(c => c.Id == userid );
+                    if (user != null)
+                    {
+                        user.Points = point;
+                        user.Coins = coin;
+                        if (user.Points >= 0 && user.Points <= 1000000)
+                        {
+                            var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Bạc");
+                            user.RankId = ranknamne.Id;
+                        }
+                        else if (user.Points >= 2000001 && user.Points <= 30000000)
+                        {
+                            var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Vàng");
+                            user.RankId = ranknamne.Id;
+                        }
+                        else 
+                        {
+                            var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Kim Cương");
+                            user.RankId = ranknamne.Id;
+                        }
+                        _myDbContext.Users.Update(user);
+                        await _myDbContext.SaveChangesAsync();
+                        return true;
+                    
 
-                foreach (var item in ranks)
-                {
-                    var user = await _myDbContext.Users.FirstOrDefaultAsync(c => c.RankId == item.Id);
-                    user.Points = point;
-                    if (user.Points >= 0 && user.Points <= 1000000)
-                    {
-                        var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Bạc");
-                        user.RankId = ranknamne.Id;
-                    }
-                    else if (user.Points >= 2000001 && user.Points <= 30000000)
-                    {
-                        var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Vàng");
-                        user.RankId = ranknamne.Id;
-                    }
-                    else if (user.Points >= 30000001 && user.Points <= 10000000)
-                    {
-                        var ranknamne = await _myDbContext.Ranks.FirstOrDefaultAsync(c => c.Name == "Kim Cương");
-                        user.RankId = ranknamne.Id;
-                    }
-                    _myDbContext.Users.Update(user);
-                    await _myDbContext.SaveChangesAsync();
-                    return true;
-
-                }
-            }
+                     }
+            
             return false;
         }
         public async Task<bool> UpdateOrderStatus(Guid idOrder, int? status, string? idStaff)
@@ -238,7 +238,8 @@ namespace FourLeafCloverShoe.Services
                     if (kh != null && hoadon != null)
                     {
                         kh.Points += Convert.ToInt32(hoadon.TotalAmout);
-                        UpdateRank(kh.Points);
+                        kh.Coins +=hoadon.TotalAmout / 100;
+                        await  UpdateRank(kh.Points, kh.Coins, kh.Id);
                     }
                   
                     updateorder.PaymentDate ??= DateTime.Now;
@@ -271,7 +272,7 @@ namespace FourLeafCloverShoe.Services
 
        
 
-        public bool ThanhCong(Guid idHoaDon, string? idNhanVien)
+        public async Task<bool> ThanhCong(Guid idHoaDon, string? idNhanVien)
         {
             try
             {
@@ -288,11 +289,12 @@ namespace FourLeafCloverShoe.Services
                     // Cộng tích điểm cho khách
                     if (hd.UserId != "2FA6148D-B530-421F-878E-CE4D54BFC6AB") // nếu userid bill khác khách vãng lai thì cộng điểm
                     {
-                        var kh = _myDbContext.Users.FirstOrDefault(c => c.Id == idNhanVien);
+                        var kh =  _myDbContext.Users.FirstOrDefault(c => c.Id == hd.UserId);
                         if (kh != null)
                         {
                             kh.Points += Convert.ToInt32(hd.TotalAmout);
-                            UpdateRank(kh.Points);
+                            kh.Coins += hd.TotalAmout /100;
+                            await UpdateRank(kh.Points, kh.Coins, kh.Id);
                         }
                     }
 
@@ -307,14 +309,15 @@ namespace FourLeafCloverShoe.Services
             }
         }
 
-        public async Task<bool> HuyHD(Guid idhd, string? idnv)
+        public async Task<bool> HuyHD(Guid idhd, string idnv)
         {
             try
             {
                 var hd = _myDbContext.Orders.Where(c => c.Id == idhd).FirstOrDefault();
                 //Update hd
                 hd.UserId = idnv;
-                hd.OrderStatus = 2;
+                hd.OrderStatus = 13;
+                hd.StaffId ??= idnv;
                 //hd.TongTien = 0;
                 _myDbContext.Orders.Update(hd);
                 await _myDbContext.SaveChangesAsync();
@@ -347,7 +350,7 @@ namespace FourLeafCloverShoe.Services
                     }
 
                 }
-                // Cộng lại số lượng voucher nếu áp dụng
+                ////Cộng lại số lượng voucher nếu áp dụng
                 //if (hd.VoucherId != null)
                 //{
                 //    var vc = await _myDbContext.Vouchers.FirstOrDefaultAsync(c => c.Id == hd.VoucherId);

@@ -166,6 +166,10 @@
                             {
                                 <td><span class="badge badge-danger">Yêu cầu đổi trả</span></td>
                             }
+                            else if (item.OrderStatus == 13)
+                            {
+                                <td><span class="badge badge-danger">Đơn Huỷ</span></td>
+                            }
                             <td>@item.TotalAmout.Value.ToString("N0")</td>
                             @* <td></td> *@
                         </tr>
