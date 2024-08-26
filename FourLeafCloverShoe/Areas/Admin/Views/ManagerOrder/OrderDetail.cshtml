@@ -315,10 +315,12 @@
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 0)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('1')">Chờ Thanh Toán</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('1')">Đã Thanh Toán</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+                <button type="button" class="btn btn-danger fw-normal text-white" onclick="huyDon('@Model.FirstOrDefault().Orders.Id')" >Hủy bỏ</button>
+                   
+                  
             </div>
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 1)
@@ -351,9 +353,7 @@
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('8')">Đã Giao Hàng</button>
             </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" onclick="DoiTrangThai('6')">Đã Huỷ</button>
-            </div>
+            
         }
         
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 6)
@@ -366,7 +366,7 @@
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 8)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-success fw-normal text-white" onclick="DoiTrangThai('8')">Hoàn thành</button>
+                <button type="button" class="btn btn-success fw-normal text-white" disabled>Hoàn thành</button>
 
             </div>
         }
