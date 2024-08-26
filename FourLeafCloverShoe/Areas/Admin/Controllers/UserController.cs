@@ -3,6 +3,7 @@ using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using FourLeafCloverShoe.Helper;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Encodings.Web;
@@ -14,7 +15,7 @@ using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[AdminAreaAuthorization]
+    [AdminAreaAuthorization]
     public class UserController : Controller
     {
         private readonly UserManager<User> _userManager;

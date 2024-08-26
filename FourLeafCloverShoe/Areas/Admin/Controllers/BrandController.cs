@@ -1,10 +1,12 @@
 ﻿using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
+using FourLeafCloverShoe.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class BrandController : Controller
     {
         private IBrandService _brandService;

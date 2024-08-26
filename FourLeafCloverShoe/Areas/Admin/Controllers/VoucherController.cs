@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using FourLeafCloverShoe.Helper;
 using System.Linq;
 using System.Net.NetworkInformation;
 using ZXing;
@@ -13,6 +14,7 @@ using ZXing;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class VoucherController : Controller
     {
         private IUserVoucherService _userVoucherService;
