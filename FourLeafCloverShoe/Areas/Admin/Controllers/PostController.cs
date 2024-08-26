@@ -2,12 +2,14 @@
 using FourLeafCloverShoe.Services;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Identity;
+using FourLeafCloverShoe.Helper;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class PostController : Controller
     {
         private IPostService _postService;

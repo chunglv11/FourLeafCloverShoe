@@ -123,7 +123,7 @@ namespace FourLeafCloverShoe.Services
 
             // Doanh thu trong ngày hôm nay
             var doanhThuTrongNgay = await _myDbContext.Orders
-                .Where(o => o.OrderStatus == 8 && o.PaymentDate.HasValue && o.PaymentDate.Value.Date == today) // Giả sử trạng thái 8 có nghĩa là đơn hàng đã hoàn thành
+                .Where(o =>( o.OrderStatus == 8 || o.OrderStatus == 1 )&& o.PaymentDate.HasValue && o.PaymentDate.Value.Date == today) // Giả sử trạng thái 8 có nghĩa là đơn hàng đã hoàn thành
                 .SelectMany(o => o.OrderItems) // Mở rộng ra các mặt hàng trong đơn hàng
                 .GroupBy(oi => oi.Orders.PaymentDate.Value.Date)
                 .Select(g => new DoanhThuViewModel
@@ -135,7 +135,7 @@ namespace FourLeafCloverShoe.Services
 
             // Doanh thu trong 7 ngày qua
             var doanhThuquery = await query
-                .Where(o => o.OrderStatus == 8) // Lọc theo trạng thái đơn và ngày
+                .Where(o => o.OrderStatus == 8 || o.OrderStatus == 1) // Lọc theo trạng thái đơn và ngày
                 .SelectMany(o => o.OrderItems) // Lấy tất cả OrderItems liên quan
                 .GroupBy(oi => oi.Orders.PaymentDate.Value.Date) // Nhóm theo ngày của đơn hàng
                 .Select(g => new DoanhThuViewModel

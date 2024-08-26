@@ -7,9 +7,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
         [Area("Admin")]
 
-    //[AdminAreaAuthorization] // check admin or staff
+    [AdminAreaAuthorization] // check admin or staff
 
-    [Authorize(Roles ="Admin")]    
     
     public class DashboardController : Controller
     {

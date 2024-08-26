@@ -1,0 +1,369 @@
+﻿@model FourLeafCloverShoe.Share.Models.Order
+@{
+    ViewData["Title"] = "View";
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    Layout = null;
+    <style>
+        body {
+            font-size: 16px;
+            letter-spacing: 0.7px;
+            font-family: "Nunito", sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            table tr td {
+                padding: 0;
+            }
+
+                table tr td:last-child {
+                    text-align: right;
+                }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .large {
+            font-size: 1.2em;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .invoice-info-container {
+            font-size: 0.875em;
+        }
+
+            .invoice-info-container td {
+                padding: 4px 0;
+            }
+
+        .client-name {
+            font-size: 1.5em;
+            vertical-align: top;
+        }
+
+        .line-items-container {
+            margin: 30px 0;
+            font-size: 0.875em;
+        }
+
+            .line-items-container th {
+                text-align: left;
+                color: black;
+                border-bottom: 2px solid #ddd;
+                padding: 10px 0 15px 0;
+                font-size: 0.75em;
+                text-transform: uppercase;
+            }
+
+                .line-items-container th:last-child {
+                    text-align: right;
+                }
+
+            .line-items-container td {
+                padding: 15px 0;
+            }
+
+            .line-items-container tbody tr:first-child td {
+                padding-top: 25px;
+            }
+
+            .line-items-container.has-bottom-border tbody tr:last-child td {
+                padding-bottom: 25px;
+                border-bottom: 2px solid #ddd;
+            }
+
+            .line-items-container.has-bottom-border {
+                margin-bottom: 0;
+            }
+
+            .line-items-container th.heading-quantity {
+                width: 50px;
+            }
+
+            .line-items-container th.heading-price {
+                text-align: right;
+                width: 100px;
+            }
+
+            .line-items-container th.heading-subtotal {
+                width: 100px;
+            }
+
+        .payment-info {
+            width: 38%;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .page-container {
+            display: none;
+        }
+    </style>
+}
+<table class="invoice-info-container">
+    <tr>
+        <td rowspan="3" class="client-name">
+            <div class="logo-container">
+                <h2>Hoá Đơn mua hàng</h2>
+            </div>
+        </td>
+        <td rowspan="3" style="font-size:14px">
+            Điện thoại: 0376810024<br />
+            Email: fourleafclovershoe@gmail.com
+        </td>
+    </tr>
+</table>
+
+
+<table class="invoice-info-container">
+    <tr>
+        <td rowspan="2" class="client-name">
+            @Model.RecipientName
+            <br />
+            Điện thoại:(+84) @Model.RecipientPhone<br />
+            Đia chỉ: @Model.RecipientAddress;
+        </td>
+        <td>
+            <div>Mã HD - @Model.OrderCode</div>
+            @{
+                var ngayxuat = (DateTime.Now).ToString("HH:mm dd-MM-yyyy");
+                <div>Ngày xuất: @ngayxuat</div>
+            }
+        </td>
+    </tr>
+</table>
+
+
+<table class="line-items-container">
+    <thead>
+        <tr>
+            <th>Mã mặt hàng</th>
+            <th>Tên mặt hàng</th>
+            <th>Kích cỡ</th>
+            <th style="text-align:right">Số lượng</th>
+            <th style="text-align:right">Đơn giá*</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal? tontien = 0;
+
+        }
+        @foreach (var item in Model.OrderItems)
+        {
+            var thanhtien = item.Quantity * item.Price;
+            tontien += thanhtien;
+            <tr>
+                <td>@item.Orders.OrderCode</td>
+                <td>@item.ProductDetails.Products.ProductName</td>
+                <td style="max-width:200px">@item.ProductDetails.Size.Name</td>
+                <td style="text-align:right">@item.Quantity</td>
+                <td>@item.Price?.ToString("n0") đ</td>
+                <td >@thanhtien?.ToString("n0") đ</td>
+            </tr>
+
+        }
+
+        @{
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                Tổng tiền hàng
+                </td>
+                <td class="bold right">
+                    @tontien?.ToString("n0") đ
+                </td>
+            </tr>
+             
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    Giảm từ voucher:
+                </td>
+                <td>
+                    - @Model.VoucherValue?.ToString("n0") đ
+                </td>
+            </tr>
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    Giảm giá từ xu:
+                </td>
+                <td>
+                   - @Model.CoinsUsed?.ToString("n0") đ
+                </td>
+            </tr>
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    Tiền ship:
+                </td>
+                <td>
+                   + @Model.ShippingFee?.ToString("n0") đ
+                </td>
+            </tr>
+
+            <tr class="p-0 m-0">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="3">
+                    Tổng thanh toán
+                </td>
+                    <td class="bold right">
+                        <b>
+                            @Model.TotalAmout?.ToString("n0") đ
+                        </b>
+                    </td>
+                
+            </tr>
+            <tr class="p-0 m-0">
+                <td colspan="5" class="right" style="font-size:12px">
+                    *Giá sản phẩm đã bao gồm thuế
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<!--Thông tin cuối -->
+<table class="line-items-container has-bottom-border">
+    <thead>
+        <tr>
+            <th>Phương thức thanh toán</th>
+            <th>Ngày đặt hàng</th>
+            <th>Tổng tiền thanh toán</th>
+            <th>Trạng thái đơn hàng</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div>
+                    @if (Model.PaymentType == "off")
+                    {
+                        <strong>Tại quầy</strong>
+                    }
+                    else if (Model.PaymentType == "cod")
+                    {
+                        <strong>Ship Cod</strong>
+                    }
+                    else if (Model.PaymentType == "momo")
+                    {
+                        <strong>Momo</strong>
+                    }
+                    else 
+                    {
+                        <strong>VnPay</strong>
+                    }
+                </div>
+            </td>
+            
+            <td>@Model.CreateDate?.ToString("HH:mm dd-MM-yyyy")</td>
+                <td>@Model.TotalAmout?.ToString("n0") đ</td>
+                @{
+                string status;
+                if (Model.OrderStatus == -1)
+                {
+                    status = "Đơn Chờ";
+                }
+                else if (Model.OrderStatus == 0)
+                {
+                    status = "Chờ Thanh Toán";
+                }
+                else if (Model.OrderStatus == 1)
+                {
+                    status = "Đã Thanh Toán";
+                }
+                else if (Model.OrderStatus == 2)
+                {
+                    status = "Chờ Xác Nhận";
+                }
+                else if (Model.OrderStatus == 3)
+                {
+                    status = "Chờ Lấy Hàng";
+                }
+                else if (Model.OrderStatus == 4)
+                {
+                    status = "Đang Giao Hàng";
+                }
+                else if (Model.OrderStatus == 5)
+                {
+                    status = "Khách Yêu Cầu Huỷ";
+                }
+                else if (Model.OrderStatus == 6)
+                {
+                    status = "Giao Hàng Thất Bại";
+                }
+                else if (Model.OrderStatus == 7)
+                {
+                    status = "Yêu Cầu Huỷ Đơn Thất Bại";
+                }
+                else if (Model.OrderStatus == 8)
+                {
+                    status = "Giao Hàng Thành Công";
+                }
+                else if (Model.OrderStatus == 9)
+                {
+                    status = "Thanh Toán Tại Quầy";
+                }
+                else if (Model.OrderStatus == 10)
+                {
+                    status = "Yêu Cầu Đổi Trả";
+                }
+                else if (Model.OrderStatus == 11)
+                {
+                    status = "Chấp Nhận Đổi Trả";
+                }
+                else if (Model.OrderStatus == 12)
+                {
+                    status = "Từ Chối Đổi Trả";
+                }
+                else if (Model.OrderStatus == 13)
+                {
+                    status = "Khách Huỷ Đơn";
+                }
+                else if (Model.OrderStatus == 14)
+                {
+                    status = "Chấp Nhận Huỷ Đơn";
+                }
+                else
+                {
+                    status = "Trạng thái không xác định";
+                }
+
+                }
+            <td class="large total">@status</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="footer">
+    <span><em>Cảm ơn quý khách và hẹn gặp lại!</em></span>
+</div>

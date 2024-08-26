@@ -145,7 +145,20 @@ namespace FourLeafCloverShoe.Areas.Identity.Pages.Account
                     }
                     //Xóa các sản phẩm đã xử lý khỏi phiên làm việc
                     SessionServices.SetCartItems(HttpContext.Session, "Cart", new List<CartItem>());
-                    return LocalRedirect(returnUrl);
+
+                    // Lấy các vai trò của người dùng
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Contains("Admin"))
+                    {
+                        returnUrl = Url.Content("~/Admin/Statistical");
+                    }
+                    else if (roles.Contains("Staff"))
+                    {
+                        returnUrl = Url.Content("~/Admin/Statistical");
+                    }
+                        return LocalRedirect(returnUrl);
+                    
                 }
                 if (result.RequiresTwoFactor)
                 {

@@ -14,16 +14,32 @@ namespace FourLeafCloverShoe.Helper
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!filterContext.HttpContext.User.IsInRole("Admin")|| !filterContext.HttpContext.User.IsInRole("Staff"))
+            //if (!filterContext.HttpContext.User.IsInRole("Admin")|| !filterContext.HttpContext.User.IsInRole("Staff"))
+            //{
+            //    filterContext.Result = new RedirectToRouteResult(
+            //        new RouteValueDictionary
+            //        {
+            //        { "controller", "Home" },
+            //        { "action", "Index" },
+            //        { "area", "" }
+            //        });
+            //}
+            var user = filterContext.HttpContext.User;
+            var isAdmin = user.IsInRole("Admin");
+            var isStaff = user.IsInRole("Staff");
+
+            if (!isAdmin && !isStaff)
             {
                 filterContext.Result = new RedirectToRouteResult(
                     new RouteValueDictionary
                     {
-                    { "controller", "Home" },
-                    { "action", "Index" },
-                    { "area", "" }
+                { "controller", "Home" },
+                { "action", "Index" },
+                { "area", "" }
                     });
             }
+
+            base.OnActionExecuting(filterContext);
         }
     }
 }

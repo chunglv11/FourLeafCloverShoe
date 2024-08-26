@@ -1,12 +1,14 @@
 ﻿using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using FourLeafCloverShoe.Helper;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class RoleController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;

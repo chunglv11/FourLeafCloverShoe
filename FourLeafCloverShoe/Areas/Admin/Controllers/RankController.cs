@@ -1,12 +1,14 @@
 ﻿using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
+using FourLeafCloverShoe.Helper;
 using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace FourLeafCloverShoe.Controllers
 {
     [Area("Admin")]
 
+    [AdminAreaAuthorization]
     public class RankController : Controller
     {
 
