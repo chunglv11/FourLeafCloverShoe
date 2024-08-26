@@ -228,7 +228,7 @@ cartItems.FirstOrDefault(c => c.ProductDetailId == productDetail.Id)?.Quantity *
                     }
                     else
                     {
-                        giaTriVoucher = String.Format("N0", giaTriVoucher) + " đ";
+                        giaTriVoucher = obj.Vouchers.VoucherValue?.ToString("N0") + " đ";
 
                     }
                     lstVoucher.Add(new SelectListItem()
