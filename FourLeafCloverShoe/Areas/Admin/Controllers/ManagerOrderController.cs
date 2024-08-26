@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Globalization;
+using FourLeafCloverShoe.Helper;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Policy;
@@ -15,6 +16,7 @@ using X.PagedList;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class ManagerOrderController : Controller
     {
         private readonly IOrderService _iorderService;

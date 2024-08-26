@@ -1,11 +1,13 @@
 ﻿using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Services;
+using FourLeafCloverShoe.Helper;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

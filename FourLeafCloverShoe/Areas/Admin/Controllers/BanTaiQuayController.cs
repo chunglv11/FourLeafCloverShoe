@@ -24,6 +24,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class BanTaiQuayController : Controller
     {
         private readonly UserManager<User> _userManager;

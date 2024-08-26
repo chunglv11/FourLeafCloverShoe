@@ -1,12 +1,14 @@
 ﻿using FourLeafCloverShoe.IServices;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
+using FourLeafCloverShoe.Helper;
 using Org.BouncyCastle.Utilities.Encoders;
 using System.Text.RegularExpressions;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class ColorController : Controller
     {
         private IColorsService _colorService;

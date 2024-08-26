@@ -1,10 +1,12 @@
 ﻿using FourLeafCloverShoe.IServices;
 using Microsoft.AspNetCore.Mvc;
+using FourLeafCloverShoe.Helper;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
 
+    [AdminAreaAuthorization]
     public class StatisticalController : Controller
     {
         private readonly IStatisticService _statisticalService;

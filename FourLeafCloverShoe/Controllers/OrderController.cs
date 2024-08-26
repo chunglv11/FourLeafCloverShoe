@@ -442,7 +442,7 @@ namespace FourLeafCloverShoe.Controllers
                         var resultCode = Request.Query["resultCode"];
                         if (resultCode == "0")
                         {
-                            order.OrderStatus = 1; // chờ xác nhận
+                            order.OrderStatus = 3; // chờ xác nhận
                             order.PaymentDate = DateTime.Now;
                             order.UpdateDate = DateTime.Now;
                             var result = await _orderService.Update(order);
@@ -521,7 +521,7 @@ namespace FourLeafCloverShoe.Controllers
                             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                             {
 
-                                order.OrderStatus = 1;
+                                order.OrderStatus = 3;
                                 order.PaymentDate = DateTime.Now;
                                 order.UpdateDate = DateTime.Now;
                                 var result = await _orderService.Update(order);
@@ -585,7 +585,7 @@ namespace FourLeafCloverShoe.Controllers
                         var resultCode = Request.Query["resultCode"];
                         if (resultCode == "0")
                         {
-                            order.OrderStatus = 1; // chờ xác nhận
+                            order.OrderStatus = 3; // chờ xác nhận
                             order.PaymentDate = DateTime.Now;
                             order.UpdateDate = DateTime.Now;
                             var result = await _orderService.Update(order);
@@ -639,7 +639,7 @@ namespace FourLeafCloverShoe.Controllers
                             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                             {
 
-                                order.OrderStatus = 1;
+                                order.OrderStatus = 3;
                                 order.PaymentDate = DateTime.Now;
                                 order.UpdateDate = DateTime.Now;
                                 var result = await _orderService.Update(order);

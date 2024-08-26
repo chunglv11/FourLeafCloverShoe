@@ -1,10 +1,13 @@
-﻿using FourLeafCloverShoe.IServices;
+﻿using FourLeafCloverShoe.Helper;
+using FourLeafCloverShoe.IServices;
+using FourLeafCloverShoe.Helper;
 using FourLeafCloverShoe.Share.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FourLeafCloverShoe.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AdminAreaAuthorization]
     public class MaterialController : Controller
     {
        
