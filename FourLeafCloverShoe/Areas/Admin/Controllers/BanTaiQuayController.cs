@@ -505,6 +505,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 return Json(new { message = "Đơn hàng chưa có sản phẩm nào!", isSuccess = false });
             }
             order.PaymentType = "off";
+            order.PaymentDate = DateTime.Now;
             order.UpdateDate = DateTime.Now;
             if (voucherId != new Guid())
             {
@@ -516,7 +517,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             order.OrderStatus = 1;
             if (await _orderService.Update(order))
             {
-
                 var coinsPlus = (order.TotalAmout + voucherValue + coinUsed) / 100;
                 if (order.UserId != null)//  cộng xu
                 {
@@ -587,6 +587,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
             if (paymentType == "off" || order.TotalAmout == 0)
             {
+                order.PaymentDate = DateTime.Now;
                 order.OrderStatus = 1;
                 if (await _orderService.Update(order)) 
                 {
