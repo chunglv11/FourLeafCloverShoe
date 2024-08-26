@@ -220,7 +220,7 @@
                                                             <div>
                                                                 <!--ko if: IsBonus--><!--/ko-->
                                                                 <!--ko if:Price > 0 && !IsBonus-->
-                                                                <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)">đ270,000</span>
+                                                                <span class="order-item-product-old-price" data-bind="text:'đ'+RegularPrice.format(0,3)"></span>
                                                                 <span class="order-item-product-amount-content order-item-product-new-price">@product.Price?.ToString("N0") đ</span>
                                                                 <!--/ko-->
                                                                 <!--ko if:Price == 0 && !IsBonus--><!--/ko-->
