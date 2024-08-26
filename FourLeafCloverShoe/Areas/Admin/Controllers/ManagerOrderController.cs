@@ -115,127 +115,117 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             return Json(new { success = true, data = lstProductDetail });
         }
 
-        public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai)// Dùng cho trạng thái truyền  vào: 10, 3
+        public async Task<IActionResult> DoiTrangThai(Guid idhd, int trangthai) // Dùng cho trạng thái truyền vào: 10, 3
         {
-
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-
-                if (identity != null)
+                // Kiểm tra người dùng đã đăng nhập chưa
+                if (identity != null && identity.IsAuthenticated)
                 {
                     var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
-
-
                     var idnv = userID.ToString();
 
-                    if (trangthai == 3) // chờ lấy hàng
+                    if (trangthai == 3) // Chờ lấy hàng
                     {
                         var hoadonCT = await _iorderItemService.GetByIdOrder(idhd);
                         foreach (var item in hoadonCT)
                         {
                             var responseUpdateQuantityProductDetail = await _productDetailService.UpdateQuantityById(item.ProductDetailID, item.Quantity);
-                            if (responseUpdateQuantityProductDetail == false)
-                            {// xác nhận đơn xong thì mới trừ số lượng sp
-                                return BadRequest();
+                            if (!responseUpdateQuantityProductDetail)
+                            {
+                                return Json(new { success = false, message = "Cập nhật số lượng sản phẩm thất bại" });
                             }
                         }
+
                         var updateSLSPfromDb = await _productService.UpdateSLTheoSPCT();
-                        if (updateSLSPfromDb == false)
-                        { // update lại slsp
-                            return BadRequest();
-
+                        if (!updateSLSPfromDb)
+                        {
+                            return Json(new { success = false, message = "Cập nhật số lượng sản phẩm theo chi tiết thất bại" });
                         }
-
 
                         var response = await _iorderService.UpdateOrderStatus(idhd, trangthai, idnv);
-                        if (response == true)
+                        if (response)
                         {
-
-
                             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
-
-                        }
-                    } 
-                    else if (trangthai == 8)
-                    {
-                        var response = await  _iorderService.ThanhCong(idhd, idnv);
-                        if (response == true)
-                        {
-
-
-                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
-                            
-
                         }
                     }
-                    else 
+                    else if (trangthai == 8) // Hoàn tất đơn hàng
+                    {
+                        var response = await _iorderService.ThanhCong(idhd, idnv);
+                        if (response)
+                        {
+                            return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+                        }
+                    }
+                    else // Các trạng thái khác
                     {
                         var response = await _iorderService.UpdateOrderStatus(idhd, trangthai, idnv);
-                        if (response == true)
+                        if (response)
                         {
-
-
                             return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
-
                         }
-
                     }
 
-
+                    return Json(new { success = false, message = "Cập nhật trạng thái thất bại" });
                 }
-                return Json(new { success = true, message = "Cập nhật trạng thái thất bại " });
-             
-
+                else
+                {
+                    return Json(new { success = false, message = "Bạn chưa đăng nhập" });
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log lỗi nếu cần thiết
                 return RedirectToAction("OrderDetail", "ManagerOrder");
             }
         }
+
         public async Task<IActionResult> HuyHD(Guid idhd, string ghichu)
         {
             try
             {
                 var identity = HttpContext.User.Identity as ClaimsIdentity;
 
-                if (identity != null)
+                // Kiểm tra người dùng đã đăng nhập chưa
+                if (identity != null && identity.IsAuthenticated)
                 {
                     var userID = Guid.Parse(identity.FindFirst(ClaimTypes.NameIdentifier).Value); // userId
 
-
-                    var idnv = userID.ToString();
                     if (ghichu != null)
                     {
+                        var idnv = userID.ToString();
                         var response = await _iorderService.HuyHD(idhd, idnv);
-                        if (response == true)
-                        {
-                        var responseghichu =  _iorderService.UpdateGhiChuHD(idhd, idnv, ghichu);
 
-                            if (responseghichu = true)
+                        if (response)
+                        {
+                            var responseghichu =  _iorderService.UpdateGhiChuHD(idhd, idnv, ghichu);
+
+                            if (responseghichu)
                             {
                                 return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
-                                return RedirectToAction("OrderDetail");
-
-
                             }
                         }
+                        return Json(new { success = false, message = "Cập nhật trạng thái thất bại" });
                     }
-                    return Json(new { success = true, message = "Ghi chú không được trống" });
-
+                    else
+                    {
+                        return Json(new { success = false, message = "Ghi chú không được trống" });
+                    }
                 }
-                return RedirectToAction("OrderDetail");
-
-
-
+                else
+                {
+                    return Json(new { success = false, message = "Bạn chưa đăng nhập" });
+                }
             }
             catch (Exception ex)
             {
+                // Log lỗi nếu cần thiết
                 return RedirectToAction("OrderDetail", "ManagerOrder");
-
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> AddProductDetailToOrder(Guid orderId, Guid productDetailId, int Quantity)
         {

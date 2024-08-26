@@ -63,9 +63,9 @@
                     <li><input name="status" value="3" type="checkbox" @(selectStatus != null && (selectStatus).Contains(3) ? "checked" : "")> Chờ lấy hàng</li>
                     <li><input name="status" value="4" type="checkbox" @(selectStatus != null && (selectStatus).Contains(4) ? "checked" : "")> Đang giao hàng</li>
                     <li><input name="status" value="6" type="checkbox" @(selectStatus != null && (selectStatus).Contains(6) ? "checked" : "")> Giao hàng thất bại</li>
-                    <li><input name="status" value="8" type="checkbox" @(selectStatus != null && (selectStatus).Contains(8) ? "checked" : "")> Giao hàng thành công</li>
-                    <li><input name="status" value="9" type="checkbox" @(selectStatus != null && (selectStatus).Contains(9) ? "checked" : "")> Thanh toán tại quầy</li>
+                    <li><input name="status" value="8" type="checkbox" @(selectStatus != null && (selectStatus).Contains(8) ? "checked" : "")> Hoàn thành </li>
                     <li><input name="status" value="10" type="checkbox" @(selectStatus != null && (selectStatus).Contains(10) ? "checked" : "")> Yêu cầu đổi trả</li>
+                    <li><input name="status" value="10" type="checkbox" @(selectStatus != null && (selectStatus).Contains(13) ? "checked" : "")> Đã Huỷ</li>
                 </ul>
                 <button style="width:249px" type="submit" class="btn btn-dark">Lọc</button>
             </form>
@@ -122,11 +122,8 @@
                                 }
                                
                             </td>
-                            @if (item.OrderStatus == -1)
-                            {
-                                <td><span class="badge badge-info">Đơn chờ</span></td>
-                            }
-                            else if(item.OrderStatus == 0)
+                            
+                           @if(item.OrderStatus == 0)
                             {
                                 <td><span class="badge badge-info">Chờ thanh toán</span></td>
                             }
@@ -156,12 +153,9 @@
                             }
                             else if (item.OrderStatus == 8)
                             {
-                                <td><span class="badge badge-success">Giao hàng thành công</span></td>
+                                <td><span class="badge badge-success"> Hoàn thành </span></td>
                             }
-                            else if (item.OrderStatus == 9)
-                            {
-                                <td><span class="badge badge-success">Thanh toán tại quầy</span></td>
-                            }
+                           
                             else if (item.OrderStatus == 10)
                             {
                                 <td><span class="badge badge-danger">Yêu cầu đổi trả</span></td>

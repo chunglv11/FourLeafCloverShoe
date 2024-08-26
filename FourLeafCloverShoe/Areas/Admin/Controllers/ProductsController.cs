@@ -405,14 +405,14 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         productDetail.ColorId == Guid.Empty ||
         productDetail.MaterialId == Guid.Empty || productDetail.PriceSale == null || productDetail.PriceSale < 0 || productDetail.Quantity <0 || productDetail.Quantity == null)
                 {
-                    ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường.");
+                    TempData["ErrorMessage"] = "Vui lòng nhập đầy đủ các trường.";
                     return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
                 }
                 bool exists = await ProductExists(productDetail.ProductId, productDetail.SizeId, productDetail.ColorId, productDetail.MaterialId);
 
                 if (exists)
                 {
-                    ModelState.AddModelError("", "Sản phẩm với kích cỡ, màu sắc và chất liệu này đã tồn tại.");
+                    TempData["ErrorMessage"] = "Sản phẩm với kích cỡ, màu sắc và chất liệu này đã tồn tại.";
                     return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
                 }
                 var product = await _productService.GetById(productDetail.ProductId);
@@ -428,7 +428,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     return RedirectToAction("productdetail", null, new { @productId = productDetail.ProductId });
                 }
             }
-            ModelState.AddModelError("", "Vui lòng nhập đầy đủ các trường");
+            TempData["ErrorMessage"] = "Vui lòng nhập đầy đủ các trường";
             return RedirectToAction("CreateProductDetail", null, new { @productId = productDetail.ProductId });
         }
         [HttpPost("Createsize")]
