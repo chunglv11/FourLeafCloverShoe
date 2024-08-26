@@ -160,7 +160,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     } 
                     else if (trangthai == 8)
                     {
-                        var response =  _iorderService.ThanhCong(idhd, idnv);
+                        var response = await  _iorderService.ThanhCong(idhd, idnv);
                         if (response == true)
                         {
 
@@ -194,7 +194,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 return RedirectToAction("OrderDetail", "ManagerOrder");
             }
         }
-        [HttpGet("/Order/HuyHD")]
         public async Task<IActionResult> HuyHD(Guid idhd, string ghichu)
         {
             try
@@ -216,14 +215,14 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
                             if (responseghichu = true)
                             {
-                                ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                                return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
                                 return RedirectToAction("OrderDetail");
 
 
                             }
                         }
                     }
-                    ViewBag.ErrorMessage = "Ghi chú không được trống";
+                    return Json(new { success = true, message = "Ghi chú không được trống" });
 
                 }
                 return RedirectToAction("OrderDetail");
