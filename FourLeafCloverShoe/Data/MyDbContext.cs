@@ -83,7 +83,9 @@ namespace FourLeafCloverShoe.Data
             builder.Entity<PaymentType>().HasData(
                 new PaymentType() { Id = Guid.NewGuid(), Name = "cod", Status = true },
                 new PaymentType() { Id = Guid.NewGuid(), Name = "momo", Status = true },
-                new PaymentType() { Id = Guid.NewGuid(), Name = "vnpay", Status = true }
+                new PaymentType() { Id = Guid.NewGuid(), Name = "vnpay", Status = true },
+                new PaymentType() { Id = Guid.NewGuid(), Name = "tienmat", Status = true },
+                new PaymentType() { Id = Guid.NewGuid(), Name = "chuyenkhoan", Status = true }
                 );
             builder.Entity<Colors>().HasData(
                 new Colors() { Id = Guid.NewGuid(), ColorName = "Đỏ", ColorCode = "#FF0000" },

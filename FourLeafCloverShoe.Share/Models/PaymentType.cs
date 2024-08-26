@@ -9,7 +9,6 @@ namespace FourLeafCloverShoe.Share.Models
 {
     public class PaymentType
     {
-        //[Key]
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public bool? Status { get; set; }
