@@ -324,11 +324,9 @@
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 1)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Chờ giao hàng</button>
+                <button type="button" class="btn btn-success fw-normal text-white" disabled>Đã Thanh Toán</button>
             </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Huỷ Đơn</button>
-            </div>
+            
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 2)
         {
@@ -390,7 +388,7 @@
         </div> *@
       
         <div class="d-flex p-2">
-            <button type="button" class="btn btn-dark">Xuất PDF</button>
+            <span class="rightinput"><a class ="btn btn-primary fw-normal text-white" href="/Admin/ManagerOrder/ExportPDF?orderId=@Model.FirstOrDefault().Orders.Id" title="Xuất hoá đơn">Xuất hoá đơn</a></span>
         </div>
        
     </div>

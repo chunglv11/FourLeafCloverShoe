@@ -5,6 +5,8 @@ using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Rotativa.AspNetCore.Options;
+using Rotativa.AspNetCore;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -407,6 +409,25 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        public async Task<IActionResult> ExportPDF(Guid orderId)
+        {
+            try
+            {
+                var order = await _iorderService.GetById(orderId);
+                var view = new ViewAsPdf("ExportPDF", order)
+                {
+                    FileName = $"{order.OrderCode}.pdf",
+                    PageOrientation = Orientation.Portrait,
+                    PageSize = Rotativa.AspNetCore.Options.Size.A4,
+
+                };
+                return view;
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", "Home");
             }
         }
     }

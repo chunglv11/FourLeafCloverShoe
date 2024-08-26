@@ -56,7 +56,6 @@
                 <h5>Trạng thái</h5>
             
                 <ul class="invoice-status">
-                    <li><input name="status" value="-1" type="checkbox" @(selectStatus != null && (selectStatus).Contains(-1) ? "checked" : "")> Đơn chờ</li>
                     <li><input name="status" value="0" type="checkbox" @(selectStatus != null && (selectStatus).Contains(0) ? "checked" : "")> Chờ thanh toán</li>
                     <li><input name="status" value="1" type="checkbox" @(selectStatus != null && (selectStatus).Contains(1) ? "checked" : "")> Đã thanh toán</li>
                     <li><input name="status" value="2" type="checkbox" @(selectStatus != null && (selectStatus).Contains(2) ? "checked" : "")> Chờ xác nhận</li>
