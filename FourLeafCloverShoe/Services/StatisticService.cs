@@ -46,7 +46,7 @@ namespace FourLeafCloverShoe.Services
 
             // Doanh thu trong 7 ngày qua
             var doanhThuquery = await query
-                .Where(o => o.OrderStatus == 8 || o.OrderStatus == 1) // Lọc theo trạng thái đơn và ngày
+                .Where(o => (o.OrderStatus == 8 || o.OrderStatus == 1) && o.PaymentDate.HasValue) // Lọc theo trạng thái đơn và ngày
                 .SelectMany(o => o.OrderItems) // Lấy tất cả OrderItems liên quan
                 .GroupBy(oi => oi.Orders.PaymentDate.Value.Date) // Nhóm theo ngày của đơn hàng
                 .Select(g => new DoanhThuViewModel

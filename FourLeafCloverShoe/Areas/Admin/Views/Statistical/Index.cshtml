@@ -104,54 +104,56 @@
                         @switch (item.trangthai)
                         {
                             case -1:
-                                <h4>Đơn chờ: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-clock"></i> Đơn chờ: @item.soluong</h4>
                                 break;
                             case 0:
-                                <h4>Chờ thanh toán: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-credit-card"></i> Chờ thanh toán: @item.soluong</h4>
                                 break;
                             case 1:
-                                <h4>Đã thanh toán: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-check-circle"></i> Đã thanh toán: @item.soluong</h4>
                                 break;
                             case 2:
-                                <h4>Chờ xác nhận: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-hourglass-half"></i> Chờ xác nhận: @item.soluong</h4>
                                 break;
                             case 3:
-                                <h4>Chờ lấy hàng: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-box"></i> Chờ lấy hàng: @item.soluong</h4>
                                 break;
                             case 4:
-                                <h4>Đang giao hàng: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-shipping-fast"></i> Đang giao hàng: @item.soluong</h4>
                                 break;
                             case 5:
-                                <h4>Yêu cầu hủy: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-times-circle"></i> Yêu cầu hủy: @item.soluong</h4>
                                 break;
                             case 6:
-                                <h4>Giao hàng thất bại: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-exclamation-triangle"></i> Giao hàng thất bại: @item.soluong</h4>
                                 break;
                             case 7:
-                                <h4>Yêu cầu hủy đơn thất bại: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-times-circle"></i> Yêu cầu hủy đơn thất bại: @item.soluong</h4>
                                 break;
                             case 8:
-                                <h4>Giao hàng thành công: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-check-circle"></i> Giao hàng thành công: @item.soluong</h4>
                                 break;
                             case 10:
-                                <h4>Yêu cầu đổi trả: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-exchange-alt"></i> Yêu cầu đổi trả: @item.soluong</h4>
                                 break;
                             case 11:
-                                <h4>Chấp nhận đổi trả: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-check-circle"></i> Chấp nhận đổi trả: @item.soluong</h4>
                                 break;
                             case 12:
-                                <h4>Từ chối đổi trả: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-times-circle"></i> Từ chối đổi trả: @item.soluong</h4>
                                 break;
                             case 13:
-                                <h4>Khách hủy đơn: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-ban"></i> Khách hủy đơn: @item.soluong</h4>
                                 break;
                             case 14:
-                                <h4>Chấp nhận hủy đơn: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-check-circle"></i> Chấp nhận hủy đơn: @item.soluong</h4>
                                 break;
                             default:
-                                <h4>Trạng thái không xác định: @item.soluong</h4>
+                                <h4 class="status-text"><i class="fas fa-question-circle"></i> Trạng thái không xác định: @item.soluong</h4>
                                 break;
                         }
+
+
                     </a>
                 </div>
             </div>
@@ -195,6 +197,17 @@
     .status-box h4 {
         margin-bottom: 10px; /* Khoảng cách dưới thẻ h4 */
     }
+
+    .status-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* Adjust spacing between icon and text */
+    }
+
+        .status-text i {
+            font-size: 1.2em; /* Adjust the size of the icon if necessary */
+        }
 
     .status-box p {
         margin-top: 0; /* Khoảng cách trên thẻ p */
