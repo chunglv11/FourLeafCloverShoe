@@ -50,11 +50,11 @@
                                                         <i class="ti ti-edit-circle f-18"></i>
                                                     </a>
                                                 </li>
-                                                <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
+                                                @* <li class="list-inline-item align-bottom" data-bs-toggle="tooltip" title="Xoá">
                                                     <a asp-action="Delete" asp-route-Id="@item.Id" class="avtar avtar-xs btn-link-danger btn-pc-default">
                                                         <i class="ti ti-trash f-18"></i>
                                                     </a>
-                                                </li>
+                                                </li> *@
                                             </ul>
                                         </div>
                                     </td>
@@ -68,5 +68,6 @@
     </div>
     <!-- [ sample-page ] end -->
 </div>
-
+@Html.Partial("~/Areas/Admin/Shared/_ErrorMessage.cshtml")
+@Html.Partial("~/Areas/Admin/Shared/SuccessMessage.cshtml")
 

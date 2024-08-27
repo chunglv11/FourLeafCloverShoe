@@ -70,7 +70,7 @@
     <div class="tabs">
         <button class="tablinks active" onclick="openTab(event, 'thongtin')">Thông tin</button>
         <button class="tablinks" onclick="openTab(event, 'giaohang')">Thông tin giao hàng</button>
-        <button class="tablinks" onclick="openTab(event, 'lichsudiem')">Lịch sử điểm</button>
+        <button class="tablinks" onclick="openTab(event, 'lichsudiem')">Lịch dùng xu</button>
     </div>
     <div id="thongtin" class="tab-content" style="display: block;">
         <div class="details">
@@ -100,10 +100,10 @@
                     }
                 </p>
             </div>
-            <div class="details-right note">
+            @* <div class="details-right note">
                 <label for="note">Ghi chú:</label>
                 <textarea id="note"></textarea>
-            </div>
+            </div> *@
         </div>
         @if (Model.FirstOrDefault().Orders.OrderStatus == 2 || Model.FirstOrDefault().Orders.OrderStatus == 3 || Model.FirstOrDefault().Orders.OrderStatus == 0)
         {

@@ -112,7 +112,11 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 });
             }
             ViewBag.ListBranditems = ListBranditems;
-
+            if (product.ProductName == null)
+            {
+                TempData["ErrorMessage"] = "Vui lòng nhập tên sản phẩm.";
+                return View(product);
+            }
             var pro = await _productService.Gets();
             var pros = pro.FirstOrDefault(p => p.ProductName.Trim().ToLower() == product.ProductName.Trim().ToLower());
             bool containsSpaceInMiddle = Regex.IsMatch(product.ProductName, @"^.+ .+$");

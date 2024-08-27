@@ -28,16 +28,16 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         public async Task<IActionResult> CreateAsync(Category category)
         {
             var categories = await _categoryService.Gets();
-            if (categories.Any(c => c.Name.Trim().ToLower() == category.Name.Trim().ToLower()))
-            {
-                TempData["ErrorMessage"] = "Loại này đã có";
-                return View();
-            }
-            else if (category.Name == null)
+            if (category.Name == null)
             {
                 TempData["ErrorMessage"] = "Không được để trống";
                 return View();
             }
+            if (categories.Any(c => c.Name.Trim().ToLower() == category.Name.Trim().ToLower()))
+            {
+                TempData["ErrorMessage"] = "Loại này đã có";
+                return View();
+            }        
             else
             {
                 var result = await _categoryService.Add(category);

@@ -97,7 +97,11 @@
                             <td><a href="@Url.Action("OrderDetail", "ManagerOrder", new { orderId = item.Id })">@item.OrderCode</a></td>
                             <td>@item.CreateDate</td>
                             <td>                              
-                                  @item.RecipientName                  
+                                  @item.RecipientName  
+                                  @if(item.RecipientName == null)
+                                    {
+                                        <p>Khách vãng lai</p>
+                                    }
                             </td>
                             <td>
 

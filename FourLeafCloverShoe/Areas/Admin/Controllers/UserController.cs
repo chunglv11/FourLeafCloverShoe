@@ -67,16 +67,31 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserViewModel user)
         {
+
+           
+
             var roles = await _roleManager.Roles.Select(r => new SelectListItem
             {
                 Text = r.Name,
                 Value = r.Name
             }).ToListAsync();
-
-
-
-            // Truyền danh sách role vào ViewBag hoặc ViewModel để sử dụng trong Razor view
             ViewBag.Roles = roles;
+            //if (roles == null)
+            //{
+            //    TempData["ErrorMessage"] = "Vui lòng chọn chức vụ";
+            //    return View(user);
+            //}
+            // Truyền danh sách role vào ViewBag hoặc ViewModel để sử dụng trong Razor view
+            if (user.FullName == null || user.UserName == null || user.Email == null || user.PhoneNumber == null || user.Password == null)
+            {
+                TempData["ErrorMessage"] = "Không được để trống";
+                return View(user);
+            }
+            if (user.Roles == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần chọn chức vụ";
+                return View(user);
+            }
             var usermodel = new User()
             {
                 UserName = user.UserName,
