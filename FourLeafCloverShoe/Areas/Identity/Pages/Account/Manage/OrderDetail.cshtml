@@ -240,7 +240,7 @@
             <div class="order-item-calc-content" data-bind="text:'đ'+SubTotal.format(0,3)">@Model.Order.TotalAmout?.ToString("N0") đ</div>
         </div>
     </div>
-    @if (Model.Order.OrderStatus == 0  ||Model.Order.OrderStatus==2)
+    @if (Model.Order.OrderStatus == 0 || Model.Order.OrderStatus == 2 || Model.Order.OrderStatus == 3)
     {
         if (Model.Order.OrderStatus == 0)
         {
@@ -256,14 +256,14 @@
             </div>
         </div>
     }
-    else if (Model.Order.OrderStatus == 3 || Model.Order.OrderStatus == 4)
+@*     else if (Model.Order.OrderStatus == 3 || Model.Order.OrderStatus == 4)
     {
         <div>
             <div class="order-item-calc-inner">
                 <button class="btn btn-solid-primary btn--m btn--inline" id="btnYeuCauHuyDon" aria-disabled="true">Yêu cầu Huỷ đơn</button>
             </div>
         </div>
-    }
+    } *@
     else if (Model.Order.OrderStatus == 8 || Model.Order.OrderStatus == 9)
     {
         <div>
