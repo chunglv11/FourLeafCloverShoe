@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Thêm mới sản phẩm chi tiết";
     ViewBag.pTitle = "Sản phâm chi tiết";
+    ViewBag.pTitleLink = "Products";
+
 
 }
 <div id="themcolormoi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" @* aria-hidden="true" *@>
@@ -23,10 +25,12 @@
                                     <input type="text" id="exampleColorInput" name="colorName" class="form-control" placeholder="Nhập màu">
                                     <input type="text" hidden name="idProduct" class="form-control" value="@ViewBag.productId">
 
+
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Mã màu</label>
                                     <input type="color" class="form-control form-control-color" name="colorCode" value="#563d7c" placeholder="Nhập mã">
+
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="card-body text-end btn-page">
@@ -61,7 +65,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Chất Liệu</label>
                                     <input name="nameMaterial" type="text" class="form-control" placeholder="Nhập chất liệu mới">
-                                    <input type="text" hidden name="ProductId" class="form-control" value="@ViewBag.productId">
+                                    <input type="text" hidden name="idProduct" class="form-control" value="@ViewBag.productId">
 
                                 </div>
                                 <div class="col-sm-12">
@@ -122,7 +126,6 @@
             <form asp-action="CreateProductDetail">
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                     <div class="form-group">
                         <label class="form-label">Kích cỡ</label>
                         <div class="card-body">
@@ -135,11 +138,12 @@
                                     <div class="col-auto">
                                         <input asp-for="SizeId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
                                         <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        <span asp-validation-for="SizeId" class="text-danger"></span>
+
                                     </div>
                                 }
                             </div>
                         </div>
-                        <span asp-validation-for="SizeId" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
@@ -154,11 +158,12 @@
                                     <div class="col-auto">
                                         <input asp-for="ColorId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
                                         <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        <span asp-validation-for="ColorId" class="text-danger"></span>
+
                                     </div>
                                 }
                             </div>
                         </div>
-                        <span asp-validation-for="ColorId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Chất Liệu</label>
@@ -173,11 +178,12 @@
                                     <div class="col-auto">
                                         <input asp-for="MaterialId" type="radio" class="btn-check" id="@item.Text" value="@item.Value">
                                         <label class="btn btn-sm btn-light-primary" for="@item.Text">@item.Text</label>
+                                        <span asp-validation-for="ColorId" class="text-danger"></span>
+
                                     </div>
                                 }
                             </div>
                         </div>
-                        <span asp-validation-for="ColorId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Số lượng sản phẩm</label>

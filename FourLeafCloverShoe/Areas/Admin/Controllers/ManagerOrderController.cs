@@ -5,6 +5,8 @@ using FourLeafCloverShoe.Share.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Rotativa.AspNetCore.Options;
+using Rotativa.AspNetCore;
 using System;
 using System.Globalization;
 using FourLeafCloverShoe.Helper;
@@ -50,9 +52,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.pTitle = "Quản lý hóa đơn";
             var lst = await _iorderService.Gets();
             //var lstOrder = lst.Where(c => c.Id != null);
-            var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue));
-            ;
-            lstOrder = lstOrder.OrderByDescending(c => c.CreateDate);
+            var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue) && c.OrderStatus != -1); 
             // Lọc theo searchText 
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -81,6 +81,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 // Nếu có cả startDate và endDate
                 else if (startDate != null && endDate != null)
                 {
+                    endDate = endDate.Value.Date.AddDays(1).AddTicks(-1);
                     lstOrder = lstOrder.Where(c => c.CreateDate >= startDate && c.CreateDate <= endDate);
                 }
             }
@@ -164,7 +165,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     } 
                     else if (trangthai == 8)
                     {
-                        var response =  _iorderService.ThanhCong(idhd, idnv);
+                        var response = await  _iorderService.ThanhCong(idhd, idnv);
                         if (response == true)
                         {
 
@@ -198,7 +199,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 return RedirectToAction("OrderDetail", "ManagerOrder");
             }
         }
-        [HttpGet("/Order/HuyHD")]
         public async Task<IActionResult> HuyHD(Guid idhd, string ghichu)
         {
             try
@@ -220,14 +220,14 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
                             if (responseghichu = true)
                             {
-                                ViewBag.SuccessMessage = "Cập nhật trạng thái thành công";
+                                return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
                                 return RedirectToAction("OrderDetail");
 
 
                             }
                         }
                     }
-                    ViewBag.ErrorMessage = "Ghi chú không được trống";
+                    return Json(new { success = true, message = "Ghi chú không được trống" });
 
                 }
                 return RedirectToAction("OrderDetail");
@@ -420,6 +420,25 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        public async Task<IActionResult> ExportPDF(Guid orderId)
+        {
+            try
+            {
+                var order = await _iorderService.GetById(orderId);
+                var view = new ViewAsPdf("ExportPDF", order)
+                {
+                    FileName = $"{order.OrderCode}.pdf",
+                    PageOrientation = Orientation.Portrait,
+                    PageSize = Rotativa.AspNetCore.Options.Size.A4,
+
+                };
+                return view;
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("index", "Home");
             }
         }
     }

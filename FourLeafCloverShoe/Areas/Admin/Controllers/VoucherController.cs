@@ -58,8 +58,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             {
                 if (voucherViewModel.VoucherCode == null ||
                     voucherViewModel.VoucherCode == "" ||
+                    voucherViewModel.VoucherValue == null ||
                     voucherViewModel.MinimumOrderValue == null ||
-                    voucherViewModel.MaximumOrderValue == null ||
                     voucherViewModel.Quantity == null ||
                     voucherViewModel.Status == null ||
                     voucherViewModel.StartDate == null ||
@@ -69,6 +69,28 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 {
                     TempData["ErrorMessage"] = "Bạn phải nhập đầy đủ thông tin";
                     return View(voucherViewModel);
+                }
+                if(voucherViewModel.VoucherType == 1)
+                {
+                    if(voucherViewModel.VoucherValue > 100 || voucherViewModel.VoucherValue <= 0)
+                    {
+                        TempData["ErrorMessage"] = "Bạn không thể giảm giá > 100% và <= 0%";
+                        return View(voucherViewModel);
+                    }
+                    if(voucherViewModel.MaximumOrderValue == null)
+                    {
+                        TempData["ErrorMessage"] = "Bạn cần phải nhập giá trị giảm tối đa";
+                    }
+                }
+                if(voucherViewModel.VoucherType == 0)
+                {
+                    if (voucherViewModel.VoucherValue <= 0)
+                    {
+                        TempData["ErrorMessage"] = "Bạn không thể giảm giá <= 0";
+                        return View(voucherViewModel);
+                    }
+                    voucherViewModel.MaximumOrderValue = Convert.ToInt32(voucherViewModel.VoucherValue);
+                }
                 }
                 if (voucherViewModel.Ranks == null)
                 {
@@ -88,13 +110,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 }
                 if (voucherViewModel.Quantity == 0 && voucherViewModel.Quantity == null)
                 {
-                    TempData["ErrorMessage"] = "Số lượng của vocher phải lơn hơn 0";
-                    return View(voucherViewModel);
-                }
-
-                if (voucherViewModel.MaximumOrderValue > voucherViewModel.VoucherValue)
-                {
-                    TempData["ErrorMessage"] = "Giá trị giảm tối đa > giá trị";
+                    TempData["ErrorMessage"] = "Số lượng của voucher phải lơn hơn 0";
                     return View(voucherViewModel);
                 }
                 var voucherNew = new Voucher()
@@ -134,7 +150,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     return RedirectToAction("Index");
 
                 }
-            }
             TempData["ErrorMessage"] = "Mã voucher bị trùng rồi";
             return View(voucherViewModel);
         }
@@ -163,6 +178,8 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
         public async Task<IActionResult> edit(Guid Id)
         {
+            ViewBag.pTitle = "Voucher";
+            ViewBag.Title = "Sửa";
             VoucherViewModel vcview = new VoucherViewModel();
             var findVoucher = await _voucherService.GetById(Id);
             vcview.Id = Id;
@@ -214,7 +231,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             if (voucherViewModel.VoucherCode == null ||
                 voucherViewModel.VoucherCode == "" ||
                 voucherViewModel.MinimumOrderValue == null ||
-                voucherViewModel.MaximumOrderValue == null ||
                 voucherViewModel.Quantity == null ||
                 voucherViewModel.Status == null ||
                 voucherViewModel.StartDate == null ||
@@ -227,11 +243,24 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             }
             if (voucherViewModel.VoucherType == 1)
             {
-                if (voucherViewModel.VoucherValue > 100)
+                if (voucherViewModel.VoucherValue > 100 || voucherViewModel.VoucherValue <= 0)
                 {
-                    TempData["ErrorMessage"] = "giá trị không được qúa 100%";
+                    TempData["ErrorMessage"] = "Bạn không thể giảm giá > 100% và <= 0%";
                     return View(voucherViewModel);
                 }
+                if (voucherViewModel.MaximumOrderValue == null)
+                {
+                    TempData["ErrorMessage"] = "Bạn cần phải nhập giá trị giảm tối đa";
+                }
+            }
+            if (voucherViewModel.VoucherType == 0)
+            {
+                if (voucherViewModel.VoucherValue <= 0)
+                {
+                    TempData["ErrorMessage"] = "Bạn không thể giảm giá <= 0";
+                    return View(voucherViewModel);
+                }
+                voucherViewModel.MaximumOrderValue = Convert.ToInt32(voucherViewModel.VoucherValue);
             }
             if (voucherViewModel.Ranks == null)
             {
@@ -249,11 +278,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = "Ngày bắt đầu lớn hơn ngày kết thúc";
                 return View(voucherViewModel);
             }
-            if (voucherViewModel.StartDate <= DateTime.Now)
-            {
-                TempData["ErrorMessage"] = "Ngày bắt đầu phải lớn hơn ht";
-                return View(voucherViewModel);
-            }
+            
             if (voucherViewModel.Quantity == 0 && voucherViewModel.Quantity == null)
             {
                 TempData["ErrorMessage"] = "Số lượng của vocher phải lơn hơn 0";

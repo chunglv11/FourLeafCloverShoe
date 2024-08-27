@@ -6,6 +6,8 @@
 @{
     ViewData["Title"] = "Chi tiết đơn hàng";
     var lstSpCT = ViewBag.lstProduct as X.PagedList.IPagedList<ProductDeailViewModel>;
+    ViewBag.pTitleLink = "ManagerOrder";
+
 }
 <style>
     /* Đảm bảo hình ảnh vừa với card */
@@ -272,10 +274,18 @@
                         }
                     </span>
                 </h6>
-                <h6>Trừ tiêu điểm: <span>@Model.FirstOrDefault().Orders.CoinsUsed</span></h6>
-                <h6>Trừ voucher: <span>@Model.FirstOrDefault().Orders.VoucherValue</span></h6>
+                <h6>Trừ tiêu điểm: <span>@Model.FirstOrDefault().Orders.CoinsUsed?.ToString("N0")</span></h6>
+                <h6>Trừ voucher: <span>@Model.FirstOrDefault().Orders.VoucherValue?.ToString("N0")</span></h6>
                 <h6>Phí vận chuyển: <span>@Model.FirstOrDefault().Orders.ShippingFee?.ToString("N0")</span></h6>
                 <h6>Tổng cộng: <span id="Total">@Model.FirstOrDefault().Orders.TotalAmout?.ToString("N0")</span></h6>
+                <div class="col-lg-4 col-sm-12">
+                    <div class="form-group">
+                        <h6><span class="form-label control-label">Ghi chú:</span></h6>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" style="height: 130px; width:250px;" id="ghiChuinTTHD">@Model.FirstOrDefault().Orders.Description</textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -289,6 +299,7 @@
         <p>Đơn này dùng: @Model.FirstOrDefault().Orders.CoinsUsed.Value.ToString("N0") xu</p>
         @* <p>Xu còn lại: @Model.FirstOrDefault().Orders.Users.Coins?.ToString("N0") xu</p> *@
     </div>
+ 
     <div class="d-flex flex-row justify-content-end">
 
         @if (@Model.FirstOrDefault().Orders.OrderStatus == -1)
@@ -297,108 +308,89 @@
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Chờ Lấy Hàng</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+                <button type="button" class="btn btn-danger fw-normal text-white"  onclick="huyDon('@Model.FirstOrDefault().Orders.Id')" >Hủy bỏ</button>
             </div>
         }
 
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 0)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('1')">Chờ Thanh Toán</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('1')">Đã Thanh Toán</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+                <button type="button" class="btn btn-danger fw-normal text-white" onclick="huyDon('@Model.FirstOrDefault().Orders.Id')" >Hủy bỏ</button>
+                   
+                  
             </div>
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 1)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Chờ giao hàng</button>
+                <button type="button" class="btn btn-success fw-normal text-white" disabled>Đã Thanh Toán</button>
             </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Huỷ Đơn</button>
-            </div>
+            
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 2)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('3')">Xác nhận đơn</button>
+                <button type="button" class="btn btn-warning fw-normal text-white" onclick="DoiTrangThai('3')">Xác nhận đơn</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+                <button type="button" class="btn btn-danger fw-normal text-white" onclick="huyDon('@Model.FirstOrDefault().Orders.Id')">Hủy bỏ</button>
             </div>
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 3)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('4')">Đang Giao Hàng</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('4')"> Giao Hàng</button>
             </div>
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
+                <button type="button" class="btn btn-danger fw-normal text-white" onclick="huyDon('@Model.FirstOrDefault().Orders.Id')">Hủy bỏ</button>
             </div>
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 4)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('8')">Giao Hàng Thành Công</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('8')">Đã Giao Hàng</button>
             </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('6')">Giao Hàng Thất Bại</button>
-            </div>
+            
         }
-        @if (@Model.FirstOrDefault().Orders.OrderStatus == 5)
-        {
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('5')">Chờ lấy hàng</button>
-            </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
-            </div>
-        }
+        
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 6)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('6')">Giao hàng thất bại</button>
+                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('6')">Đơn chưa hoàn thành</button>
             </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hoàn Hàng</button>
-            </div>
+           
         }
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 8)
         {
             <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('8')">Giao hàng thành công</button>
+                <button type="button" class="btn btn-success fw-normal text-white" disabled>Hoàn thành</button>
 
             </div>
         }
-        @if (@Model.FirstOrDefault().Orders.OrderStatus == 9)
-        {
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('9')">Thành Công</button>
-            </div>
-            <div class="d-flex p-2">
-                <button type="button" class="btn btn-danger fw-normal text-white" @* onclick="huyDon('@Model.ID')" *@>Hủy bỏ</button>
-            </div>
-        }
+        
         @if (@Model.FirstOrDefault().Orders.OrderStatus == 10)
         {
             <div class="d-flex p-2">
                 <button type="button" class="btn btn-primary fw-normal text-white" onclick="DoiTrangThai('10')">Yêu cầu đổi trả</button>
             </div>
         }
-
+        @if (@Model.FirstOrDefault().Orders.OrderStatus == 13)
+        {
+            <div class="d-flex p-2">
+                <button type="button" class="btn btn-danger fw-normal text-white" onclick="DoiTrangThai('10')">Đơn đã huỷ</button>
+            </div>
+        }
         @* <div class="d-flex p-2">
         <button type="button" class="btn btn-success">Cập nhật đơn hàng</button>
         </div> *@
+      
         <div class="d-flex p-2">
-            <button type="button" class="btn btn-warning">Hoàn trả</button>
+            <span class="rightinput"><a class ="btn btn-primary fw-normal text-white" href="/Admin/ManagerOrder/ExportPDF?orderId=@Model.FirstOrDefault().Orders.Id" title="Xuất hoá đơn">Xuất hoá đơn</a></span>
         </div>
-        <div class="d-flex p-2">
-            <button type="button" class="btn btn-dark">Xuất PDF</button>
-        </div>
-        <div class="d-flex p-2">
-            <button type="button" class="btn btn-danger">Huỷ đơn</button>
-        </div>
+       
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -655,5 +647,39 @@
             });
         }
     }
+    // huy đơn
+    function huyDon(IDHD) {
+        var gc = $("#ghiChuinTTHD").val().trim();
+
+        // Kiểm tra nếu ghi chú không được nhập hoặc mặc định là giá trị Model
+        if (!gc || gc === '@Model.FirstOrDefault().Orders.Description') {
+            toastr.error('Vui lòng nhập ghi chú hóa đơn', "Error Alert", { timeOut: 1000 });
+            return;
+        }
+
+        // Xác nhận hủy hóa đơn
+        if (confirm("Bạn có chắc chắn hủy Hóa đơn này?")) {
+            $.ajax({
+                url: "@Url.Action("HuyHD", "ManagerOrder")",
+                type: "GET",
+                dataType: 'json',
+                data: {
+                    idhd: IDHD,
+                    ghichu: gc
+                },
+                success: function (response) {
+                    toastr.success(response.message, "Success Alert", { timeOut: 300 });
+                    // Đợi một chút trước khi reload để đảm bảo toastr có thời gian hiển thị
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
+                },
+                error: function (err) {
+                    toastr.error('Thay đổi trạng thái thất bại', "Error Alert", { timeOut: 300 });
+                }
+            });
+        }
+    }
+
 </script>
 
