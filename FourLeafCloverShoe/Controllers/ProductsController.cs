@@ -137,7 +137,7 @@ namespace FourLeafCloverShoe.Controllers
         {
             if (page == null)
                 page = 1;
-            int pageSize = 24;
+            int pageSize = 8;
             int pageNumber = (page ?? 1);
 
             var lstProduct = (await _productService.Gets()).Where(c => c.Status == true && c.ProductDetails.Where(p => p.Status == 1).Count() > 0).ToList();

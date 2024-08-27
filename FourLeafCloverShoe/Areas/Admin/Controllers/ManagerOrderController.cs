@@ -52,7 +52,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             ViewBag.pTitle = "Quản lý hóa đơn";
             var lst = await _iorderService.Gets();
             //var lstOrder = lst.Where(c => c.Id != null);
-            var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue));
+            var lstOrder = lst.Where(c => c.OrderItems != null && c.OrderItems.Any(i => i.OrderId.HasValue) && c.OrderStatus != -1); 
             // Lọc theo searchText 
             if (!string.IsNullOrEmpty(searchText))
             {
