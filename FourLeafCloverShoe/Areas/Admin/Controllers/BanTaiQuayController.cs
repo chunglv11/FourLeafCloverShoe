@@ -76,13 +76,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
         public async Task<IActionResult> GetPhoneNumbersAsync()
         {
-            //var lstUser = await _userManager.Users.ToListAsync();
-            //// Lấy dữ liệu số điện thoại từ nguồn nào đó
-            //var phoneNumbers = new List<SelectListItem>();
-            //foreach (var item in lstUser)
-            //{
-            //    phoneNumbers.Add(new SelectListItem() { Text = item.PhoneNumber, Value = item.Id });
-            //}
             var lstUser = await _userManager.Users.ToListAsync();
 
             // Exclude users with the roles "Admin", "Staff", and "Guest"
