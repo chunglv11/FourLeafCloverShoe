@@ -76,12 +76,28 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
         public async Task<IActionResult> GetPhoneNumbersAsync()
         {
+            //var lstUser = await _userManager.Users.ToListAsync();
+            //// Lấy dữ liệu số điện thoại từ nguồn nào đó
+            //var phoneNumbers = new List<SelectListItem>();
+            //foreach (var item in lstUser)
+            //{
+            //    phoneNumbers.Add(new SelectListItem() { Text = item.PhoneNumber, Value = item.Id });
+            //}
+            // Get the list of all users
             var lstUser = await _userManager.Users.ToListAsync();
-            // Lấy dữ liệu số điện thoại từ nguồn nào đó
+
+            // Exclude users with the roles "Admin", "Staff", and "Guest"
+            var excludedRoles = new[] { "Admin", "Staff", "Guest" };
+
+            // Get the phone numbers of users who do not have the excluded roles
             var phoneNumbers = new List<SelectListItem>();
-            foreach (var item in lstUser)
+            foreach (var user in lstUser)
             {
-                phoneNumbers.Add(new SelectListItem() { Text = item.PhoneNumber, Value = item.Id });
+                var userRoles = await _userManager.GetRolesAsync(user);
+                if (!userRoles.Any(role => excludedRoles.Contains(role)))
+                {
+                    phoneNumbers.Add(new SelectListItem() { Text = user.PhoneNumber, Value = user.Id });
+                }
             }
 
 
