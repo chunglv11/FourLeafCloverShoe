@@ -14,95 +14,6 @@ namespace FourLeafCloverShoe.Services
         {
             _myDbContext = context;
         }
-        //public async Task<StatisticalViewModal> GetStatistics(int? month, int? year)
-        //{
-        //    var query = _myDbContext.Orders.ToList();
-
-
-        //    if (month != 0)
-        //    {
-        //        query = query.Where(o => o.PaymentDate.Value.Month == month.Value && o.PaymentDate.HasValue).ToList();
-        //    }
-
-        //    if (year != 0)
-        //    {
-        //        query = query.Where(o => o.PaymentDate.Value.Year == year.Value && o.PaymentDate.HasValue).ToList();
-        //    }
-
-        //    var today = DateTime.Now.Date;
-        //    var sevenDaysAgo = today.AddDays(-6);
-
-        //    // Doanh thu trong ngày hôm nay
-        //    var doanhThuTrongNgay = await _myDbContext.Orders
-        //        .Where(o => o.OrderStatus == 8 && o.PaymentDate.Value.Date == today) // Giả sử trạng thái 8 có nghĩa là đơn hàng đã hoàn thành
-        //        .SelectMany(o => o.OrderItems) // Mở rộng ra các mặt hàng trong đơn hàng
-        //        .GroupBy(oi => oi.Orders.PaymentDate.Value.Date)
-        //        .Select(g => new DoanhThuViewModel
-        //        {
-        //            NgayBan = g.Key,
-        //            DoanhThu = g.Sum(oi => (oi.Quantity ?? 0) * (oi.Price ?? 0))
-        //        })
-        //        .FirstOrDefaultAsync() ?? new DoanhThuViewModel { NgayBan = today, DoanhThu = 0 };
-
-        //    var doanhThuquerys = query
-        //     .Where(o => o.OrderStatus == 8 && o.PaymentDate >= sevenDaysAgo) /// Lọc theo trạng thái đơn và ngày
-        //      .SelectMany(o => o.OrderItems) // Lấy tất cả OrderItems liên quan
-        //      //.GroupBy(oi => oi.Orders.PaymentDate.Value.Date) // Nhóm theo ngày của đơn hàng
-        //      //.Select(g => new DoanhThuViewModel
-        //      //{
-        //      //    NgayBan = g.Key,
-        //      //    DoanhThu = g.Sum(oi => (oi.Quantity ?? 0) * (oi.Price ?? 0)) // Tính tổng doanh thu
-        //      //})
-        //       .ToList();
-
-        //    // Doanh thu trong 7 ngày qua
-        //    var doanhThuquery = query
-        //        .Where(o => o.OrderStatus == 8 && o.PaymentDate >= sevenDaysAgo) // Lọc theo trạng thái đơn và ngày
-        //        .SelectMany(o => o.OrderItems) // Lấy tất cả OrderItems liên quan
-        //        .GroupBy(oi => oi.Orders.PaymentDate.Value.Date) // Nhóm theo ngày của đơn hàng
-        //        .Select(g => new DoanhThuViewModel
-        //             {
-        //                 NgayBan = g.Key,
-        //                 DoanhThu = g.Sum(oi => (oi.Quantity ?? 0) * (oi.Price ?? 0)) // Tính tổng doanh thu
-        //             })
-        //         .ToList();
-
-        //    // Số lượng đơn hàng mới trong ngày hôm nay
-        //    var tomorrow = today.AddDays(1);
-
-        //    var donHangMoi = await _myDbContext.Orders
-        //        .CountAsync(o => o.CreateDate >= today && o.CreateDate < tomorrow);
-
-
-        //    // Số lượng đơn hàng bị hủy trong ngày hôm nay
-        //    var donHuy = await _myDbContext.Orders
-        //        .CountAsync(o => o.CreateDate >= today && o.CreateDate < tomorrow && o.OrderStatus == 13);
-
-        //    // Top sản phẩm bán chạy trong ngày hôm na
-
-
-        //    // Trạng thái đơn hàng trong ngày hôm nay (cần phải được định nghĩa trước)
-        //    var trangThai = await _myDbContext.Orders
-        //        .Where(o => o.CreateDate >= today)
-        //        .GroupBy(o => o.OrderStatus)
-        //        .Select(g => new TrangThaiDonHangViewModel
-        //        {
-        //            trangthai = (int)g.Key,
-        //            soluong = g.Count()
-        //        })
-        //        .ToListAsync();
-
-        //    return new StatisticalViewModal
-        //    {
-        //        Doanhthu = doanhThuTrongNgay.DoanhThu,
-        //        DonHangMoi = donHangMoi,
-        //        DonHuy = donHuy,
-        //        DoanhThuTrong7ngay = doanhThuquery,
-        //        TrangThai = trangThai,
-        //        Topsp = GetTopRevenueProducts()
-        //    };
-        //}
-
         public async Task<StatisticalViewModal> GetStatistics(int? month, int? year)
         {
             var today = DateTime.Now.Date;
@@ -184,7 +95,7 @@ namespace FourLeafCloverShoe.Services
         {
 
             var salesData = _myDbContext.OrderItems
-                .Where(oi => oi.Orders.OrderStatus == 8)
+                .Where(oi => oi.Orders.OrderStatus == 8 || oi.Orders.OrderStatus == 1)
                 .GroupBy(oi => oi.ProductDetailId)
                 .Select(g => new
                 {

@@ -660,9 +660,6 @@
                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                             </div>
                             <div class="product-cart-actions hiden-xs">
-                                <a style="display: inherit;" id="btnBuyNow"
-                                   class="buy-now-link"> Mua ngay </a>
-
                                 <button onclick="addToCart();" style="cursor: pointer; display: inherit;" id="btnAddToCart"
                                    class="add-to-cart-link">
                                     <i class="mwc-icon-mwc-cart"></i> Thêm vào giỏ hàng
@@ -687,7 +684,7 @@
                                     <img src="https://img.mwc.com.vn/files/Icon/icon4.jpg"
                                          alt="Miễn phí vận chuyển">
                                 </div> <span class="product-policy__title">
-                                    Miễn phí vận chuyển toàn quốc<br> cho đơn hàng từ 150k
+                                    Vận chuyển toàn quốc<br> với mức phí ưu đãi
                                 </span>
                             </div>
                             <div class="product-policy__item">
@@ -703,7 +700,7 @@
                                     <img src="https://img.mwc.com.vn/files/Icon/icon2.jpg" alt=""
                                          style="width: 25px;">
                                 </div> <span class="product-policy__title">
-                                    Hotline 1900.633.349<br>
+                                    Hotline 0376810024<br>
                                     hỗ trợ từ 8h30-21h30
                                 </span>
                             </div>
@@ -738,7 +735,7 @@
                         </li>
 
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="product-detail-review-tab" data-bs-toggle="tab" data-bs-target="#product-detail-review" type="button" role="tab" aria-controls="product-detail-review" aria-selected="false" onclick="loadComments()"> Bình luận </button>
+                            <button class="nav-link" id="product-detail-review-tab" data-bs-toggle="tab" data-bs-target="#product-detail-review" type="button" role="tab" aria-controls="product-detail-review" aria-selected="false" onclick="loadComments()"> Đánh giá </button>
                         </li>
 
                     </ul>
@@ -751,7 +748,7 @@
                             <br>
                             <div class="be-comment-block" id="product-detail-comments">
                                 <input type="hidden" id="TotalRow" name="TotalRow" value="0">
-                                <h1 class="comments-title">Không có bình luận</h1>
+                                <h1 class="comments-title">Chưa có đánh giá</h1>
 
                                 <div class="be-comment mb-2">
                                     @* bình luận hiển thị ở đây *@
@@ -764,7 +761,7 @@
                 </div>
 
             </div>
-            <div class="row">
+            @* <div class="row">
                 <div class="col-12 col-lg-12 mb-32px">
                     <div class="filter-sidebar-body">
                         <div class="combo-products">
@@ -808,7 +805,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> *@
         </div>
 
     </div>
