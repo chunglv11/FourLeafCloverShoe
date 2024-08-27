@@ -76,14 +76,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
         }
         public async Task<IActionResult> GetPhoneNumbersAsync()
         {
-            //var lstUser = await _userManager.Users.ToListAsync();
-            //// Lấy dữ liệu số điện thoại từ nguồn nào đó
-            //var phoneNumbers = new List<SelectListItem>();
-            //foreach (var item in lstUser)
-            //{
-            //    phoneNumbers.Add(new SelectListItem() { Text = item.PhoneNumber, Value = item.Id });
-            //}
-            // Get the list of all users
             var lstUser = await _userManager.Users.ToListAsync();
 
             // Exclude users with the roles "Admin", "Staff", and "Guest"
@@ -99,7 +91,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                     phoneNumbers.Add(new SelectListItem() { Text = user.PhoneNumber, Value = user.Id });
                 }
             }
-
 
             // Trả về dữ liệu dưới dạng JSON
             return Json(phoneNumbers);
@@ -522,6 +513,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
                 return Json(new { message = "Đơn hàng chưa có sản phẩm nào!", isSuccess = false });
             }
             order.PaymentType = "off";
+            order.PaymentDate = DateTime.Now;
             order.UpdateDate = DateTime.Now;
             if (voucherId != new Guid())
             {
@@ -533,7 +525,6 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
             order.OrderStatus = 1;
             if (await _orderService.Update(order))
             {
-
                 var coinsPlus = (order.TotalAmout + voucherValue + coinUsed) / 100;
                 if (order.UserId != null)//  cộng xu
                 {
@@ -604,6 +595,7 @@ namespace FourLeafCloverShoe.Areas.Admin.Controllers
 
             if (paymentType == "off" || order.TotalAmout == 0)
             {
+                order.PaymentDate = DateTime.Now;
                 order.OrderStatus = 1;
                 if (await _orderService.Update(order)) 
                 {
